@@ -1,7 +1,8 @@
-const express = require('express');
-const cors = require('cors');
-const { notifyAdminNewRequest, notifyStudentConfirmation, notifyStudentStatusChange } = require('./emailService');
-require('dotenv').config();
+import express from 'express';
+import cors from 'cors';
+import { notifyAdminNewRequest, notifyStudentConfirmation, notifyStudentStatusChange } from './emailService.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
