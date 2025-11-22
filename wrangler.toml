@@ -1,0 +1,7 @@
+name = "campus-print-email"
+main = "worker.js"
+compatibility_date = "2023-10-25"
+
+[vars]
+# ADMIN_EMAIL = "your-admin-email@example.com"
+# RESEND_API_KEY will be set via `wrangler secret put RESEND_API_KEY`
