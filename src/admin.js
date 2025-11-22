@@ -7,15 +7,16 @@ export const renderAdminDashboard = (user) => {
   const app = document.querySelector('#app');
   app.innerHTML = `
   < div class="min-h-screen bg-gray-100" >
-      <nav class="bg-white shadow-sm">
+      <nav class="bg-[#043873] shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex justify-between h-16">
-            <div class="flex items-center">
-              <h1 class="text-xl font-bold text-purple-600">Campus Print Admin</h1>
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 bg-[#4F9CF9] rounded flex items-center justify-center text-white font-bold">A</div>
+              <h1 class="text-xl font-bold text-white tracking-tight">Port Print Admin</h1>
             </div>
-            <div class="flex items-center">
-              <span class="text-gray-700 mr-4 text-sm">Admin Mode</span>
-              <button id="logoutBtn" class="text-sm text-red-600 hover:text-red-800">Logout</button>
+            <div class="flex items-center space-x-4">
+              <span class="text-gray-200 text-sm font-medium bg-white/10 px-3 py-1 rounded-full">Admin Mode</span>
+              <button id="logoutBtn" class="text-sm bg-[#4F9CF9] text-white px-3 py-1.5 rounded hover:bg-[#2F7ACF] transition-colors">Logout</button>
             </div>
           </div>
         </div>

@@ -9,15 +9,16 @@ export const renderStudentDashboard = (user) => {
   const app = document.querySelector('#app');
   app.innerHTML = `
   < div class="min-h-screen bg-gray-50" >
-      <nav class="bg-white shadow-sm">
+      <nav class="bg-[#043873] shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex justify-between h-16">
-            <div class="flex items-center">
-              <h1 class="text-xl font-bold text-blue-600">Campus Print</h1>
+            <div class="flex items-center gap-3">
+               <div class="w-8 h-8 bg-[#4F9CF9] rounded flex items-center justify-center text-white font-bold">P</div>
+               <h1 class="text-xl font-bold text-white tracking-tight">Port Print</h1>
             </div>
-            <div class="flex items-center">
-              <span class="text-gray-700 mr-4 text-sm">${user.email}</span>
-              <button id="logoutBtn" class="text-sm text-red-600 hover:text-red-800">Logout</button>
+            <div class="flex items-center space-x-4">
+              <span class="text-gray-200 text-sm hidden sm:block">${user.email}</span>
+              <button id="logoutBtn" class="text-sm bg-[#4F9CF9] text-white px-3 py-1.5 rounded hover:bg-[#2F7ACF] transition-colors">Logout</button>
             </div>
           </div>
         </div>
@@ -28,7 +29,7 @@ export const renderStudentDashboard = (user) => {
           <!-- New Request Section -->
           <div class="lg:col-span-2 space-y-6">
             <div class="bg-white shadow rounded-lg p-6">
-              <h2 class="text-lg font-medium text-gray-900 mb-4">New Print Request</h2>
+              <h2 class="text-lg font-medium text-[#043873] mb-4">New Print Request</h2>
               
               <!-- File Upload -->
               <div class="mb-6">
@@ -84,36 +85,15 @@ export const renderStudentDashboard = (user) => {
                 </div>
 
                 <!-- Quote -->
-                <div class="bg-blue-50 p-4 rounded-md mt-6">
+                <div class="bg-[#043873] bg-opacity-5 p-4 rounded-md mt-6 border border-[#043873] border-opacity-10">
                   <div class="flex justify-between items-center">
-                    <span class="text-gray-700 font-medium">Total Cost:</span>
-                    <span id="totalCost" class="text-2xl font-bold text-blue-700">₹0.00</span>
+                    <span class="text-[#043873] font-medium">Total Cost:</span>
+                    <span id="totalCost" class="text-2xl font-bold text-[#043873]">₹0.00</span>
                   </div>
                   <p class="text-xs text-gray-500 mt-1 text-right">Includes all fees</p>
                 </div>
 
-                <!-- Payment Method Selection -->
-                <div class="mt-6">
-                  <label class="block text-sm font-medium text-gray-700 mb-3">Payment Method</label>
-                  <div class="space-y-3">
-                    <label class="flex items-center p-3 border-2 border-gray-300 rounded-md cursor-pointer hover:bg-gray-50 transition-colors">
-                      <input type="radio" name="paymentMethod" value="online" class="w-4 h-4 text-blue-600" checked>
-                      <div class="ml-3">
-                        <span class="block font-medium text-gray-900">Pay Online</span>
-                        <span class="block text-xs text-gray-500">Pay now via Razorpay (UPI, Cards, Net Banking)</span>
-                      </div>
-                    </label>
-                    <label class="flex items-center p-3 border-2 border-gray-300 rounded-md cursor-pointer hover:bg-gray-50 transition-colors">
-                      <input type="radio" name="paymentMethod" value="cod" class="w-4 h-4 text-blue-600">
-                      <div class="ml-3">
-                        <span class="block font-medium text-gray-900">Cash on Delivery</span>
-                        <span class="block text-xs text-gray-500">Pay when you collect your prints</span>
-                      </div>
-                    </label>
-                  </div>
-                </div>
-
-                <button id="payBtn" class="w-full bg-blue-600 text-white py-3 rounded-md font-medium hover:bg-blue-700 transition-colors shadow-sm mt-6">
+                <button id="payBtn" class="w-full bg-[#4F9CF9] text-white py-3 rounded-lg font-bold hover:bg-[#2F7ACF] transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 mt-6">
                   Submit Request
                 </button>
               </div>
@@ -123,7 +103,7 @@ export const renderStudentDashboard = (user) => {
           <!-- My Requests Section -->
           <div class="lg:col-span-1">
             <div class="bg-white shadow rounded-lg p-6 h-full">
-              <h2 class="text-lg font-medium text-gray-900 mb-4">My Requests</h2>
+              <h2 class="text-lg font-medium text-[#043873] mb-4">My Requests</h2>
               <div id="requestsList" class="space-y-4 overflow-y-auto max-h-[600px]">
                 <p class="text-gray-500 text-sm text-center py-4">Loading requests...</p>
               </div>
@@ -131,16 +111,14 @@ export const renderStudentDashboard = (user) => {
           </div>
         </div>
       </main>
-
-      <!--Payment Modal-->
-  <div id="paymentModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center z-50">
-    <div class="bg-white p-8 rounded-lg shadow-xl max-w-sm w-full text-center">
-      <h3 class="text-xl font-bold mb-4">Payment Gateway</h3>
-      <p class="mb-6 text-gray-600">Simulating Razorpay Payment of <span id="modalAmount" class="font-bold text-black"></span></p>
-      <div class="flex space-x-4 justify-center">
-        <button id="cancelPayment" class="px-4 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-50">Cancel</button>
-        <button id="confirmPayment" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Pay Now</button>
-      </div>
+  
+  <!-- Loading Modal -->
+  <div id="loadingModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 hidden flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-8 max-w-sm w-full text-center shadow-xl">
+      <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
+      <h3 class="text-xl font-bold text-gray-900 mb-2">Processing Request...</h3>
+      <p class="text-gray-600">Uploading your file and calculating details.</p>
+      <p class="text-xs text-gray-400 mt-2">Please do not close this window.</p>
     </div>
   </div>
     </div >
@@ -162,10 +140,6 @@ export const renderStudentDashboard = (user) => {
   const optionsSection = document.getElementById('optionsSection');
   const totalCostDisplay = document.getElementById('totalCost');
   const payBtn = document.getElementById('payBtn');
-  const paymentModal = document.getElementById('paymentModal');
-  const modalAmount = document.getElementById('modalAmount');
-  const confirmPaymentBtn = document.getElementById('confirmPayment');
-  const cancelPaymentBtn = document.getElementById('cancelPayment');
 
   // Inputs
   const duplexSelect = document.getElementById('duplex');
@@ -206,6 +180,14 @@ export const renderStudentDashboard = (user) => {
       return;
     }
 
+    // Check file size (300MB limit)
+    const maxSize = 300 * 1024 * 1024; // 300MB in bytes
+    if (file.size > maxSize) {
+      alert('File is too large. Maximum size allowed is 300MB.');
+      return;
+    }
+
+
     currentFile = file;
     fileNameDisplay.textContent = file.name;
     fileNameDisplay.classList.remove('hidden');
@@ -233,11 +215,14 @@ export const renderStudentDashboard = (user) => {
 
   // Reusable function to submit request
   const submitRequest = async (paymentMethod, paymentStatus) => {
+    const loadingModal = document.getElementById('loadingModal');
+    loadingModal.classList.remove('hidden'); // Show loading modal
+
     try {
       // Show uploading state
       const submitBtn = document.getElementById('payBtn');
-      const originalText = submitBtn.textContent;
       submitBtn.disabled = true;
+
       submitBtn.textContent = "Uploading PDF...";
 
       // 1. Upload PDF to Supabase Storage
@@ -281,13 +266,8 @@ export const renderStudentDashboard = (user) => {
       const savedTotalCost = calculateCost();
 
       // Reset Form
-      paymentModal.classList.add('hidden');
+      alert(`Request submitted successfully! Please pay ${formatCurrency(savedTotalCost)} when you collect your prints.`);
 
-      if (paymentMethod === 'Cash on Delivery') {
-        alert("Request submitted successfully! Pay when you collect your prints.");
-      } else {
-        alert("Payment successful! Order placed.");
-      }
 
       // Reset UI
       fileInput.value = '';
@@ -297,10 +277,6 @@ export const renderStudentDashboard = (user) => {
       pageCountDisplay.classList.add('hidden');
       optionsSection.classList.add('opacity-50', 'pointer-events-none');
       updateCostDisplay();
-
-      // Reset button
-      submitBtn.disabled = false;
-      submitBtn.textContent = originalText;
 
       // Send Email Notifications (Async - don't block UI)
       // Use relative path '/api/email' which works both locally (via proxy/Vercel dev) and in production
@@ -324,50 +300,23 @@ export const renderStudentDashboard = (user) => {
     } catch (error) {
       console.error("Error submitting request:", error);
       alert("Failed to submit request: " + error.message);
+      throw error; // Re-throw to allow calling handlers to catch it
+    } finally {
+      const loadingModal = document.getElementById('loadingModal');
+      loadingModal.classList.add('hidden');
 
-      // Reset button
       const submitBtn = document.getElementById('payBtn');
       submitBtn.disabled = false;
-      submitBtn.textContent = "Submit Request";
-
-      throw error; // Re-throw to allow calling handlers to catch it
+      submitBtn.textContent = 'Submit Request';
     }
   };
 
   // Payment Flow
+  // Submit Handler
   payBtn.addEventListener('click', () => {
-    const selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-    const cost = calculateCost();
-
-    if (selectedPaymentMethod === 'cod') {
-      // Cash on Delivery - Skip payment modal, submit directly
-      submitRequest('Cash on Delivery', 'Pending');
-    } else {
-      // Online Payment - Show payment modal
-      modalAmount.textContent = formatCurrency(cost);
-      paymentModal.classList.remove('hidden');
-    }
+    submitRequest('Cash on Delivery', 'Pending');
   });
 
-  cancelPaymentBtn.addEventListener('click', () => {
-    paymentModal.classList.add('hidden');
-  });
-
-
-  confirmPaymentBtn.addEventListener('click', async () => {
-    // Simulate Online Payment Success
-    confirmPaymentBtn.disabled = true;
-    confirmPaymentBtn.textContent = "Processing...";
-
-    try {
-      await submitRequest('Online Payment', 'Paid');
-      confirmPaymentBtn.disabled = false;
-      confirmPaymentBtn.textContent = "Pay Now";
-    } catch (error) {
-      confirmPaymentBtn.disabled = false;
-      confirmPaymentBtn.textContent = "Pay Now";
-    }
-  });
 
   // Real-time Requests Listener
   const q = query(
