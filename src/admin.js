@@ -6,7 +6,7 @@ import { formatCurrency, formatDate } from './utils';
 export const renderAdminDashboard = (user) => {
   const app = document.querySelector('#app');
   app.innerHTML = `
-  < div class="min-h-screen bg-gray-100" >
+  <div class="min-h-screen bg-gray-100">
       <nav class="bg-[#043873] shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex justify-between h-16">
