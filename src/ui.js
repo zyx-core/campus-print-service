@@ -1,5 +1,6 @@
 import { auth } from './firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { showInstallPrompt, isInstallAvailable } from './install-prompt.js';
 
 
 export const renderLogin = () => {
@@ -7,7 +8,15 @@ export const renderLogin = () => {
   const app = document.querySelector('#app');
   console.log("App element:", app);
   app.innerHTML = `
-    <div class="min-h-screen bg-[#E5E5E5] flex items-center justify-center p-4 font-sans">
+    <div class="min-h-screen bg-[#E5E5E5] flex items-center justify-center p-4 font-sans relative">
+      <!-- PWA Install Button (Floating) -->
+      <button id="pwa-install-button" class="hidden fixed top-4 right-4 z-50 bg-[#4F9CF9] text-white px-6 py-3 rounded-lg font-bold hover:bg-[#2F7ACF] transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+        </svg>
+        Install App
+      </button>
+
       <div class="bg-white rounded-lg shadow-2xl w-full max-w-5xl overflow-hidden flex flex-col md:flex-row">
         
         <!-- Left Side: Marketing Content (Deep Blue Theme) -->
@@ -178,6 +187,7 @@ export const renderLogin = () => {
   }
 
 
+
   const showSignupBtn = document.getElementById('showSignup');
   if (showSignupBtn) {
     showSignupBtn.addEventListener('click', (e) => {
@@ -187,6 +197,14 @@ export const renderLogin = () => {
     });
   } else {
     console.error("Show Signup button not found!");
+  }
+
+  // PWA Install Button Handler
+  const pwaInstallBtn = document.getElementById('pwa-install-button');
+  if (pwaInstallBtn) {
+    pwaInstallBtn.addEventListener('click', () => {
+      showInstallPrompt();
+    });
   }
 };
 

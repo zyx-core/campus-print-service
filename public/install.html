@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Install Port Print App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        h1 {
+            color: #1e40af;
+            font-size: 32px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        .features {
+            text-align: left;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f3f4f6;
+            border-radius: 12px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .feature:last-child {
+            margin-bottom: 0;
+        }
+
+        .feature-icon {
+            width: 24px;
+            height: 24px;
+            background: #3b82f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .feature-icon::before {
+            content: "✓";
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .install-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .install-btn:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+        }
+
+        .install-btn:active {
+            transform: translateY(0);
+        }
+
+        .steps {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .steps h3 {
+            color: #374151;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .step {
+            display: flex;
+            align-items: start;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #6b7280;
+            text-align: left;
+        }
+
+        .step-number {
+            background: #dbeafe;
+            color: #1e40af;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            flex-shrink: 0;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .icon {
+                width: 100px;
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="icon">
+            <!-- Replace with your actual icon path -->
+            <img src="/icons/icon-512.png" alt="Port Print Icon">
+        </div>
+
+        <h1>Port Print</h1>
+        <p class="subtitle">UKF CET Campus Print Service</p>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon"></div>
+                <span>Print documents at ₹1 per page</span>
+            </div>
+            <div class="feature">
+                <div class="feature-icon"></div>
+                <span>Next-day pickup guaranteed</span>
+            </div>
+            <div class="feature">
+                <div class="feature-icon"></div>
+                <span>Works offline after installation</span>
+            </div>
+            <div class="feature">
+                <div class="feature-icon"></div>
+                <span>No app store required</span>
+            </div>
+        </div>
+
+        <button class="install-btn" onclick="goToApp()">
+            📱 Open & Install App
+        </button>
+
+        <div class="steps">
+            <h3>How to Install</h3>
+            <div class="step">
+                <div class="step-number">1</div>
+                <span>Click the button above to open the app</span>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <span>Look for "Install App" button in top-right corner</span>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <span>Click to install - works like a native app!</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goToApp() {
+            // Replace with your actual app URL
+            window.location.href = '/';
+        }
+    </script>
+</body>
+
+</html>
