@@ -1,5 +1,5 @@
 import { auth, db } from './firebase';
-import { collection, query, orderBy, onSnapshot, doc, updateDoc } from "firebase/firestore";
+import { collection, query, orderBy, onSnapshot, doc, updateDoc, getDoc } from "firebase/firestore";
 import { supabase } from './supabase';
 import { formatCurrency, formatDate } from './utils';
 
@@ -33,7 +33,7 @@ export const renderAdminDashboard = (user) => {
               <thead class="bg-gray-50">
                 <tr>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student Details</th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">File Details</th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PDF</th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Options</th>
@@ -51,6 +51,23 @@ export const renderAdminDashboard = (user) => {
           </div>
         </div>
       </main>
+
+      <!-- Student Details Modal -->
+      <div id="studentModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full m-4">
+          <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+            <h3 class="text-lg font-bold text-gray-900">Student Details</h3>
+            <button id="closeModalBtn" class="text-gray-400 hover:text-gray-500">
+              <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+          <div class="p-6 space-y-4" id="modalContent">
+            <!-- Content injected via JS -->
+          </div>
+        </div>
+      </div>
     </div >
   `;
 
@@ -65,7 +82,7 @@ export const renderAdminDashboard = (user) => {
     orderBy("createdAt", "desc")
   );
 
-  onSnapshot(q, (snapshot) => {
+  onSnapshot(q, async (snapshot) => {
     const tbody = document.getElementById('requestsTableBody');
     const countBadge = document.getElementById('requestCount');
 
@@ -77,19 +94,50 @@ export const renderAdminDashboard = (user) => {
       return;
     }
 
-    snapshot.forEach((docSnapshot) => {
+    // Use for...of loop to handle async user fetching
+    for (const docSnapshot of snapshot.docs) {
       const data = docSnapshot.data();
       const requestId = docSnapshot.id;
       const date = data.createdAt?.toDate ? formatDate(data.createdAt.toDate()) : 'Just now';
 
+      // Fetch user profile
+      let userProfile = {
+        name: 'Unknown',
+        year: '-',
+        studentClass: '-',
+        department: '-',
+        phone: '-'
+      };
+
+      try {
+        if (data.userId) {
+          const userDoc = await getDoc(doc(db, "users", data.userId));
+          if (userDoc.exists()) {
+            userProfile = { ...userProfile, ...userDoc.data() };
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching user profile:", err);
+      }
+
       const statusOptions = ['New Request', 'Printing', 'Ready for Pickup', 'Completed'];
 
       const tr = document.createElement('tr');
+      // Store profile data as JSON string in data attribute
+      const profileData = encodeURIComponent(JSON.stringify(userProfile));
+
       tr.innerHTML = `
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${date}</td>
         <td class="px-6 py-4 whitespace-nowrap">
-          <div class="text-sm font-medium text-gray-900">${data.userEmail}</div>
-          <div class="text-xs text-gray-500">ID: ${data.userId.slice(0, 6)}...</div>
+          <div class="flex items-center">
+            <div class="text-sm font-medium text-gray-900 mr-2">${userProfile.name}</div>
+            <button class="info-btn text-blue-600 hover:text-blue-800 focus:outline-none" data-profile="${profileData}">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+              </svg>
+            </button>
+          </div>
+          <div class="text-xs text-gray-500">${data.userEmail}</div>
         </td>
         <td class="px-6 py-4 whitespace-nowrap">
           <div class="text-sm text-gray-900 max-w-xs truncate" title="${data.fileName}">${data.fileName}</div>
@@ -136,9 +184,71 @@ export const renderAdminDashboard = (user) => {
             `).join('')}
           </select>
         </td>
-      `;
+`;
       tbody.appendChild(tr);
+    }
+
+    // Add Event Listeners for Info Buttons
+    document.querySelectorAll('.info-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const profile = JSON.parse(decodeURIComponent(e.currentTarget.dataset.profile));
+        const modal = document.getElementById('studentModal');
+        const content = document.getElementById('modalContent');
+
+        const fields = [
+          { label: 'Full Name', value: profile.name },
+          { label: 'Year', value: profile.year },
+          { label: 'Class', value: profile.studentClass },
+          { label: 'Department', value: profile.department },
+          { label: 'Phone', value: profile.phone },
+          { label: 'Email', value: profile.email }
+        ];
+
+        content.innerHTML = fields.map(field => `
+          <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+            <div>
+              <p class="text-xs text-gray-500 uppercase">${field.label}</p>
+              <p class="text-sm font-medium text-gray-900">${field.value || '-'}</p>
+            </div>
+            <button class="copy-btn text-gray-400 hover:text-blue-600 p-1" data-value="${field.value || ''}" title="Copy ${field.label}">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+            </button>
+          </div>
+        `).join('');
+
+        // Add Copy Functionality
+        content.querySelectorAll('.copy-btn').forEach(copyBtn => {
+          copyBtn.addEventListener('click', (ev) => {
+            const value = ev.currentTarget.dataset.value;
+            if (value) {
+              navigator.clipboard.writeText(value);
+
+              // Visual feedback
+              const originalHTML = ev.currentTarget.innerHTML;
+              ev.currentTarget.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>`;
+              setTimeout(() => {
+                ev.currentTarget.innerHTML = originalHTML;
+              }, 1500);
+            }
+          });
+        });
+
+        modal.classList.remove('hidden');
+      });
     });
+
+    // Close Modal Handler
+    const closeModal = () => {
+      document.getElementById('studentModal').classList.add('hidden');
+    };
+
+    document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+    document.getElementById('studentModal').addEventListener('click', (e) => {
+      if (e.target.id === 'studentModal') closeModal();
+    });
+
 
     // Add Event Listeners to Download Buttons
     document.querySelectorAll('.download-pdf-btn').forEach(btn => {
