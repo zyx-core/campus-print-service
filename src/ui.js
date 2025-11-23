@@ -1,6 +1,7 @@
 import { auth } from './firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { showInstallPrompt, isInstallAvailable } from './install-prompt.js';
+import { navigateTo } from './router.js';
 
 
 export const renderLogin = () => {
@@ -200,8 +201,8 @@ export const renderLogin = () => {
   if (showSignupBtn) {
     showSignupBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      console.log("Switching to Signup");
-      renderSignup();
+      console.log("[Login] Switching to Signup");
+      navigateTo('/signup');
     });
   } else {
     console.error("Show Signup button not found!");
@@ -290,8 +291,8 @@ export const renderSignup = () => {
   if (showLoginBtn) {
     showLoginBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      console.log("Switching to Login");
-      renderLogin();
+      console.log("[Signup] Switching to Login");
+      navigateTo('/login');
     });
   } else {
     console.error("Show Login button not found!");
