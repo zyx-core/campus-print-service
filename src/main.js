@@ -38,6 +38,13 @@ router.register('/admin', (user) => {
   renderAdminDashboard(user || auth.currentUser);
 }, true);  // Protected admin dashboard
 
+// Handle direct navigation to non-hash routes (e.g. /login -> /#/login)
+const pathname = window.location.pathname;
+if (pathname === '/login' || pathname === '/signup') {
+  console.log(`[Main] Redirecting ${pathname} to hash route`);
+  window.location.href = `/#${pathname}`;
+}
+
 // Initialize the router FIRST
 console.log('[Main] Initializing router...');
 router.init();
@@ -45,7 +52,12 @@ router.init();
 // Set up auth state observer
 let authInitialized = false;
 
-onAuthStateChanged(auth, (user) => {
+import { doc, getDoc } from 'firebase/firestore'
+import { auth, db } from './firebase.js'
+
+// ... existing imports ...
+
+onAuthStateChanged(auth, async (user) => {
   console.log('[Main] Auth state changed:', user ? user.email : 'No user');
 
   if (!authInitialized) {
@@ -53,18 +65,37 @@ onAuthStateChanged(auth, (user) => {
     authInitialized = true;
 
     if (user) {
-      // User is logged in - redirect to dashboard if on public page
+      // User is logged in - fetch role and redirect
       console.log('[Main] Initial auth: User authenticated:', user.email);
-      const userRole = localStorage.getItem('userRole') || 'student';
-      const currentPath = router.getCurrentPath();
 
-      if (currentPath === '/' || currentPath === '/login' || currentPath === '/signup') {
-        console.log('[Main] User on public page, redirecting to dashboard');
-        if (userRole === 'admin') {
-          router.navigate('/admin');
+      try {
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        let userRole = 'student';
+
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          userRole = userData.role || 'student';
+          console.log('[Main] User role fetched:', userRole);
+          localStorage.setItem('userRole', userRole);
         } else {
-          router.navigate('/dashboard');
+          console.log('[Main] User document not found, defaulting to student');
         }
+
+        const currentPath = router.getCurrentPath();
+
+        if (currentPath === '/' || currentPath === '/login' || currentPath === '/signup') {
+          console.log('[Main] User on public page, redirecting to dashboard');
+          if (userRole === 'admin') {
+            router.navigate('/admin');
+          } else {
+            router.navigate('/dashboard');
+          }
+        }
+      } catch (error) {
+        console.error('[Main] Error fetching user role:', error);
+        // Fallback to student dashboard on error, or maybe stay on login?
+        // For now, let's try to proceed as student
+        router.navigate('/dashboard');
       }
     } else {
       // Not logged in - stay on public page or redirect to login
@@ -79,18 +110,32 @@ onAuthStateChanged(auth, (user) => {
   } else {
     // Subsequent auth state changes (login/logout)
     if (user) {
-      //User just logged in - redirect to appropriate dashboard
+      // User just logged in - fetch role and redirect
       console.log('[Main] User logged in:', user.email);
-      const userRole = localStorage.getItem('userRole') || 'student';
 
-      if (userRole === 'admin') {
-        router.navigate('/admin');
-      } else {
+      try {
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        let userRole = 'student';
+
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          userRole = userData.role || 'student';
+          localStorage.setItem('userRole', userRole);
+        }
+
+        if (userRole === 'admin') {
+          router.navigate('/admin');
+        } else {
+          router.navigate('/dashboard');
+        }
+      } catch (error) {
+        console.error('[Main] Error fetching user role:', error);
         router.navigate('/dashboard');
       }
     } else {
       // User just logged out - redirect to landing page
       console.log('[Main] User logged out, redirecting to landing');
+      localStorage.removeItem('userRole');
       router.navigate('/');
     }
   }
