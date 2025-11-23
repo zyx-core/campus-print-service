@@ -511,4 +511,27 @@ export const renderLanding = () => {
       showInstallPrompt();
     });
   }
+
+  // Hide install character on scroll to prevent overlap
+  let scrollTimeout;
+  window.addEventListener('scroll', () => {
+    const character = document.getElementById('install-character');
+    if (character && window.scrollY > 50) {
+      character.classList.add('hidden');
+
+      // Show again after user stops scrolling and is at top
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        if (window.scrollY <= 50 && !character.classList.contains('hidden')) {
+          character.classList.remove('hidden');
+        }
+      }, 1000);
+    } else if (character && window.scrollY <= 50) {
+      // Only show if install button is visible
+      const installBtn = document.getElementById('pwa-install-button');
+      if (installBtn && installBtn.style.display === 'flex') {
+        character.classList.remove('hidden');
+      }
+    }
+  });
 };
