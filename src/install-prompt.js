@@ -56,11 +56,23 @@ function showInstallButton() {
         installButton.style.display = 'flex';
         installButton.addEventListener('click', showInstallPrompt);
     }
+
+    // Also show the character
+    const character = document.getElementById('install-character');
+    if (character) {
+        character.classList.remove('hidden');
+    }
 }
 
 function hideInstallButton() {
     if (installButton) {
         installButton.style.display = 'none';
+    }
+
+    // Also hide the character
+    const character = document.getElementById('install-character');
+    if (character) {
+        character.classList.add('hidden');
     }
 }
 
