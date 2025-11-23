@@ -105,7 +105,7 @@ export const renderLanding = () => {
         <div class="max-w-7xl mx-auto">
           <div class="text-center mb-16 fade-in-up">
             <h2 class="text-4xl md:text-5xl font-bold text-[#043873] mb-4">
-              Enthukondaanu Students Port Print-ne Itra STAN Cheyyunnath?
+              ₹1/Page: Why We STAN! (Campus Vibe Check!)
             </h2>
             <p class="text-xl text-gray-600 max-w-2xl mx-auto">
               Busy-aaya college students-nu vendi nammal fire aayitt design cheythu.
@@ -118,7 +118,7 @@ export const renderLanding = () => {
               <div class="w-16 h-16 bg-[#4F9CF9] bg-opacity-10 rounded-lg flex items-center justify-center mb-6">
                 <span class="text-4xl">⚡</span>
               </div>
-              <h3 class="text-2xl font-bold text-[#043873] mb-4">⚡ Lightning Fast (Ithinte Vibe വേറെയാ!)</h3>
+              <h3 class="text-2xl font-bold text-[#043873] mb-4">⚡ Lightning Fast (Ithinte Speed വേറെയാ!)</h3>
               <p class="text-gray-600 leading-relaxed">
                 PDF seconds-ukalkullil upload cheyyam. Next-day pickup confirm! Last-minute tension-il shook aavanda.
               </p>
@@ -129,9 +129,9 @@ export const renderLanding = () => {
               <div class="w-16 h-16 bg-[#4F9CF9] bg-opacity-10 rounded-lg flex items-center justify-center mb-6">
                 <span class="text-4xl">💰</span>
               </div>
-              <h3 class="text-2xl font-bold text-[#043873] mb-4">💰 Super Affordable (Moneypurse Full Aayirikkatte)</h3>
+              <h3 class="text-2xl font-bold text-[#043873] mb-4">💰 Super Affordable (Moneypurse Full Aayirikkatte - Adyam Ithu Vayikku!)</h3>
               <p class="text-gray-600 leading-relaxed">
-                ₹1/page-il thudangunna double-sided prints! Hidden fees onnum illaatha transparent pricing. Student budget-nu GOAT option!
+                ₹1/page-il thudangunna double-sided prints! This is not a drill—oru roopaykku oru page! Hidden fees onnum illaatha transparent pricing. Student budget-nu GOAT option!
               </p>
             </div>
 
@@ -140,9 +140,9 @@ export const renderLanding = () => {
               <div class="w-16 h-16 bg-[#4F9CF9] bg-opacity-10 rounded-lg flex items-center justify-center mb-6">
                 <span class="text-4xl">📍</span>
               </div>
-              <h3 class="text-2xl font-bold text-[#043873] mb-4">📍 Campus Convenient (Doorstep Aanu, Almost)</h3>
+              <h3 class="text-2xl font-bold text-[#043873] mb-4">📍 Campus Convenient (Doorstep Aanu, Almost!)</h3>
               <p class="text-gray-600 leading-relaxed">
-                UKF CET campus-il vechu thanne prints edukkam. Printing shop-ukal thedi low-key yelupanda. Time save cheyyam, Gyaan vaayikkam!
+                UKF CET Campus-il vechu thanne ningalude prints edukkam. Printing shop-ukal thedi low-key yelupanda. College students-nu vendi college-il thanne service! Time save cheyyam, Gyaan vaayikkam!
               </p>
             </div>
           </div>
@@ -201,7 +201,7 @@ export const renderLanding = () => {
 
           <div class="text-center mt-12">
             <button id="howItWorksCTA" class="bg-white text-[#043873] px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-all shadow-xl">
-              👉🏼 Ippo Thanney Start Printing → (Don't Be Sus!)
+              👉🏼 Ippo Thanney Start Printing → (Don't Be Sus! Save Money!)
             </button>
           </div>
         </div>
@@ -212,7 +212,7 @@ export const renderLanding = () => {
         <div class="max-w-7xl mx-auto">
           <div class="text-center mb-16 fade-in-up">
             <h2 class="text-4xl md:text-5xl font-bold text-[#043873] mb-4">
-              Simple, Transparent Pricing (Enthokke Aanu Scene?)
+              Simple, Transparent Pricing (₹1/Page Is The Main Character!)
             </h2>
             <p class="text-xl text-gray-600 max-w-2xl mx-auto">
               Ethrayo athrayum matrame pay cheyyendu.
@@ -223,7 +223,7 @@ export const renderLanding = () => {
             <!-- Pricing Card 1 -->
             <div class="fade-in-up bg-gray-50 rounded-2xl p-8 border-2 border-gray-200 hover:border-[#4F9CF9] transition-all">
               <div class="text-center">
-                <h3 class="text-2xl font-bold text-[#043873] mb-2">Single-Sided</h3>
+                <h3 class="text-2xl font-bold text-[#043873] mb-2">Single-Sided (Still a W!)</h3>
                 <div class="text-5xl font-bold text-[#4F9CF9] mb-4">₹1.50<span class="text-xl text-gray-500">/page</span></div>
                 <ul class="text-left space-y-3 mb-6">
                   <li class="flex items-center gap-3">
@@ -245,7 +245,7 @@ export const renderLanding = () => {
             <!-- Pricing Card 2 (Recommended) -->
             <div class="fade-in-up bg-[#4F9CF9] rounded-2xl p-8 border-2 border-[#4F9CF9] relative shadow-xl">
               <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-[#FFE492] text-[#043873] px-4 py-1 rounded-full text-sm font-bold">
-                RECOMMENDED Double-Sided (Bussin' Option!)
+                RECOMMENDED: Double-Sided (Bussin' Option!)
               </div>
               <div class="text-center text-white">
                 <h3 class="text-2xl font-bold mb-2">Double-Sided</h3>
@@ -253,7 +253,7 @@ export const renderLanding = () => {
                 <ul class="text-left space-y-3 mb-6">
                   <li class="flex items-center gap-3">
                     <span class="text-[#FFE492]">✓</span>
-                    <span>Black & White Printing</span>
+                    <span>The Legendary ₹1/Page Price!</span>
                   </li>
                   <li class="flex items-center gap-3">
                     <span class="text-[#FFE492]">✓</span>
@@ -345,7 +345,7 @@ export const renderLanding = () => {
       <section class="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-animated">
         <div class="max-w-4xl mx-auto text-center text-white">
           <h2 class="text-4xl md:text-5xl font-bold mb-6 fade-in-up">
-            Ready To Print Smart-aayi?
+            Ready To Print Smart-aayi? (Enthu Kaanichaanu! ₹1/Page!)
           </h2>
           <p class="text-xl mb-8 fade-in-up opacity-90">
             Ningalum Port Print-inte fam-il join cheyyu!
