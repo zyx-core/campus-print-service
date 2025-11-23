@@ -1,4 +1,5 @@
 import { navigateTo } from './router.js';
+import { showInstallPrompt } from './install-prompt.js';
 
 export const renderLanding = () => {
   const app = document.querySelector('#app');
@@ -24,6 +25,12 @@ export const renderLanding = () => {
 
             <!-- CTA Buttons -->
             <div class="flex items-center gap-4">
+              <button id="pwa-install-button" class="hidden items-center gap-2 text-[#043873] font-semibold hover:text-[#4F9CF9] transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                </svg>
+                Install
+              </button>
               <button id="navLoginBtn" class="text-[#043873] font-semibold hover:text-[#4F9CF9] transition-colors">
                 Login
               </button>
@@ -476,6 +483,14 @@ export const renderLanding = () => {
       document.querySelector('#features').scrollIntoView({
         behavior: 'smooth'
       });
+    });
+  }
+
+  // PWA Install Button Handler
+  const pwaInstallBtn = document.getElementById('pwa-install-button');
+  if (pwaInstallBtn) {
+    pwaInstallBtn.addEventListener('click', () => {
+      showInstallPrompt();
     });
   }
 };

@@ -53,7 +53,7 @@ export function showInstallPrompt() {
 function showInstallButton() {
     installButton = document.getElementById('pwa-install-button');
     if (installButton) {
-        installButton.style.display = 'block';
+        installButton.style.display = 'flex';
         installButton.addEventListener('click', showInstallPrompt);
     }
 }
