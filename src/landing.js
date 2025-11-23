@@ -334,7 +334,7 @@ export const renderLanding = () => {
             <div class="fade-in-up bg-white rounded-xl p-6 shadow-sm">
               <h3 class="text-lg font-bold text-[#043873] mb-2">🎓 Is this only for UKF CET students?</h3>
               <p class="text-gray-600">
-                Yes, only for UKF CET, Periodt! College email vechu matrame sign up cheyyan pattukayullu.
+                Yes, only for UKFCET students.
               </p>
             </div>
           </div>
@@ -386,8 +386,8 @@ export const renderLanding = () => {
             <div>
               <h4 class="font-bold text-lg mb-4">Contact</h4>
               <ul class="space-y-2 text-gray-300">
-                <li>📧 support@portprint.com</li>
-                <li>📱 WhatsApp Support</li>
+                <li><a href="mailto:ershadpersonal123@gmail.com" class="hover:text-white transition-colors">📧 ershadpersonal123@gmail.com</a></li>
+                <li><a href="https://wa.me/917994238524" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">📱 WhatsApp: +91 7994238524</a></li>
                 <li>📍 UKF CET Campus</li>
               </ul>
             </div>
