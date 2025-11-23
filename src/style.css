@@ -2,6 +2,77 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-gray-50 text-gray-900;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-gray-50 text-gray-900;
+  }
+}
+
+@layer components {
+
+  /* Glassmorphism effect for navigation */
+  .glass {
+    @apply bg-white bg-opacity-90 backdrop-blur-lg;
+  }
+
+  /* Gradient backgrounds */
+  .gradient-hero {
+    background: linear-gradient(180deg, #f9fafb 0%, #e5e7eb 100%);
+  }
+
+  /* Animated gradient for CTA section */
+  .gradient-animated {
+    background: linear-gradient(-45deg, #043873, #4F9CF9, #1e3a8a, #043873);
+    background-size: 400% 400%;
+    animation: gradient-shift 15s ease infinite;
+  }
+
+  /* Hover lift effect for cards */
+  .hover-lift {
+    @apply transition-all duration-300;
+  }
+
+  .hover-lift:hover {
+    @apply -translate-y-2 shadow-2xl;
+  }
+}
+
+@layer utilities {
+
+  /* Scroll-triggered fade-in animations */
+  .fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+
+  .fade-in-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Text gradient for headings */
+  .text-gradient-blue {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #043873 0%, #4F9CF9 100%);
+  }
+}
+
+/* Keyframe animations */
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }

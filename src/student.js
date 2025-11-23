@@ -4,6 +4,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { supabase } from './supabase';
 import { PDFDocument } from 'pdf-lib';
 import { formatCurrency, formatDate, sanitizeFileName } from './utils';
+import { navigateTo } from './router.js';
 
 export const renderStudentDashboard = (user) => {
   const app = document.querySelector('#app');
@@ -13,9 +14,12 @@ export const renderStudentDashboard = (user) => {
       <nav class="bg-[#043873] shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex justify-between h-16">
-            <div class="flex items-center gap-3">
-               <div class="w-8 h-8 bg-[#4F9CF9] rounded flex items-center justify-center text-white font-bold">P</div>
-               <h1 class="text-xl font-bold text-white tracking-tight">Port Print</h1>
+            <div class="flex items-center gap-6">
+              <a href="#/" id="homeLink" class="flex items-center gap-3 hover:opacity-80 transition cursor-pointer">
+                <div class="w-8 h-8 bg-[#4F9CF9] rounded flex items-center justify-center text-white font-bold">P</div>
+                <h1 class="text-xl font-bold text-white tracking-tight">Port Print</h1>
+              </a>
+              <span class="text-gray-300 text-sm hidden sm:inline">→ Dashboard</span>
             </div>
             <div class="flex items-center space-x-4">
               <span class="text-gray-200 text-sm hidden sm:block">${user.email}</span>
@@ -128,7 +132,16 @@ export const renderStudentDashboard = (user) => {
 
   // Logout Handler
   document.getElementById('logoutBtn').addEventListener('click', () => {
+    console.log('[Student] Logging out...');
     auth.signOut();
+    // Auth state change will handle navigation to landing page
+  });
+
+  // Home link handler
+  document.getElementById('homeLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    console.log('[Student] Navigating to home');
+    navigateTo('/');
   });
 
   // State
