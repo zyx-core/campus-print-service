@@ -47,7 +47,7 @@ export const renderLanding = () => {
               
               <h1 class="text-5xl md:text-6xl font-bold text-[#043873] mb-6 leading-tight">
                 Port Print: NO CAP!<br/>
-                <span class="text-gradient-blue">Vigwam, Kuracha Paisa, Oru Tension-um Illaatha Campus Printing Service!</span> 🔥
+                <span class="text-gradient-blue"> Online Campus Printing Service!</span> 🔥
               </h1>
               
               <p class="text-xl text-gray-600 mb-8 leading-relaxed">
