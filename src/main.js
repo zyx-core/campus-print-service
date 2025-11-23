@@ -5,6 +5,7 @@ import { renderLanding } from './landing.js'
 import { renderLogin, renderSignup } from './ui.js'
 import { renderStudentDashboard } from './student.js'
 import { renderAdminDashboard } from './admin.js'
+import { renderProfileSetup } from './profile.js'
 import { router } from './router.js'
 import { auth } from './firebase.js'
 import { onAuthStateChanged } from 'firebase/auth'
@@ -31,6 +32,9 @@ console.log('[Main] Registering routes...');
 router.register('/', renderLanding, false);        // Public landing page
 router.register('/login', renderLogin, false);      // Public login page
 router.register('/signup', renderSignup, false);    // Public signup page
+router.register('/profile-setup', (user) => {
+  renderProfileSetup(user || auth.currentUser);
+}, true);  // Protected profile setup page
 router.register('/dashboard', (user) => {
   renderStudentDashboard(user || auth.currentUser);
 }, true);  // Protected student dashboard 
@@ -78,7 +82,10 @@ onAuthStateChanged(auth, async (user) => {
           console.log('[Main] User role fetched:', userRole);
           localStorage.setItem('userRole', userRole);
         } else {
-          console.log('[Main] User document not found, defaulting to student');
+          // User document doesn't exist - redirect to profile setup
+          console.log('[Main] User document not found, redirecting to profile setup');
+          router.navigate('/profile-setup');
+          return; // Exit early
         }
 
         const currentPath = router.getCurrentPath();
@@ -121,12 +128,16 @@ onAuthStateChanged(auth, async (user) => {
           const userData = userDoc.data();
           userRole = userData.role || 'student';
           localStorage.setItem('userRole', userRole);
-        }
 
-        if (userRole === 'admin') {
-          router.navigate('/admin');
+          if (userRole === 'admin') {
+            router.navigate('/admin');
+          } else {
+            router.navigate('/dashboard');
+          }
         } else {
-          router.navigate('/dashboard');
+          // User document doesn't exist - redirect to profile setup
+          console.log('[Main] User document not found after login, redirecting to profile setup');
+          router.navigate('/profile-setup');
         }
       } catch (error) {
         console.error('[Main] Error fetching user role:', error);

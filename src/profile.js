@@ -1,7 +1,6 @@
 import { db } from './firebase';
 import { doc, setDoc } from "firebase/firestore";
-
-import { renderStudentDashboard } from './student';
+import { navigateTo } from './router.js';
 
 export const renderProfileSetup = (user) => {
   const app = document.querySelector('#app');
@@ -58,7 +57,7 @@ export const renderProfileSetup = (user) => {
     const fullName = document.getElementById('fullName').value;
     const year = document.getElementById('year').value;
     const studentClass = document.getElementById('studentClass').value;
-    const department = document.getElementById('department').value; // Get department value
+    const department = document.getElementById('department').value;
     const phone = document.getElementById('phone').value;
 
     try {
@@ -73,8 +72,9 @@ export const renderProfileSetup = (user) => {
         createdAt: new Date()
       });
 
-      // After saving, redirect to dashboard
-      renderStudentDashboard(user);
+      // After saving, redirect to dashboard using router
+      console.log('[Profile] Profile saved, redirecting to dashboard');
+      navigateTo('/dashboard');
     } catch (error) {
       console.error("Error saving profile:", error);
       alert("Failed to save profile: " + error.message);
