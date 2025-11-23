@@ -42,18 +42,18 @@ export const renderLanding = () => {
         </div>
         
         <!-- Install Prompt Character (Only shows when install button is visible) -->
-        <div id="install-character" class="hidden fixed top-24 right-8 z-40 animate-bounce">
+        <div id="install-character" class="hidden fixed top-32 right-6 z-40 animate-bounce">
           <div class="relative">
             <!-- Speech Bubble -->
-            <div class="absolute bottom-full right-0 mb-2 bg-white rounded-2xl shadow-2xl p-4 border-4 border-[#4F9CF9] min-w-[200px]">
-              <p class="text-[#043873] font-bold text-sm whitespace-nowrap">
-                👆 Makale, ippo thanne install cheyto!
+            <div class="absolute bottom-full right-0 mb-1 bg-white rounded-xl shadow-lg p-2 border-2 border-[#4F9CF9] min-w-[140px]">
+              <p class="text-[#043873] font-bold text-xs whitespace-nowrap">
+                👆 Makale, install cheyto!
               </p>
               <!-- Bubble Arrow -->
-              <div class="absolute top-full right-8 w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-[#4F9CF9]"></div>
+              <div class="absolute top-full right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-[#4F9CF9]"></div>
             </div>
-            <!-- Character Emoji -->
-            <div class="text-6xl">
+            <!-- Character Emoji (Smaller) -->
+            <div class="text-3xl">
               👨‍💻
             </div>
           </div>
