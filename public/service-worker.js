@@ -1,5 +1,5 @@
-const CACHE_NAME = 'port-print-v1';
-const RUNTIME_CACHE = 'port-print-runtime-v1';
+const CACHE_NAME = 'port-print-v2';  // Updated version to force refresh
+const RUNTIME_CACHE = 'port-print-runtime-v2';  // Updated version
 
 // Assets to cache on install
 const PRECACHE_ASSETS = [

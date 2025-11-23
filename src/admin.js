@@ -69,7 +69,8 @@ export const renderAdminDashboard = (user) => {
           </div>
         </div>
       </div>
-    </div >
+    </div>
+
   `;
 
   // Logout Handler

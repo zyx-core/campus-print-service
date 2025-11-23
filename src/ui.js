@@ -32,36 +32,44 @@ export const renderLogin = () => {
               <h1 class="text-3xl font-bold tracking-tight">Port Print</h1>
             </div>
             
-            <h2 class="text-4xl font-bold mb-6 leading-tight">Get More Done with <br/><span class="text-[#4F9CF9]">Smart Printing</span></h2>
+            <h2 class="text-3xl font-bold mb-4 leading-tight">⚡ Print cheyyan und?</h2>
             
-            <p class="mb-8 text-gray-300 text-lg leading-relaxed">Port Print is your official, affordable, and incredibly convenient print service, built just for UKF College of Engineering and Technology.</p>
-            
-            <div class="bg-[#4F9CF9] bg-opacity-10 rounded-xl p-6 mb-8 border border-[#4F9CF9] border-opacity-20 backdrop-blur-sm">
-              <h3 class="font-bold text-lg mb-4 flex items-center text-white">
-                <span class="mr-2">💰</span> Simple Pricing
-              </h3>
-              <div class="space-y-3">
-                <div class="flex justify-between items-center border-b border-white border-opacity-10 pb-2">
-                  <span class="text-gray-200">Standard Page Print</span>
-                  <span class="font-bold text-xl text-[#FFE492]">₹1 <span class="text-sm font-normal text-white">/page</span></span>
+            <p class="mb-6 text-gray-200 text-base leading-relaxed">
+              Assignments, notes, project drafts… ithokke last minute varum alle?<br/>
+              Worry venda! Port Print undenkil <span class="text-[#FFE492] font-semibold">print tension history!</span> 😎
+            </p>
+
+            <div class="bg-white bg-opacity-5 rounded-lg p-4 mb-6 border border-white border-opacity-10">
+              <p class="text-gray-100 mb-3">
+                🖨️ <span class="font-bold text-white">Port Print</span> = cheap, fast, tension-free.
+              </p>
+              <div class="space-y-2 text-sm">
+                <div class="flex items-center gap-2">
+                  <span class="text-[#FFE492]">✓</span>
+                  <span class="text-gray-200">Pocket-friendly rate: <span class="font-bold text-white">₹1/page</span></span>
                 </div>
-                <div class="flex justify-between items-center">
-                  <span class="text-gray-200">Spiral Binding</span>
-                  <span class="font-bold text-xl text-[#FFE492]">₹25 <span class="text-sm font-normal text-white">/doc</span></span>
+                <div class="flex items-center gap-2">
+                  <span class="text-[#FFE492]">✓</span>
+                  <span class="text-gray-200">Project-perfect binding: <span class="font-bold text-white">₹25/document</span></span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-[#FFE492]">✓</span>
+                  <span class="text-gray-200">Upload cheytha mathi → Nale pickup → Easy life!</span>
                 </div>
               </div>
             </div>
 
-            <div class="flex gap-6 text-sm font-medium text-gray-300">
-              <div class="flex items-center gap-2">
-                <div class="w-2 h-2 rounded-full bg-[#FFE492]"></div>
-                Lightning-Fast
-              </div>
-              <div class="flex items-center gap-2">
-                <div class="w-2 h-2 rounded-full bg-[#4F9CF9]"></div>
-                Next-Day Pickup
-              </div>
+            <div class="bg-[#4F9CF9] bg-opacity-15 rounded-lg p-4 mb-6 border border-[#4F9CF9] border-opacity-30">
+              <p class="text-white text-sm leading-relaxed">
+                ⏱️ <span class="font-bold">Next-day pickup guarantee</span>, so waiting, rushing, panic okke illa.<br/>
+                College-il thanne print kitte, time waste onnum illa.
+              </p>
             </div>
+
+            <p class="text-gray-300 text-sm italic">
+              Smart students eppozhum smart solutions thanne choose cheyyum…<br/>
+              So print smart. <span class="text-[#FFE492] font-bold not-italic">Print with Port Print! 🚀✨</span>
+            </p>
           </div>
         </div>
 

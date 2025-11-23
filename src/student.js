@@ -3,12 +3,13 @@ import { collection, addDoc, query, where, orderBy, onSnapshot } from "firebase/
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { supabase } from './supabase';
 import { PDFDocument } from 'pdf-lib';
-import { formatCurrency, formatDate } from './utils';
+import { formatCurrency, formatDate, sanitizeFileName } from './utils';
 
 export const renderStudentDashboard = (user) => {
   const app = document.querySelector('#app');
   app.innerHTML = `
-  < div class="min-h-screen bg-gray-50" >
+  <div class="min-h-screen bg-gray-50">
+
       <nav class="bg-[#043873] shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex justify-between h-16">
@@ -121,7 +122,8 @@ export const renderStudentDashboard = (user) => {
       <p class="text-xs text-gray-400 mt-2">Please do not close this window.</p>
     </div>
   </div>
-    </div >
+    </div>
+
   `;
 
   // Logout Handler
@@ -225,28 +227,36 @@ export const renderStudentDashboard = (user) => {
 
       submitBtn.textContent = "Uploading PDF...";
 
-      // 1. Upload PDF to Supabase Storage
-      const fileName = `${user.uid}/${Date.now()}_${currentFile.name}`;
+      // 1. Sanitize filename to prevent issues with special characters
+      console.log('[DEBUG] Original filename:', currentFile.name);
+      const fileInfo = sanitizeFileName(currentFile.name);
+      console.log('[DEBUG] Sanitized filename:', fileInfo.safeFileName);
+      console.log('[DEBUG] Full fileInfo:', fileInfo);
+
+      // 2. Upload PDF to Supabase Storage with sanitized filename
+      const storagePath = `${user.uid}/${fileInfo.safeFileName}`;
+      console.log('[DEBUG] Storage path:', storagePath);
       const { data, error: uploadError } = await supabase.storage
         .from('pdfs')
-        .upload(fileName, currentFile);
+        .upload(storagePath, currentFile);
 
       if (uploadError) throw uploadError;
 
       // Get Public URL
       const { data: { publicUrl } } = supabase.storage
         .from('pdfs')
-        .getPublicUrl(fileName);
+        .getPublicUrl(storagePath);
 
       submitBtn.textContent = "Saving Request...";
 
-      // 2. Save to Firestore with PDF URL
+      // 3. Save to Firestore with PDF URL (use original filename for display)
       await addDoc(collection(db, "requests"), {
         userId: user.uid,
         userEmail: user.email,
-        fileName: currentFile.name,
+        fileName: fileInfo.originalFileName,  // Store original filename for display
+        sanitizedFileName: fileInfo.safeFileName,  // Store sanitized filename for reference
         pdfUrl: publicUrl,
-        pdfPath: fileName,
+        pdfPath: storagePath,
         pageCount: pageCount,
         options: {
           duplex: duplexSelect.value,
@@ -355,27 +365,27 @@ export const renderStudentDashboard = (user) => {
       const item = document.createElement('div');
       item.className = 'border rounded-md p-4 hover:bg-gray-50 transition-colors';
       item.innerHTML = `
-  < div class="flex justify-between items-start mb-2" >
+        <div class="flex justify-between items-start mb-2">
           <div>
             <h3 class="font-medium text-gray-900 truncate max-w-[150px]" title="${data.fileName}">${data.fileName}</h3>
             <p class="text-xs text-gray-500">${date}</p>
           </div>
           <span class="px-2 py-1 text-xs font-semibold rounded-full ${statusClass}">${data.status}</span>
-        </div >
-  <div class="text-sm text-gray-600 space-y-1">
-    <div class="flex justify-between">
-      <span>Pages: ${data.pageCount}</span>
-      <span>${data.options.duplex === 'duplex' ? 'Duplex' : 'Simplex'}</span>
-    </div>
-    <div class="flex justify-between">
-      <span class="text-xs ${data.paymentMethod === 'Cash on Delivery' ? 'text-orange-600' : 'text-green-600'}">${data.paymentMethod || 'Online Payment'}</span>
-      <span class="text-xs text-gray-500">${data.paymentStatus || 'Paid'}</span>
-    </div>
-    <div class="flex justify-between font-medium text-gray-900 pt-2 border-t mt-2">
-      <span>Total</span>
-      <span>${formatCurrency(data.totalCost)}</span>
-    </div>
-  </div>
+        </div>
+        <div class="text-sm text-gray-600 space-y-1">
+          <div class="flex justify-between">
+            <span>Pages: ${data.pageCount}</span>
+            <span>${data.options.duplex === 'duplex' ? 'Duplex' : 'Simplex'}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-xs ${data.paymentMethod === 'Cash on Delivery' ? 'text-orange-600' : 'text-green-600'}">${data.paymentMethod || 'Online Payment'}</span>
+            <span class="text-xs text-gray-500">${data.paymentStatus || 'Paid'}</span>
+          </div>
+          <div class="flex justify-between font-medium text-gray-900 pt-2 border-t mt-2">
+            <span>Total</span>
+            <span>${formatCurrency(data.totalCost)}</span>
+          </div>
+        </div>
 `;
       requestsList.appendChild(item);
     });
