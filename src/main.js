@@ -53,7 +53,7 @@ router.init();
 let authInitialized = false;
 
 import { doc, getDoc } from 'firebase/firestore'
-import { auth, db } from './firebase.js'
+import { db } from './firebase.js'
 
 // ... existing imports ...
 
