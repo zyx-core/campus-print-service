@@ -42,42 +42,41 @@ export const renderLanding = () => {
             <!-- Hero Content -->
             <div class="fade-in-up">
               <div class="inline-block mb-4 px-4 py-2 bg-[#4F9CF9] bg-opacity-10 rounded-full">
-                <span class="text-[#4F9CF9] font-semibold text-sm">🎓 Made for UKF CET Students</span>
+                <span class="text-[#4F9CF9] font-semibold text-sm">🎓 Students, Ithokke GOAT Stuff Aan!</span>
               </div>
               
               <h1 class="text-5xl md:text-6xl font-bold text-[#043873] mb-6 leading-tight">
-                Print Smart.<br/>
-                <span class="text-gradient-blue">Print with Port Print</span> 🚀
+                Port Print: NO CAP!<br/>
+                <span class="text-gradient-blue">Vigwam, Kuracha Paisa, Oru Tension-um Illaatha Campus Printing Service!</span> 🔥
               </h1>
               
               <p class="text-xl text-gray-600 mb-8 leading-relaxed">
-                Fast, affordable, and hassle-free campus printing service. 
-                Upload your documents, pay online, and pick up next day at college. 
-                <span class="font-semibold text-[#043873]">Starting at just ₹1/page.</span>
+                Ningalude document slay aakki upload cheyyu, online-il pay cheyyu, bet, next day college-il vannu collect cheyyu. 
+                <span class="font-semibold text-[#043873]">Starting just ₹1/page! What a W!</span>
               </p>
 
               <div class="flex flex-col sm:flex-row gap-4 mb-8">
                 <button id="heroGetStartedBtn" class="bg-[#4F9CF9] text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-[#2F7ACF] transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
-                  Get Started Free
+                  👉🏼 Ippo Thanney Get Started Free (Enthina Simp-aavunnath?)
                 </button>
                 <button id="heroLearnMoreBtn" class="border-2 border-[#043873] text-[#043873] px-8 py-4 rounded-lg font-bold text-lg hover:bg-[#043873] hover:text-white transition-all">
-                  Learn More
+                  👉🏼 Kooduthal Ariyaan (Vibe Check Venamenkil)
                 </button>
               </div>
 
               <!-- Stats -->
               <div class="flex gap-8 pt-8 border-t border-gray-200">
                 <div>
-                  <div class="text-3xl font-bold text-[#043873]">500+</div>
-                  <div class="text-sm text-gray-500">Documents Printed</div>
+                  <div class="text-3xl font-bold text-[#043873]">💯500+</div>
+                  <div class="text-sm text-gray-500">Documents Printed (Nammal Flex Cheyyukayanu!)</div>
                 </div>
                 <div>
-                  <div class="text-3xl font-bold text-[#043873]">95%</div>
-                  <div class="text-sm text-gray-500">Satisfaction Rate</div>
+                  <div class="text-3xl font-bold text-[#043873]">⭐95%</div>
+                  <div class="text-sm text-gray-500">Satisfaction Rate (Slayed!)</div>
                 </div>
                 <div>
-                  <div class="text-3xl font-bold text-[#043873]">Next Day</div>
-                  <div class="text-sm text-gray-500">Pickup Time</div>
+                  <div class="text-3xl font-bold text-[#043873]">🚀Next Day</div>
+                  <div class="text-sm text-gray-500">Pickup Time (Fast Aanu, No Cap!)</div>
                 </div>
               </div>
             </div>
@@ -92,7 +91,7 @@ export const renderLanding = () => {
                     <div class="text-8xl mb-4">📄</div>
                     <div class="text-6xl mb-4">➡️</div>
                     <div class="text-8xl mb-4">🖨️</div>
-                    <div class="text-2xl font-bold text-[#043873]">Upload → Print → Collect</div>
+                    <div class="text-2xl font-bold text-[#043873]">Upload → Print → Collect (The whole scene is smooth!)</div>
                   </div>
                 </div>
               </div>
@@ -106,10 +105,10 @@ export const renderLanding = () => {
         <div class="max-w-7xl mx-auto">
           <div class="text-center mb-16 fade-in-up">
             <h2 class="text-4xl md:text-5xl font-bold text-[#043873] mb-4">
-              Why Students Love Port Print
+              Enthukondaanu Students Port Print-ne Itra STAN Cheyyunnath?
             </h2>
             <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-              We've designed the perfect printing solution for busy college students
+              Busy-aaya college students-nu vendi nammal fire aayitt design cheythu.
             </p>
           </div>
 
@@ -119,10 +118,9 @@ export const renderLanding = () => {
               <div class="w-16 h-16 bg-[#4F9CF9] bg-opacity-10 rounded-lg flex items-center justify-center mb-6">
                 <span class="text-4xl">⚡</span>
               </div>
-              <h3 class="text-2xl font-bold text-[#043873] mb-4">Lightning Fast</h3>
+              <h3 class="text-2xl font-bold text-[#043873] mb-4">⚡ Lightning Fast (Ithinte Vibe വേറെയാ!)</h3>
               <p class="text-gray-600 leading-relaxed">
-                Upload your PDF in seconds. We guarantee next-day pickup at your college campus. 
-                No more last-minute printing stress!
+                PDF seconds-ukalkullil upload cheyyam. Next-day pickup confirm! Last-minute tension-il shook aavanda.
               </p>
             </div>
 
@@ -131,10 +129,9 @@ export const renderLanding = () => {
               <div class="w-16 h-16 bg-[#4F9CF9] bg-opacity-10 rounded-lg flex items-center justify-center mb-6">
                 <span class="text-4xl">💰</span>
               </div>
-              <h3 class="text-2xl font-bold text-[#043873] mb-4">Super Affordable</h3>
+              <h3 class="text-2xl font-bold text-[#043873] mb-4">💰 Super Affordable (Moneypurse Full Aayirikkatte)</h3>
               <p class="text-gray-600 leading-relaxed">
-                Starting at just ₹1/page for double-sided prints. Transparent pricing with no hidden fees. 
-                Perfect for student budgets!
+                ₹1/page-il thudangunna double-sided prints! Hidden fees onnum illaatha transparent pricing. Student budget-nu GOAT option!
               </p>
             </div>
 
@@ -143,10 +140,9 @@ export const renderLanding = () => {
               <div class="w-16 h-16 bg-[#4F9CF9] bg-opacity-10 rounded-lg flex items-center justify-center mb-6">
                 <span class="text-4xl">📍</span>
               </div>
-              <h3 class="text-2xl font-bold text-[#043873] mb-4">Campus Convenient</h3>
+              <h3 class="text-2xl font-bold text-[#043873] mb-4">📍 Campus Convenient (Doorstep Aanu, Almost)</h3>
               <p class="text-gray-600 leading-relaxed">
-                Pick up your prints right at UKF CET campus. No need to travel to printing shops. 
-                Save time and focus on studies!
+                UKF CET campus-il vechu thanne prints edukkam. Printing shop-ukal thedi low-key yelupanda. Time save cheyyam, Gyaan vaayikkam!
               </p>
             </div>
           </div>
@@ -158,10 +154,10 @@ export const renderLanding = () => {
         <div class="max-w-7xl mx-auto">
           <div class="text-center mb-16 fade-in-up">
             <h2 class="text-4xl md:text-5xl font-bold mb-4">
-              How Port Print Works
+              Port Print Works Cheyyunnath Ee Vidham (No Cap Scene)
             </h2>
             <p class="text-xl text-gray-200 max-w-2xl mx-auto">
-              Get your documents printed in 4 simple steps
+              4 simple steps-il W adikkam.
             </p>
           </div>
 
@@ -171,8 +167,8 @@ export const renderLanding = () => {
               <div class="w-20 h-20 bg-[#4F9CF9] rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-6">
                 1
               </div>
-              <h3 class="text-xl font-bold mb-3">Sign Up</h3>
-              <p class="text-gray-300">Create your free account with your college email</p>
+              <h3 class="text-xl font-bold mb-3">Sign Up (College Email Ithu Oru Rule Aanu)</h3>
+              <p class="text-gray-300">College email ID vechu oru free account thudanguka.</p>
             </div>
 
             <!-- Step 2 -->
@@ -180,8 +176,8 @@ export const renderLanding = () => {
               <div class="w-20 h-20 bg-[#4F9CF9] rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-6">
                 2
               </div>
-              <h3 class="text-xl font-bold mb-3">Upload PDF</h3>
-              <p class="text-gray-300">Upload your document and choose print options</p>
+              <h3 class="text-xl font-bold mb-3">Upload PDF (PDF Aayirikkanam, Periodt.)</h3>
+              <p class="text-gray-300">Ningalude document upload cheyyu, print options select cheyyu.</p>
             </div>
 
             <!-- Step 3 -->
@@ -189,8 +185,8 @@ export const renderLanding = () => {
               <div class="w-20 h-20 bg-[#4F9CF9] rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-6">
                 3
               </div>
-              <h3 class="text-xl font-bold mb-3">Pay & Submit</h3>
-              <p class="text-gray-300">Make secure payment and submit your request</p>
+              <h3 class="text-xl font-bold mb-3">Pay & Submit (Security Fire Aanu!)</h3>
+              <p class="text-gray-300">Payment cheythu request submit cheyyuka.</p>
             </div>
 
             <!-- Step 4 -->
@@ -198,14 +194,14 @@ export const renderLanding = () => {
               <div class="w-20 h-20 bg-[#4F9CF9] rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-6">
                 4
               </div>
-              <h3 class="text-xl font-bold mb-3">Pick Up</h3>
-              <p class="text-gray-300">Collect your prints next day at campus</p>
+              <h3 class="text-xl font-bold mb-3">Pick Up (Big W for You!)</h3>
+              <p class="text-gray-300">Next day campus-il ninnu ningalude prints collect cheyyuka. Slay!</p>
             </div>
           </div>
 
           <div class="text-center mt-12">
             <button id="howItWorksCTA" class="bg-white text-[#043873] px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-all shadow-xl">
-              Start Printing Now →
+              👉🏼 Ippo Thanney Start Printing → (Don't Be Sus!)
             </button>
           </div>
         </div>
@@ -216,10 +212,10 @@ export const renderLanding = () => {
         <div class="max-w-7xl mx-auto">
           <div class="text-center mb-16 fade-in-up">
             <h2 class="text-4xl md:text-5xl font-bold text-[#043873] mb-4">
-              Simple, Transparent Pricing
+              Simple, Transparent Pricing (Enthokke Aanu Scene?)
             </h2>
             <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-              No hidden fees. Pay only for what you print.
+              Ethrayo athrayum matrame pay cheyyendu.
             </p>
           </div>
 
@@ -249,7 +245,7 @@ export const renderLanding = () => {
             <!-- Pricing Card 2 (Recommended) -->
             <div class="fade-in-up bg-[#4F9CF9] rounded-2xl p-8 border-2 border-[#4F9CF9] relative shadow-xl">
               <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-[#FFE492] text-[#043873] px-4 py-1 rounded-full text-sm font-bold">
-                RECOMMENDED
+                RECOMMENDED Double-Sided (Bussin' Option!)
               </div>
               <div class="text-center text-white">
                 <h3 class="text-2xl font-bold mb-2">Double-Sided</h3>
@@ -261,7 +257,7 @@ export const renderLanding = () => {
                   </li>
                   <li class="flex items-center gap-3">
                     <span class="text-[#FFE492]">✓</span>
-                    <span>Eco-Friendly & Cheaper</span>
+                    <span>Eco-Friendly & Cheaper (Fire!)</span>
                   </li>
                   <li class="flex items-center gap-3">
                     <span class="text-[#FFE492]">✓</span>
@@ -274,19 +270,19 @@ export const renderLanding = () => {
 
           <!-- Additional Services -->
           <div class="fade-in-up bg-gray-50 rounded-xl p-8 max-w-2xl mx-auto">
-            <h3 class="text-xl font-bold text-[#043873] mb-4 text-center">Additional Services</h3>
+            <h3 class="text-xl font-bold text-[#043873] mb-4 text-center">Additional Services (Drip Vendaathavar Arellam)</h3>
             <div class="space-y-3">
               <div class="flex justify-between items-center">
                 <span class="text-gray-700">📎 Stapling</span>
-                <span class="font-bold text-[#043873]">Free</span>
+                <span class="font-bold text-[#043873]">Free (W!)</span>
               </div>
               <div class="flex justify-between items-center">
                 <span class="text-gray-700">📘 Spiral Binding</span>
-                <span class="font-bold text-[#043873]">₹25/document</span>
+                <span class="font-bold text-[#043873]">₹25/document (Final project slay cheyyan!)</span>
               </div>
               <div class="flex justify-between items-center">
                 <span class="text-gray-700">📑 Multiple Copies</span>
-                <span class="font-bold text-[#043873]">Same Rate × Copies</span>
+                <span class="font-bold text-[#043873]">Same Rate × Copies (Kopikal flex cheythu edukkam!)</span>
               </div>
             </div>
           </div>
@@ -298,10 +294,10 @@ export const renderLanding = () => {
         <div class="max-w-4xl mx-auto">
           <div class="text-center mb-16 fade-in-up">
             <h2 class="text-4xl md:text-5xl font-bold text-[#043873] mb-4">
-              Frequently Asked Questions
+              Frequently Asked Questions (F.A.Q. - Tea Spill Cheyyaan Ready!)
             </h2>
             <p class="text-xl text-gray-600">
-              Got questions? We've got answers.
+              Samsayam Theerkkaam.
             </p>
           </div>
 
@@ -310,35 +306,35 @@ export const renderLanding = () => {
             <div class="fade-in-up bg-white rounded-xl p-6 shadow-sm">
               <h3 class="text-lg font-bold text-[#043873] mb-2">📦 When can I pick up my prints?</h3>
               <p class="text-gray-600">
-                We guarantee next-day pickup! Upload your document today, and it'll be ready for collection at the campus tomorrow.
+                Next-day pickup guarantee! No Cap! Innu upload cheythal, naale college-il collection-nu ready aayirikkum.
               </p>
             </div>
 
             <div class="fade-in-up bg-white rounded-xl p-6 shadow-sm">
               <h3 class="text-lg font-bold text-[#043873] mb-2">💳 What payment methods do you accept?</h3>
               <p class="text-gray-600">
-                We currently accept Cash on Delivery (COD). You can pay when you pick up your prints at campus. Online payment options coming soon!
+                Ippo Cash on Delivery (COD) matrame ullu. Pick up cheyyumbol paisa kodukkam. Online options pettennu varum, bet!
               </p>
             </div>
 
             <div class="fade-in-up bg-white rounded-xl p-6 shadow-sm">
               <h3 class="text-lg font-bold text-[#043873] mb-2">📄 What file formats do you support?</h3>
               <p class="text-gray-600">
-                Currently, we only accept PDF files. Make sure to convert your Word documents, presentations, or images to PDF before uploading.
+                PDF files matrame support cheyyunnathullu. Word, PowerPoint okke PDF-lekku maattiyittu upload cheyyuka, illenkil Big Yikes aakum.
               </p>
             </div>
 
             <div class="fade-in-up bg-white rounded-xl p-6 shadow-sm">
               <h3 class="text-lg font-bold text-[#043873] mb-2">📏 Is there a page limit?</h3>
               <p class="text-gray-600">
-                No page limit! Whether you need 5 pages or 500 pages printed, we've got you covered. File size limit is 300MB.
+                Page limit illa! 5 pages venamo atho 500 venamo, chill aayi print cheythu tharam. File size limit 300MB aayirikkanam.
               </p>
             </div>
 
             <div class="fade-in-up bg-white rounded-xl p-6 shadow-sm">
               <h3 class="text-lg font-bold text-[#043873] mb-2">🎓 Is this only for UKF CET students?</h3>
               <p class="text-gray-600">
-                Currently, yes! Port Print is exclusively for UKF CET students. You'll need to sign up with your college email.
+                Yes, only for UKF CET, Periodt! College email vechu matrame sign up cheyyan pattukayullu.
               </p>
             </div>
           </div>
@@ -349,13 +345,13 @@ export const renderLanding = () => {
       <section class="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-animated">
         <div class="max-w-4xl mx-auto text-center text-white">
           <h2 class="text-4xl md:text-5xl font-bold mb-6 fade-in-up">
-            Ready to Print Smart?
+            Ready To Print Smart-aayi?
           </h2>
           <p class="text-xl mb-8 fade-in-up opacity-90">
-            Join hundreds of students who've made printing hassle-free with Port Print
+            Ningalum Port Print-inte fam-il join cheyyu!
           </p>
           <button id="finalCTA" class="fade-in-up bg-white text-[#043873] px-10 py-5 rounded-lg font-bold text-xl hover:bg-gray-100 transition-all shadow-2xl hover:shadow-3xl transform hover:-translate-y-1">
-            Get Started Free →
+            👉🏼 Get Started Free → (Ithu Oru W Move Aanu!)
           </button>
         </div>
       </section>
