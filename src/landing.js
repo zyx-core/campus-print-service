@@ -244,33 +244,11 @@ export const renderLanding = () => {
             </p>
           </div>
 
-          <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-12">
-            <!-- Pricing Card 1 -->
-            <div class="fade-in-up bg-gray-50 rounded-2xl p-8 border-2 border-gray-200 hover:border-[#4F9CF9] transition-all">
-              <div class="text-center">
-                <h3 class="text-2xl font-bold text-[#043873] mb-2">Single-Sided</h3>
-                <div class="text-5xl font-bold text-[#4F9CF9] mb-4">₹1.50<span class="text-xl text-gray-500">/page</span></div>
-                <ul class="text-left space-y-3 mb-6">
-                  <li class="flex items-center gap-3">
-                    <span class="text-green-500">✓</span>
-                    <span>Black & White Printing</span>
-                  </li>
-                  <li class="flex items-center gap-3">
-                    <span class="text-green-500">✓</span>
-                    <span>Standard Quality</span>
-                  </li>
-                  <li class="flex items-center gap-3">
-                    <span class="text-green-500">✓</span>
-                    <span>Free Stapling</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <!-- Pricing Card 2 (Recommended) -->
+          <div class="max-w-md mx-auto mb-12">
+            <!-- Pricing Card (Double-Sided Only) -->
             <div class="fade-in-up bg-[#4F9CF9] rounded-2xl p-8 border-2 border-[#4F9CF9] relative shadow-xl">
               <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-[#FFE492] text-[#043873] px-4 py-1 rounded-full text-sm font-bold">
-                RECOMMENDED
+                BEST PRICE
               </div>
               <div class="text-center text-white">
                 <h3 class="text-2xl font-bold mb-2">Double-Sided</h3>
