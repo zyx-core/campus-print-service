@@ -28,6 +28,10 @@ export default async function handler(req, res) {
             await handleNewRequest(data);
         } else if (type === 'status_update') {
             await handleStatusUpdate(data);
+        } else if (type === 'request_deleted') {
+            await handleRequestDeleted(data);
+        } else if (type === 'request_rejected') {
+            await handleRequestRejected(data);
         } else {
             return res.status(400).json({ error: 'Invalid notification type' });
         }
@@ -88,6 +92,42 @@ async function handleStatusUpdate(data) {
         from: 'Campus Print Service <onboarding@resend.dev>',
         to: data.userEmail,
         subject: `Status Update: ${data.newStatus}`,
+        html: html,
+    });
+}
+
+async function handleRequestDeleted(data) {
+    if (!process.env.ADMIN_EMAIL) return;
+
+    const html = `
+    <h2>🗑️ Request Deleted by Student</h2>
+    <p>The following request was deleted by the student:</p>
+    <p><strong>Student:</strong> ${data.userEmail}</p>
+    <p><strong>File:</strong> ${data.fileName}</p>
+    <p><strong>Request ID:</strong> ${data.requestId}</p>
+  `;
+
+    await resend.emails.send({
+        from: 'Campus Print Service <onboarding@resend.dev>',
+        to: process.env.ADMIN_EMAIL,
+        subject: `Request Deleted: ${data.fileName}`,
+        html: html,
+    });
+}
+
+async function handleRequestRejected(data) {
+    const html = `
+    <h2>❌ Request Rejected</h2>
+    <p>We apologize, but we are unable to fulfill your print request for <strong>${data.fileName}</strong>.</p>
+    <p><strong>Reason:</strong> The request was rejected by the admin.</p>
+    <p>If you have already paid, a refund will be processed shortly (if applicable).</p>
+    <p>Please contact us if you have any questions.</p>
+  `;
+
+    await resend.emails.send({
+        from: 'Campus Print Service <onboarding@resend.dev>',
+        to: data.userEmail,
+        subject: `Request Rejected: ${data.fileName}`,
         html: html,
     });
 }

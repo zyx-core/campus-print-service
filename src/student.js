@@ -1,5 +1,5 @@
 import { auth, db, storage } from './firebase';
-import { collection, addDoc, query, where, orderBy, onSnapshot, deleteDoc, doc } from "firebase/firestore";
+import { collection, addDoc, query, where, orderBy, onSnapshot, deleteDoc, doc, getDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { supabase } from './supabase';
 import { PDFDocument } from 'pdf-lib';
@@ -456,7 +456,29 @@ export const renderStudentDashboard = (user) => {
     if (!confirm("Are you sure you want to delete this request?")) return;
 
     try {
-      await deleteDoc(doc(db, "requests", requestId));
+      // Fetch data for email before deleting
+      const docRef = doc(db, "requests", requestId);
+      const docSnap = await getDoc(docRef); // Need to import getDoc
+      const data = docSnap.exists() ? docSnap.data() : null;
+
+      await deleteDoc(docRef);
+
+      // Send Email to Admin
+      if (data) {
+        fetch('/api/email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'request_deleted',
+            data: {
+              userEmail: user.email,
+              fileName: data.fileName || 'Unknown File',
+              requestId: requestId
+            }
+          })
+        }).catch(err => console.error("Failed to send delete notification:", err));
+      }
+
       // UI updates automatically via onSnapshot
     } catch (error) {
       console.error("Error deleting request:", error);

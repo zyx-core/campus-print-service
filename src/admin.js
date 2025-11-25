@@ -1,10 +1,43 @@
 import { auth, db } from './firebase';
-import { collection, query, orderBy, onSnapshot, doc, updateDoc, getDoc } from "firebase/firestore";
+import { collection, query, where, orderBy, onSnapshot, doc, updateDoc, getDoc, getDocs, deleteDoc } from "firebase/firestore";
 import { supabase } from './supabase';
 import { formatCurrency, formatDate } from './utils';
 import { navigateTo } from './router.js';
 
 export const renderAdminDashboard = (user) => {
+  // Auto-delete requests older than 7 days
+  const cleanupOldRequests = async () => {
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+    try {
+      const q = query(collection(db, "requests"), where("createdAt", "<", sevenDaysAgo));
+      const snapshot = await getDocs(q);
+
+      snapshot.forEach(async (docSnapshot) => {
+        const data = docSnapshot.data();
+        console.log("Deleting old request:", docSnapshot.id);
+
+        // Delete files
+        const pathsToDelete = [];
+        if (data.pdfPath) pathsToDelete.push(data.pdfPath);
+        if (data.files) data.files.forEach(f => pathsToDelete.push(f.path));
+
+        if (pathsToDelete.length > 0) {
+          await supabase.storage.from('pdfs').remove(pathsToDelete);
+        }
+
+        // Delete doc
+        await deleteDoc(doc(db, "requests", docSnapshot.id));
+      });
+    } catch (error) {
+      console.error("Error cleaning up old requests:", error);
+    }
+  };
+
+  // Run cleanup on load
+  cleanupOldRequests();
+
   const app = document.querySelector('#app');
   app.innerHTML = `
   <div class="min-h-screen bg-gray-100">
@@ -73,7 +106,6 @@ export const renderAdminDashboard = (user) => {
           </div>
         </div>
       </div>
-      </div>
       
       <!-- Files Modal -->
       <div id="filesModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center z-50">
@@ -92,7 +124,6 @@ export const renderAdminDashboard = (user) => {
         </div>
       </div>
     </div>
-
   `;
 
   // Logout Handler
@@ -153,7 +184,7 @@ export const renderAdminDashboard = (user) => {
         console.error("Error fetching user profile:", err);
       }
 
-      const statusOptions = ['New Request', 'Printing', 'Ready for Pickup', 'Completed'];
+      const statusOptions = ['New Request', 'Printing', 'Ready for Pickup', 'Completed', 'Rejected'];
 
       const tr = document.createElement('tr');
       // Store profile data as JSON string in data attribute
@@ -217,7 +248,8 @@ export const renderAdminDashboard = (user) => {
             ${data.status === 'New Request' ? 'bg-yellow-100 text-yellow-800' :
           data.status === 'Printing' ? 'bg-blue-100 text-blue-800' :
             data.status === 'Ready for Pickup' ? 'bg-green-100 text-green-800' :
-              'bg-gray-100 text-gray-800'}">
+              data.status === 'Rejected' ? 'bg-red-100 text-red-800' :
+                'bg-gray-100 text-gray-800'}">
             ${data.status}
           </span>
         </td>
@@ -233,7 +265,7 @@ export const renderAdminDashboard = (user) => {
             `).join('')}
           </select>
         </td>
-`;
+      `;
       tbody.appendChild(tr);
     }
 
@@ -360,8 +392,8 @@ export const renderAdminDashboard = (user) => {
             status: newStatus
           });
 
-          // Delete PDF from Supabase if status is "Completed"
-          if (newStatus === 'Completed' && pdfPath) {
+          // Delete PDF from Supabase if status is "Completed" or "Rejected"
+          if ((newStatus === 'Completed' || newStatus === 'Rejected') && pdfPath) {
             const { error: deleteError } = await supabase.storage
               .from('pdfs')
               .remove([pdfPath]);
@@ -374,23 +406,25 @@ export const renderAdminDashboard = (user) => {
           }
 
           // Send Email Notification
+          let emailType = 'status_update';
+          if (newStatus === 'Rejected') emailType = 'request_rejected';
+
           fetch('/api/email', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              type: 'status_update',
+              type: emailType,
               data: {
-                requestId: requestId,
-                newStatus: newStatus,
                 userEmail: userEmail,
-                fileName: fileName
+                fileName: fileName,
+                newStatus: newStatus
               }
             })
-          }).catch(err => console.error("Failed to send status email:", err));
+          }).catch(err => console.error("Failed to send email:", err));
 
         } catch (error) {
           console.error("Error updating status:", error);
-          alert("Failed to update status");
+          alert("Failed to update status.");
         }
       });
     });
