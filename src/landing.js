@@ -397,7 +397,7 @@ export const renderLanding = () => {
           </div>
 
           <div class="border-t border-gray-600 pt-8 text-center text-gray-400 text-sm">
-            <p>&copy; 2025 Port Print. All rights reserved. Made with ❤️ for UKF CET students.</p>
+            <p>&copy; 2025 Port Print. All rights reserved. Made with ❤️ for UKF CET students. Developed by Ershad.</p>
           </div>
         </div>
       </footer>
