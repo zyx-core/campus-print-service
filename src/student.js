@@ -275,118 +275,109 @@ export const renderStudentDashboard = (user) => {
     fileListDisplay.innerHTML = '';
     fileListDisplay.classList.remove('hidden');
 
-    // Show initial loading state for files
-    files.forEach(file => {
-      const tempId = Math.random().toString(36).substring(7);
-      const fileItem = document.createElement('div');
-      fileItem.id = `file-item-${tempId}`;
-      fileItem.className = 'text-sm text-gray-600 flex justify-between items-center p-2 bg-gray-50 rounded mb-2';
-      fileItem.innerHTML = `
+    // We don't need the global loading modal for local processing, it's fast enough.
+    // But we can show it briefly if we want, or just rely on the inline spinners.
+
+    try {
+      for (const file of files) {
+        const tempId = Math.random().toString(36).substring(7);
+
+        // 1. Create UI Item (Initial State)
+        const fileItem = document.createElement('div');
+        fileItem.id = `file-item-${tempId}`;
+        fileItem.className = 'text-sm text-gray-600 flex justify-between items-center p-2 bg-gray-50 rounded mb-2';
+        fileItem.innerHTML = `
             <span class="truncate max-w-[200px]">${file.name}</span>
             <div class="flex items-center gap-2">
                 <div id="spinner-${tempId}" class="animate-spin h-4 w-4 border-2 border-blue-500 rounded-full border-t-transparent"></div>
-                <span id="status-${tempId}" class="text-xs text-blue-500">Processing...</span>
+                <span id="status-${tempId}" class="text-xs text-blue-500">Reading...</span>
             </div>
         `;
-      fileListDisplay.appendChild(fileItem);
-      file.tempId = tempId; // Attach ID to file object for reference
-    });
-
-    const loadingModal = document.getElementById('loadingModal');
-    // We don't show the full screen loading modal anymore, just the inline spinners
-
-    try {
-      let validFiles = [];
-      let totalPages = 0;
-
-      // Process files in parallel
-      const filePromises = files.map(async (file) => {
-        const tempId = file.tempId;
-        const statusEl = document.getElementById(`status-${tempId}`);
-        const spinnerEl = document.getElementById(`spinner-${tempId}`);
+        fileListDisplay.appendChild(fileItem);
 
         if (file.type !== 'application/pdf') {
-          statusEl.textContent = "Invalid File";
-          statusEl.className = "text-xs text-red-500";
-          spinnerEl.classList.add('hidden');
-          return null;
+          document.getElementById(`status-${tempId}`).textContent = "Invalid File";
+          document.getElementById(`status-${tempId}`).className = "text-xs text-red-500";
+          document.getElementById(`spinner-${tempId}`).classList.add('hidden');
+          continue;
         }
 
         const maxSize = 300 * 1024 * 1024; // 300MB
         if (file.size > maxSize) {
-          statusEl.textContent = "Too Large";
-          statusEl.className = "text-xs text-red-500";
-          spinnerEl.classList.add('hidden');
-          return null;
+          document.getElementById(`status-${tempId}`).textContent = "Too Large";
+          document.getElementById(`status-${tempId}`).className = "text-xs text-red-500";
+          document.getElementById(`spinner-${tempId}`).classList.add('hidden');
+          continue;
         }
 
-        try {
-          // 1. Read Page Count
-          const arrayBuffer = await file.arrayBuffer();
-          const pdfDoc = await PDFDocument.load(arrayBuffer);
-          const pages = pdfDoc.getPageCount();
+        // 2. Local Processing (Page Count) - Await this to show cost immediately
+        const arrayBuffer = await file.arrayBuffer();
+        const pdfDoc = await PDFDocument.load(arrayBuffer);
+        const pages = pdfDoc.getPageCount();
 
-          // 2. Upload to Supabase
-          statusEl.textContent = "Uploading...";
+        // 3. Update State & UI IMMEDIATELY
+        const fileObj = {
+          file: file,
+          originalName: file.name,
+          sanitizedName: sanitizeFileName(file.name).safeFileName,
+          pages: pages,
+          tempId: tempId,
+          path: null, // Will be set after upload
+          url: null   // Will be set after upload
+        };
+        currentFiles.push(fileObj);
+        totalPageCount += pages;
 
-          const fileInfo = sanitizeFileName(file.name);
-          const storagePath = `${user.uid}/${Date.now()}_${fileInfo.safeFileName}`;
+        // Update Cost Display NOW
+        pageCountDisplay.textContent = `${totalPageCount} Total Pages`;
+        pageCountDisplay.classList.remove('hidden');
+        optionsSection.classList.remove('opacity-50', 'pointer-events-none');
+        updateCostDisplay();
 
-          const { error: uploadError } = await supabase.storage
-            .from('pdfs')
-            .upload(storagePath, file);
+        // 4. Start Background Upload (Do NOT await)
+        const statusEl = document.getElementById(`status-${tempId}`);
+        const spinnerEl = document.getElementById(`spinner-${tempId}`);
+        statusEl.textContent = "Uploading...";
 
-          if (uploadError) throw uploadError;
+        const uploadTask = async () => {
+          try {
+            const storagePath = `${user.uid}/${Date.now()}_${fileObj.sanitizedName}`;
+            const { error: uploadError } = await supabase.storage
+              .from('pdfs')
+              .upload(storagePath, file);
 
-          const { data: { publicUrl } } = supabase.storage
-            .from('pdfs')
-            .getPublicUrl(storagePath);
+            if (uploadError) throw uploadError;
 
-          // Success UI
-          statusEl.textContent = `${pages} pages • Uploaded`;
-          statusEl.className = "text-xs text-green-600 font-medium";
-          spinnerEl.classList.add('hidden');
-          // Add checkmark
-          spinnerEl.parentElement.innerHTML = `
-                <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                <span class="text-xs text-green-600">${pages} pages</span>
-            `;
+            const { data: { publicUrl } } = supabase.storage
+              .from('pdfs')
+              .getPublicUrl(storagePath);
 
-          return {
-            originalName: file.name,
-            sanitizedName: fileInfo.safeFileName,
-            path: storagePath,
-            url: publicUrl,
-            pages: pages,
-            file: file // Keep file ref just in case, though we have url now
-          };
+            // Update file object with remote details
+            fileObj.path = storagePath;
+            fileObj.url = publicUrl;
 
-        } catch (err) {
-          console.error(`Error processing ${file.name}:`, err);
-          statusEl.textContent = "Error";
-          statusEl.className = "text-xs text-red-500";
-          spinnerEl.classList.add('hidden');
-          return null;
-        }
-      });
+            // Success UI
+            statusEl.textContent = `${pages} pages • Uploaded`;
+            statusEl.className = "text-xs text-green-600 font-medium";
+            spinnerEl.classList.add('hidden');
+            spinnerEl.parentElement.innerHTML = `
+                    <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <span class="text-xs text-green-600">${pages} pages</span>
+                `;
+          } catch (err) {
+            console.error(`Error uploading ${file.name}:`, err);
+            statusEl.textContent = "Upload Failed";
+            statusEl.className = "text-xs text-red-500";
+            spinnerEl.classList.add('hidden');
+            // Remove from currentFiles so we don't try to submit it? 
+            // Or keep it and let validation fail. Let's keep it but it won't have a URL.
+          }
+        };
 
-      const results = await Promise.all(filePromises);
-      validFiles = results.filter(f => f !== null);
-
-      if (validFiles.length === 0) {
-        // alert("No valid PDF files processed.");
-        return;
+        // Attach promise to object if we want to track it later, 
+        // but for now we just let it run.
+        fileObj.uploadPromise = uploadTask();
       }
-
-      currentFiles = validFiles;
-      totalPageCount = validFiles.reduce((sum, f) => sum + f.pages, 0);
-
-      pageCountDisplay.textContent = `${totalPageCount} Total Pages`;
-      pageCountDisplay.classList.remove('hidden');
-
-      // Enable Options
-      optionsSection.classList.remove('opacity-50', 'pointer-events-none');
-      updateCostDisplay();
 
     } catch (error) {
       console.error("Error in file handler:", error);
