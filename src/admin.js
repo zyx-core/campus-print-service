@@ -73,6 +73,24 @@ export const renderAdminDashboard = (user) => {
           </div>
         </div>
       </div>
+      </div>
+      
+      <!-- Files Modal -->
+      <div id="filesModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-xl max-w-lg w-full m-4">
+          <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+            <h3 class="text-lg font-bold text-gray-900">Attached Files</h3>
+            <button id="closeFilesModalBtn" class="text-gray-400 hover:text-gray-500">
+              <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+          <div class="p-6 grid grid-cols-2 gap-4" id="filesModalContent">
+            <!-- File tiles injected here -->
+          </div>
+        </div>
+      </div>
     </div>
 
   `;
@@ -159,12 +177,28 @@ export const renderAdminDashboard = (user) => {
           <div class="text-xs text-gray-500">${data.pageCount} Pages</div>
         </td>
         <td class="px-6 py-4 whitespace-nowrap">
-          <button class="download-pdf-btn inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500" data-pdfurl="${data.pdfUrl || ''}" data-filename="${data.fileName}" title="Download PDF">
-            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-            </svg>
-            PDF
-          </button>
+          ${(() => {
+          if (data.files && data.files.length > 1) {
+            const filesData = encodeURIComponent(JSON.stringify(data.files));
+            return `
+                <button class="view-files-btn inline-flex items-center px-3 py-1 border border-transparent shadow-sm text-xs font-medium rounded text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" data-files="${filesData}">
+                  <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                  View ${data.files.length} Files
+                </button>
+              `;
+          } else {
+            const url = data.files ? data.files[0].url : data.pdfUrl;
+            const name = data.files ? data.files[0].originalName : data.fileName;
+            return `
+                <button class="download-pdf-btn inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500" data-pdfurl="${url || ''}" data-filename="${name}" title="Download PDF">
+                  <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                  </svg>
+                  PDF
+                </button>
+              `;
+          }
+        })()}
         </td>
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
           <div>${data.options.duplex === 'duplex' ? 'Duplex' : 'Simplex'}</div>
@@ -262,6 +296,36 @@ export const renderAdminDashboard = (user) => {
     document.getElementById('closeModalBtn').addEventListener('click', closeModal);
     document.getElementById('studentModal').addEventListener('click', (e) => {
       if (e.target.id === 'studentModal') closeModal();
+    });
+
+    // View Files Button Handler
+    document.querySelectorAll('.view-files-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const files = JSON.parse(decodeURIComponent(e.currentTarget.dataset.files));
+        const modal = document.getElementById('filesModal');
+        const content = document.getElementById('filesModalContent');
+
+        content.innerHTML = files.map(file => `
+          <a href="${file.url}" target="_blank" class="block p-4 border rounded-lg hover:bg-gray-50 hover:border-blue-500 transition-all text-center group">
+            <div class="mx-auto w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mb-3 group-hover:bg-red-200">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+            </div>
+            <p class="text-sm font-medium text-gray-900 truncate" title="${file.originalName}">${file.originalName}</p>
+            <p class="text-xs text-gray-500 mt-1">${file.pages} Pages</p>
+          </a>
+        `).join('');
+
+        modal.classList.remove('hidden');
+      });
+    });
+
+    // Close Files Modal
+    const closeFilesModal = () => {
+      document.getElementById('filesModal').classList.add('hidden');
+    };
+    document.getElementById('closeFilesModalBtn').addEventListener('click', closeFilesModal);
+    document.getElementById('filesModal').addEventListener('click', (e) => {
+      if (e.target.id === 'filesModal') closeFilesModal();
     });
 
 
