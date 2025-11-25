@@ -204,11 +204,13 @@ export const renderStudentDashboard = (user) => {
     const isDuplex = duplexSelect.value === 'duplex';
     const rate = isDuplex ? 1.00 : 1.50;
     const copies = parseInt(copiesInput.value) || 1;
-    const finishingFee = finishingSelect.value === 'spiral' ? 25.00 : 0.00;
+    const numberOfFiles = currentFiles.length || 1;
+
+    // Binding Cost: ₹25 * Copies * Number of Files (if spiral)
+    const finishingFeePerItem = finishingSelect.value === 'spiral' ? 25.00 : 0.00;
+    const bindingCost = finishingFeePerItem * copies * numberOfFiles;
 
     const printCost = totalPageCount * rate * copies;
-    const bindingCost = finishingFee; // Per document binding fee logic might need clarification, assuming flat fee for now or per set? 
-    // "The discount is applied to the Print Cost only, not the Binding fee."
 
     // Discount Logic
     let discount = 0;
@@ -228,11 +230,12 @@ export const renderStudentDashboard = (user) => {
     const isDuplex = duplexSelect.value === 'duplex';
     const rate = isDuplex ? 1.00 : 1.50;
     const copies = parseInt(copiesInput.value) || 1;
+    const numberOfFiles = currentFiles.length || 1;
 
     const costBreakdown = document.getElementById('costBreakdown');
     let breakdownHtml = `
       <p>${totalPageCount} pages × ${formatCurrency(rate)} × ${copies} copies = ${formatCurrency(printCost)}</p>
-      ${bindingCost > 0 ? `<p>+ Binding: ${formatCurrency(bindingCost)}</p>` : ''}
+      ${bindingCost > 0 ? `<p>+ Binding: ₹25 × ${numberOfFiles} files × ${copies} copies = ${formatCurrency(bindingCost)}</p>` : ''}
     `;
 
     if (discount > 0) {
