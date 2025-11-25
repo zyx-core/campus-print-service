@@ -253,60 +253,135 @@ export const renderStudentDashboard = (user) => {
 
   // File Upload Handler
   // File Upload Handler
+  // File Upload Handler
   fileInput.addEventListener('change', async (e) => {
     const files = Array.from(e.target.files);
     if (!files.length) return;
+
+    // cleanup previous files if any
+    if (currentFiles.length > 0) {
+      const pathsToDelete = currentFiles.map(f => f.path).filter(p => p);
+      if (pathsToDelete.length > 0) {
+        console.log("Cleaning up previous files...", pathsToDelete);
+        supabase.storage.from('pdfs').remove(pathsToDelete).then(({ error }) => {
+          if (error) console.error("Error cleaning up old files:", error);
+        });
+      }
+    }
 
     // Reset state
     currentFiles = [];
     totalPageCount = 0;
     fileListDisplay.innerHTML = '';
-    fileListDisplay.classList.add('hidden');
+    fileListDisplay.classList.remove('hidden');
+
+    // Show initial loading state for files
+    files.forEach(file => {
+      const tempId = Math.random().toString(36).substring(7);
+      const fileItem = document.createElement('div');
+      fileItem.id = `file-item-${tempId}`;
+      fileItem.className = 'text-sm text-gray-600 flex justify-between items-center p-2 bg-gray-50 rounded mb-2';
+      fileItem.innerHTML = `
+            <span class="truncate max-w-[200px]">${file.name}</span>
+            <div class="flex items-center gap-2">
+                <div id="spinner-${tempId}" class="animate-spin h-4 w-4 border-2 border-blue-500 rounded-full border-t-transparent"></div>
+                <span id="status-${tempId}" class="text-xs text-blue-500">Processing...</span>
+            </div>
+        `;
+      fileListDisplay.appendChild(fileItem);
+      file.tempId = tempId; // Attach ID to file object for reference
+    });
 
     const loadingModal = document.getElementById('loadingModal');
-    loadingModal.classList.remove('hidden');
+    // We don't show the full screen loading modal anymore, just the inline spinners
 
     try {
       let validFiles = [];
       let totalPages = 0;
 
-      for (const file of files) {
+      // Process files in parallel
+      const filePromises = files.map(async (file) => {
+        const tempId = file.tempId;
+        const statusEl = document.getElementById(`status-${tempId}`);
+        const spinnerEl = document.getElementById(`spinner-${tempId}`);
+
         if (file.type !== 'application/pdf') {
-          console.warn(`Skipping non-PDF file: ${file.name}`);
-          continue;
+          statusEl.textContent = "Invalid File";
+          statusEl.className = "text-xs text-red-500";
+          spinnerEl.classList.add('hidden');
+          return null;
         }
 
         const maxSize = 300 * 1024 * 1024; // 300MB
         if (file.size > maxSize) {
-          alert(`File ${file.name} is too large. Skipping.`);
-          continue;
+          statusEl.textContent = "Too Large";
+          statusEl.className = "text-xs text-red-500";
+          spinnerEl.classList.add('hidden');
+          return null;
         }
 
-        const arrayBuffer = await file.arrayBuffer();
-        const pdfDoc = await PDFDocument.load(arrayBuffer);
-        const pages = pdfDoc.getPageCount();
+        try {
+          // 1. Read Page Count
+          const arrayBuffer = await file.arrayBuffer();
+          const pdfDoc = await PDFDocument.load(arrayBuffer);
+          const pages = pdfDoc.getPageCount();
 
-        validFiles.push({ file, pages });
-        totalPages += pages;
+          // 2. Upload to Supabase
+          statusEl.textContent = "Uploading...";
 
-        // Add to display list
-        const fileItem = document.createElement('div');
-        fileItem.className = 'text-sm text-gray-600 flex justify-between';
-        fileItem.innerHTML = `<span>${file.name}</span> <span class="text-gray-400">(${pages} pages)</span>`;
-        fileListDisplay.appendChild(fileItem);
-      }
+          const fileInfo = sanitizeFileName(file.name);
+          const storagePath = `${user.uid}/${Date.now()}_${fileInfo.safeFileName}`;
+
+          const { error: uploadError } = await supabase.storage
+            .from('pdfs')
+            .upload(storagePath, file);
+
+          if (uploadError) throw uploadError;
+
+          const { data: { publicUrl } } = supabase.storage
+            .from('pdfs')
+            .getPublicUrl(storagePath);
+
+          // Success UI
+          statusEl.textContent = `${pages} pages • Uploaded`;
+          statusEl.className = "text-xs text-green-600 font-medium";
+          spinnerEl.classList.add('hidden');
+          // Add checkmark
+          spinnerEl.parentElement.innerHTML = `
+                <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                <span class="text-xs text-green-600">${pages} pages</span>
+            `;
+
+          return {
+            originalName: file.name,
+            sanitizedName: fileInfo.safeFileName,
+            path: storagePath,
+            url: publicUrl,
+            pages: pages,
+            file: file // Keep file ref just in case, though we have url now
+          };
+
+        } catch (err) {
+          console.error(`Error processing ${file.name}:`, err);
+          statusEl.textContent = "Error";
+          statusEl.className = "text-xs text-red-500";
+          spinnerEl.classList.add('hidden');
+          return null;
+        }
+      });
+
+      const results = await Promise.all(filePromises);
+      validFiles = results.filter(f => f !== null);
 
       if (validFiles.length === 0) {
-        alert("No valid PDF files found.");
-        loadingModal.classList.add('hidden');
+        // alert("No valid PDF files processed.");
         return;
       }
 
       currentFiles = validFiles;
-      totalPageCount = totalPages;
+      totalPageCount = validFiles.reduce((sum, f) => sum + f.pages, 0);
 
-      fileListDisplay.classList.remove('hidden');
-      pageCountDisplay.textContent = `${totalPageCount} Total Pages detected`;
+      pageCountDisplay.textContent = `${totalPageCount} Total Pages`;
       pageCountDisplay.classList.remove('hidden');
 
       // Enable Options
@@ -314,13 +389,8 @@ export const renderStudentDashboard = (user) => {
       updateCostDisplay();
 
     } catch (error) {
-      console.error("Error reading PDFs:", error);
-      alert("Failed to read PDF files.");
-      currentFiles = [];
-      totalPageCount = 0;
-      optionsSection.classList.add('opacity-50', 'pointer-events-none');
-    } finally {
-      loadingModal.classList.add('hidden');
+      console.error("Error in file handler:", error);
+      alert("An unexpected error occurred.");
     }
   });
 
@@ -333,7 +403,29 @@ export const renderStudentDashboard = (user) => {
   };
 
   document.getElementById('cancelConfirmBtn').addEventListener('click', () => {
-    document.getElementById('confirmModal').classList.add('hidden');
+    if (confirm("Cancelling will remove your uploaded files. Are you sure?")) {
+      // cleanup files
+      if (currentFiles.length > 0) {
+        const pathsToDelete = currentFiles.map(f => f.path).filter(p => p);
+        if (pathsToDelete.length > 0) {
+          supabase.storage.from('pdfs').remove(pathsToDelete).then(({ error }) => {
+            if (error) console.error("Error cleaning up files on cancel:", error);
+          });
+        }
+      }
+
+      // Reset UI
+      fileInput.value = '';
+      currentFiles = [];
+      totalPageCount = 0;
+      document.getElementById('fileList').innerHTML = '';
+      document.getElementById('fileList').classList.add('hidden');
+      pageCountDisplay.classList.add('hidden');
+      optionsSection.classList.add('opacity-50', 'pointer-events-none');
+      updateCostDisplay();
+
+      document.getElementById('confirmModal').classList.add('hidden');
+    }
   });
 
   document.getElementById('proceedConfirmBtn').addEventListener('click', () => {
@@ -349,36 +441,24 @@ export const renderStudentDashboard = (user) => {
     try {
       const submitBtn = document.getElementById('payBtn');
       submitBtn.disabled = true;
-      submitBtn.textContent = "Uploading PDFs...";
+      submitBtn.textContent = "Saving Request...";
 
-      const uploadedFiles = [];
-
-      // Upload all files
-      for (const item of currentFiles) {
-        const file = item.file;
-        const fileInfo = sanitizeFileName(file.name);
-        const storagePath = `${user.uid}/${Date.now()}_${fileInfo.safeFileName}`;
-
-        const { error: uploadError } = await supabase.storage
-          .from('pdfs')
-          .upload(storagePath, file);
-
-        if (uploadError) throw uploadError;
-
-        const { data: { publicUrl } } = supabase.storage
-          .from('pdfs')
-          .getPublicUrl(storagePath);
-
-        uploadedFiles.push({
-          originalName: file.name,
-          sanitizedName: fileInfo.safeFileName,
-          path: storagePath,
-          url: publicUrl,
-          pages: item.pages
-        });
+      // Ensure files are ready (though UI prevents submission if not)
+      if (!currentFiles.length || !currentFiles.every(f => f.url)) {
+        alert("Files are still processing. Please wait.");
+        loadingModal.classList.add('hidden');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Request';
+        return;
       }
 
-      submitBtn.textContent = "Saving Request...";
+      const uploadedFiles = currentFiles.map(f => ({
+        originalName: f.originalName,
+        sanitizedName: f.sanitizedName,
+        path: f.path,
+        url: f.url,
+        pages: f.pages
+      }));
 
       const { total, discount } = calculateCost();
       const fileNames = uploadedFiles.map(f => f.originalName);
@@ -407,7 +487,7 @@ export const renderStudentDashboard = (user) => {
       // Reset Form
       alert(`Request submitted successfully! Please pay ${formatCurrency(total)} when you collect your prints.`);
 
-      // Reset UI
+      // Reset UI (files are already uploaded and saved, so just clear local state)
       fileInput.value = '';
       currentFiles = [];
       totalPageCount = 0;
@@ -416,6 +496,9 @@ export const renderStudentDashboard = (user) => {
       pageCountDisplay.classList.add('hidden');
       optionsSection.classList.add('opacity-50', 'pointer-events-none');
       updateCostDisplay();
+
+      // Clear temp tracking as these are now permanent
+      localStorage.removeItem('temp_uploads');
 
       // Send Email
       fetch('/api/email', {
@@ -487,6 +570,44 @@ export const renderStudentDashboard = (user) => {
   };
 
 
+  // --- Cleanup Logic for Abandoned Requests ---
+
+  // 1. Cleanup on Load (Safety Net)
+  const cleanupAbandonedFiles = async () => {
+    const tempFilesJson = localStorage.getItem('temp_uploads');
+    if (tempFilesJson) {
+      try {
+        const paths = JSON.parse(tempFilesJson);
+        if (paths && paths.length > 0) {
+          console.log("Cleaning up abandoned files from previous session:", paths);
+          await supabase.storage.from('pdfs').remove(paths);
+        }
+      } catch (e) {
+        console.error("Error parsing temp files:", e);
+      }
+      localStorage.removeItem('temp_uploads');
+    }
+  };
+  cleanupAbandonedFiles();
+
+  // 2. Cleanup on Unload (Best Effort)
+  window.addEventListener('beforeunload', (event) => {
+    if (currentFiles.length > 0) {
+      const paths = currentFiles.map(f => f.path).filter(p => p);
+      if (paths.length > 0) {
+        // Save to localStorage so we can clean up next time if this fails
+        localStorage.setItem('temp_uploads', JSON.stringify(paths));
+
+        // Attempt immediate cleanup (might be cancelled by browser)
+        supabase.storage.from('pdfs').remove(paths).catch(err => console.error(err));
+
+        // Optional: Show confirmation dialog (browsers often ignore custom messages)
+        // event.preventDefault();
+        // event.returnValue = ''; 
+      }
+    }
+  });
+
   // Real-time Requests Listener
   const q = query(
     collection(db, "requests"),
@@ -517,7 +638,8 @@ export const renderStudentDashboard = (user) => {
         'New Request': 'bg-yellow-100 text-yellow-800',
         'Printing': 'bg-blue-100 text-blue-800',
         'Ready for Pickup': 'bg-green-100 text-green-800',
-        'Completed': 'bg-gray-100 text-gray-800'
+        'Completed': 'bg-gray-100 text-gray-800',
+        'Rejected': 'bg-red-100 text-red-800'
       };
       const statusClass = statusColors[data.status] || 'bg-gray-100 text-gray-800';
 
