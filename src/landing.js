@@ -112,8 +112,18 @@ export const renderLanding = () => {
             <!-- Hero Illustration -->
             <div class="fade-in-up hidden md:block">
               <div class="relative">
-                <!-- Printer Mascot with Doodles -->
-                <img src="/printer-mascot.png" alt="Cute printer mascot character" class="w-full h-auto max-w-lg mx-auto" />
+                <!-- Floating Badge: ₹1/page -->
+                <div class="absolute -top-4 -left-8 bg-neo-cyan border-4 border-black px-4 py-3 rounded-xl shadow-neo font-bold text-lg z-10 floating-badge" style="animation-delay: 0s;">
+                  💰 ₹1/page
+                </div>
+                
+                <!-- Floating Badge: Next Day Pickup -->
+                <div class="absolute -bottom-4 -right-8 bg-neo-yellow border-4 border-black px-4 py-3 rounded-xl shadow-neo font-bold text-lg z-10 floating-badge" style="animation-delay: 1s;">
+                  🚀 Next Day!
+                </div>
+                
+                <!-- Printer Mascot with Float Animation -->
+                <img src="/printer-mascot.png" alt="Cute printer mascot character" class="w-full h-auto max-w-lg mx-auto floating-badge" style="animation-delay: 0.5s;" />
               </div>
             </div>
           </div>
