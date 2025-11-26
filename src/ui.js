@@ -8,83 +8,158 @@ export const renderLogin = () => {
   console.log("[Login] Rendering login page");
   const app = document.querySelector('#app');
   app.innerHTML = `
-    <div class="min-h-screen bg-white flex flex-col items-center justify-center p-4 font-sans text-[#111]">
-      <div class="w-full max-w-[400px] flex flex-col items-center">
-        <!-- Logo -->
-        <div class="mb-8">
-          <div class="w-12 h-12 bg-[#043873] rounded-xl flex items-center justify-center shadow-md">
-            <span class="text-white text-xl font-bold">P</span>
-          </div>
-        </div>
-
-        <!-- Heading -->
-        <div class="text-center mb-8">
-          <h1 class="text-2xl font-bold tracking-tight mb-2 text-[#043873]">Welcome to Port Print</h1>
-          <p class="text-gray-500 font-medium">Start printing now.</p>
-        </div>
-
-        <!-- Error Message -->
-        <div id="errorMessage" class="hidden w-full mb-4 p-3 bg-red-50 border border-red-100 rounded-lg">
-          <p class="text-sm text-red-600 text-center"></p>
-        </div>
-
-        <!-- Google Sign-In Button -->
-        <button id="googleSignInBtn" class="w-full bg-[#043873] text-white h-12 rounded-lg font-medium hover:bg-[#032d5e] transition-all flex items-center justify-center gap-3 mb-6 shadow-sm hover:shadow-md">
-          <svg class="w-5 h-5" viewBox="0 0 24 24">
-            <path fill="#ffffff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-            <path fill="#ffffff" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-            <path fill="#ffffff" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-            <path fill="#ffffff" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-          </svg>
-          Continue with Google
-        </button>
-
-        <!-- Divider -->
-        <div class="relative w-full mb-6">
-          <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-gray-200"></div>
-          </div>
-          <div class="relative flex justify-center text-xs font-medium text-gray-400">
-            <span class="px-4 bg-white">OR</span>
-          </div>
-        </div>
-
-        <!-- Email/Password Form -->
-        <form id="loginForm" class="w-full space-y-3">
-          <div>
-            <input 
-              type="email" 
-              id="email" 
-              class="w-full bg-gray-50 border-none rounded-lg px-4 h-12 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-[#4F9CF9] transition-all" 
-              placeholder="Enter your work email..."
-              required
-            >
-          </div>
-
-          <div>
-            <input 
-              type="password" 
-              id="password" 
-              class="w-full bg-gray-50 border-none rounded-lg px-4 h-12 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-[#4F9CF9] transition-all" 
-              placeholder="Password"
-              required
-            >
-          </div>
-
-          <button 
-            type="submit" 
-            id="loginBtn" 
-            class="w-full bg-[#4F9CF9] text-white h-12 rounded-lg font-bold hover:bg-[#2F7ACF] transition-all mt-2 shadow-sm hover:shadow-md"
-          >
-            Continue
+    <!-- Paper Container with Border -->
+    <div class="min-h-screen p-4 md:p-8">
+      <div class="max-w-[1200px] mx-auto bg-white border-[8px] border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]">
+        
+        <!-- Back Button -->
+        <div class="p-6 border-b-4 border-black">
+          <button id="backToHome" class="flex items-center gap-2 text-black font-bold hover:text-neo-cyan transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            Back to Home
           </button>
-        </form>
+        </div>
 
-        <!-- Sign Up Link -->
-        <p class="mt-8 text-sm text-gray-500">
-          Don't have an account? 
-          <a href="#" id="showSignup" class="text-[#4F9CF9] font-bold hover:underline">Sign up</a>
-        </p>
+        <!-- Content Grid -->
+        <div class="grid md:grid-cols-2 gap-0">
+          
+          <!-- Left Side: Fun Welcome Content -->
+          <div class="p-8 md:p-12 bg-neo-cyan border-r-0 md:border-r-4 border-b-4 md:border-b-0 border-black">
+            <!-- Logo -->
+            <div class="flex items-center gap-3 mb-8">
+              <div class="w-12 h-12 bg-neo-yellow border-4 border-black rounded-lg flex items-center justify-center text-black font-bold text-xl shadow-neo-sm">P</div>
+              <h1 class="text-3xl font-bold text-black">Port Print</h1>
+            </div>
+            
+            <h2 class="text-4xl font-bold text-black mb-4 leading-tight">
+              Welcome Back! 👋
+            </h2>
+            
+            <p class="text-lg text-black mb-8 font-bold">
+              Ready to print something awesome?<br/>
+              <span class="text-neo-pink">Let's get started!</span>
+            </p>
+
+            <!-- Quick Stats -->
+            <div class="space-y-4 mb-8">
+              <div class="bg-white border-4 border-black rounded-xl p-4 shadow-neo-sm transform rotate-slight-left">
+                <div class="flex items-center gap-3">
+                  <span class="text-3xl">⚡</span>
+                  <div>
+                    <h3 class="font-bold text-black text-lg">Lightning Fast</h3>
+                    <p class="text-black text-sm">Login in seconds, print in minutes</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-neo-pink border-4 border-black rounded-xl p-4 shadow-neo-sm">
+                <div class="flex items-center gap-3">
+                  <span class="text-3xl">🔒</span>
+                  <div>
+                    <h3 class="font-bold text-black text-lg">Secure & Safe</h3>
+                    <p class="text-black text-sm">Your data is protected with us</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-neo-yellow border-4 border-black rounded-xl p-4 shadow-neo-sm transform rotate-slight-right">
+                <div class="flex items-center gap-3">
+                  <span class="text-3xl">📊</span>
+                  <div>
+                    <h3 class="font-bold text-black text-lg">Track Everything</h3>
+                    <p class="text-black text-sm">Monitor all your print requests</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mascot Character -->
+            <div class="hidden md:block mt-8">
+              <div class="bg-neo-cream border-4 border-black rounded-xl p-4 relative">
+                <div class="flex items-center gap-3">
+                  <div class="text-5xl animate-float">🎯</div>
+                  <div class="bg-white border-3 border-black rounded-lg p-3 shadow-neo-sm">
+                    <p class="text-black font-bold text-sm">
+                      "Your prints are waiting!" 🚀
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Side: Login Form -->
+          <div class="p-8 md:p-12 bg-white">
+            <h2 class="text-3xl font-bold text-black mb-2">Sign In</h2>
+            <p class="text-gray-600 mb-6 font-bold">Welcome back to Port Print! ✨</p>
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="hidden mb-4 p-4 bg-red-100 border-4 border-red-500 rounded-lg">
+              <p class="text-sm text-red-700 font-bold"></p>
+            </div>
+
+            <!-- Google Sign In Button -->
+            <button id="googleSignInBtn" class="w-full neo-btn-white mb-6 flex items-center justify-center gap-3">
+              <svg class="w-5 h-5" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+              </svg>
+              Continue with Google
+            </button>
+
+            <!-- Divider -->
+            <div class="relative mb-6">
+              <div class="absolute inset-0 flex items-center">
+                <div class="w-full border-t-4 border-black"></div>
+              </div>
+              <div class="relative flex justify-center">
+                <span class="px-4 bg-white text-black font-bold text-sm">OR</span>
+              </div>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="space-y-4">
+              <div>
+                <label class="block text-sm font-bold text-black mb-2">Email Address</label>
+                <input 
+                  type="email" 
+                  id="email" 
+                  class="w-full border-4 border-black rounded-lg p-3 focus:ring-4 focus:ring-neo-cyan focus:border-neo-cyan transition-all font-bold bg-gray-50" 
+                  placeholder="your@email.com" 
+                  required
+                >
+              </div>
+              
+              <div>
+                <label class="block text-sm font-bold text-black mb-2">Password</label>
+                <input 
+                  type="password" 
+                  id="password" 
+                  class="w-full border-4 border-black rounded-lg p-3 focus:ring-4 focus:ring-neo-cyan focus:border-neo-cyan transition-all font-bold bg-gray-50" 
+                  placeholder="••••••••" 
+                  required
+                >
+              </div>
+
+              <button 
+                type="submit" 
+                id="loginBtn" 
+                class="w-full neo-btn-primary rounded-xl text-lg"
+              >
+                Sign In 🚀
+              </button>
+            </form>
+
+            <p class="mt-6 text-center text-sm text-gray-600 font-bold">
+              Don't have an account? 
+              <a href="#" id="showSignup" class="text-neo-cyan hover:underline font-bold">Sign up</a>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   `;
@@ -93,6 +168,7 @@ export const renderLogin = () => {
   const errorMessage = document.getElementById('errorMessage');
   const loginBtn = document.getElementById('loginBtn');
   const googleSignInBtn = document.getElementById('googleSignInBtn');
+  const backToHomeBtn = document.getElementById('backToHome');
 
   const showError = (message) => {
     errorMessage.classList.remove('hidden');
@@ -102,6 +178,13 @@ export const renderLogin = () => {
   const hideError = () => {
     errorMessage.classList.add('hidden');
   };
+
+  // Back to Home Handler
+  if (backToHomeBtn) {
+    backToHomeBtn.addEventListener('click', () => {
+      navigateTo('/');
+    });
+  }
 
   // Email/Password Login Handler
   if (loginForm) {
