@@ -35,7 +35,7 @@ export const renderLanding = () => {
                 Install
               </button>
               <button id="navLoginBtn" class="neo-btn-primary rounded-lg">
-                Login / Sign Up
+                Login
               </button>
             </div>
           </div>
@@ -509,8 +509,8 @@ export const renderLanding = () => {
   ];
 
   loginBtn.addEventListener('click', () => {
-    console.log('[Landing] Navigating to signup');
-    navigateTo('/signup');
+    console.log('[Landing] Navigating to login');
+    navigateTo('/login');
   });
 
   signupBtns.forEach(btn => {
