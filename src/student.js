@@ -93,7 +93,7 @@ export const renderStudentDashboard = (user) => {
                 <label class="block text-sm font-bold text-black mb-2">Copies</label>
                 <div class="flex items-center">
                   <button id="decCopies" class="bg-gray-200 border-4 border-black border-r-0 rounded-l-lg p-3 font-bold hover:bg-gray-300">-</button>
-                  <input type="number" id="copies" min="1" value="1" class="w-full border-4 border-black p-3 text-center font-bold bg-white outline-none" readonly>
+                  <input type="number" id="copies" min="1" value="1" class="w-full border-4 border-black p-3 text-center font-bold bg-white outline-none">
                   <button id="incCopies" class="bg-gray-200 border-4 border-black border-l-0 rounded-r-lg p-3 font-bold hover:bg-gray-300">+</button>
                 </div>
               </div>
@@ -377,8 +377,16 @@ export const renderStudentDashboard = (user) => {
   });
 
   copiesInput.addEventListener('input', () => {
+    if (copiesInput.value === '') return;
     if (parseInt(copiesInput.value) < 1) copiesInput.value = 1;
     updateCostDisplay();
+  });
+
+  copiesInput.addEventListener('blur', () => {
+    if (!copiesInput.value || parseInt(copiesInput.value) < 1) {
+      copiesInput.value = 1;
+      updateCostDisplay();
+    }
   });
 
   // File Upload Handler (Keep new UI logic as it drives the interface)
