@@ -141,6 +141,12 @@ export const renderStudentDashboard = (user) => {
               <span id="summaryFinishing">None</span>
             </div>
             
+            <!-- Discount Row -->
+            <div id="summaryDiscountRow" class="flex justify-between items-center text-green-600 font-bold hidden">
+              <span>Discount:</span>
+              <span id="summaryDiscount">-₹0</span>
+            </div>
+            
             <div class="border-t-4 border-black my-4"></div>
             
             <div class="flex justify-between items-end mb-2">
@@ -156,53 +162,20 @@ export const renderStudentDashboard = (user) => {
           </div>
         </div>
 
-        <!-- My Requests Link -->
-        <div class="bg-neo-cream border-4 border-black shadow-neo rounded-xl p-6 text-center">
-          <h3 class="font-bold text-lg mb-2">Recent Activity</h3>
-          <p class="text-sm text-gray-600 mb-4">Track your previous print jobs</p>
-          <button id="viewHistoryBtn" class="neo-btn-white w-full text-sm">View My Requests</button>
+        <!-- Recent Activity (Embedded) -->
+        <div class="bg-white border-4 border-black shadow-neo rounded-xl overflow-hidden">
+          <div class="bg-neo-purple border-b-4 border-black p-4">
+             <h3 class="font-bold text-lg text-black">Recent Activity</h3>
+          </div>
+          <div id="requestsList" class="p-4 space-y-3 max-h-[400px] overflow-y-auto">
+             <p class="text-center text-gray-500 font-bold">Loading...</p>
+          </div>
         </div>
       </div>
 
     </main>
     
-    <!-- Requests Modal (Hidden by default) -->
-    <div id="requestsModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
-      <div class="bg-white border-4 border-black shadow-neo-lg rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
-        <div class="bg-neo-yellow border-b-4 border-black p-4 flex justify-between items-center">
-          <h2 class="text-xl font-bold text-black">My Requests</h2>
-          <button id="closeModalBtn" class="text-black hover:text-red-600 font-bold text-xl">&times;</button>
-        </div>
-        <div class="p-6 overflow-y-auto flex-grow">
-          <div id="requestsList" class="space-y-4">
-            <!-- Requests injected here -->
-            <div class="text-center py-8 text-gray-500 font-bold">Loading requests...</div>
-          </div>
-        </div>
-      </div>
-    </div>
 
-  </div>
-                </div>
-
-                <button id="payBtn" class="w-full bg-[#4F9CF9] text-white py-3 rounded-lg font-bold hover:bg-[#2F7ACF] transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 mt-6">
-                  Submit Request
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- My Requests Section -->
-          <div class="lg:col-span-1">
-            <div class="bg-white shadow rounded-lg p-6 h-full">
-              <h2 class="text-lg font-medium text-[#043873] mb-4">My Requests</h2>
-              <div id="requestsList" class="space-y-4 overflow-y-auto max-h-[600px]">
-                <p class="text-gray-500 text-sm text-center py-4">Loading requests...</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
   
   <!-- Loading Modal -->
   <div id="loadingModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 hidden flex items-center justify-center z-50">
@@ -330,6 +303,17 @@ export const renderStudentDashboard = (user) => {
     summaryPages.textContent = totalPageCount;
     summaryCopies.textContent = copiesInput.value;
     summaryFinishing.textContent = finishingSelect.options[finishingSelect.selectedIndex].text;
+
+    // Show/Hide Discount Row
+    const summaryDiscountRow = document.getElementById('summaryDiscountRow');
+    const summaryDiscount = document.getElementById('summaryDiscount');
+
+    if (discount > 0) {
+      summaryDiscountRow.classList.remove('hidden');
+      summaryDiscount.textContent = `-${formatCurrency(discount)}`;
+    } else {
+      summaryDiscountRow.classList.add('hidden');
+    }
 
     totalCostDisplay.textContent = formatCurrency(total);
 
@@ -599,65 +583,76 @@ export const renderStudentDashboard = (user) => {
     }
   });
 
-  // History Modal Handlers
-  let unsubscribeHistory = null;
+  // Real-time History Listener
+  const q = query(
+    collection(db, "requests"),
+    where("userId", "==", user.uid),
+    orderBy("createdAt", "desc")
+  );
 
-  const openHistory = () => {
-    requestsModal.classList.remove('hidden');
+  onSnapshot(q, (snapshot) => {
+    requestsList.innerHTML = '';
+    if (snapshot.empty) {
+      requestsList.innerHTML = '<div class="text-center py-8 text-gray-500 font-bold">No requests found. Start printing!</div>';
+      return;
+    }
 
-    const q = query(
-      collection(db, "requests"),
-      where("userId", "==", user.uid),
-      orderBy("createdAt", "desc")
-    );
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      const date = data.createdAt?.toDate ? formatDate(data.createdAt.toDate()) : 'Just now';
 
-    unsubscribeHistory = onSnapshot(q, (snapshot) => {
-      requestsList.innerHTML = '';
-      if (snapshot.empty) {
-        requestsList.innerHTML = '<div class="text-center py-8 text-gray-500 font-bold">No requests found. Start printing!</div>';
-        return;
-      }
+      const statusColors = {
+        'New Request': 'bg-yellow-100 text-yellow-800 border-yellow-300',
+        'Pending': 'bg-yellow-100 text-yellow-800 border-yellow-300',
+        'Processing': 'bg-blue-100 text-blue-800 border-blue-300',
+        'Completed': 'bg-green-100 text-green-800 border-green-300',
+        'Rejected': 'bg-red-100 text-red-800 border-red-300'
+      };
+      const statusClass = statusColors[data.status] || 'bg-gray-100';
 
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        const date = data.createdAt?.toDate ? formatDate(data.createdAt.toDate()) : 'Just now';
+      // Delete Button Logic (Only for New/Pending requests within 20 mins)
+      const now = new Date();
+      const createdAt = data.createdAt?.toDate ? data.createdAt.toDate() : new Date();
+      const diffMins = (now - createdAt) / 1000 / 60;
+      const canDelete = (data.status === 'New Request' || data.status === 'Pending') && diffMins < 20;
 
-        const statusColors = {
-          'Pending': 'bg-yellow-100 text-yellow-800 border-yellow-300',
-          'Processing': 'bg-blue-100 text-blue-800 border-blue-300',
-          'Completed': 'bg-green-100 text-green-800 border-green-300',
-          'Rejected': 'bg-red-100 text-red-800 border-red-300'
-        };
-        const statusClass = statusColors[data.status] || 'bg-gray-100';
-
-        const item = document.createElement('div');
-        item.className = 'bg-white border-2 border-black rounded-lg p-4 shadow-sm';
-        item.innerHTML = `
-                <div class="flex justify-between items-start mb-2">
-                    <div>
-                        <span class="text-xs font-bold text-gray-500">#${doc.id.slice(0, 8)}</span>
-                        <p class="font-bold text-black">${data.files.length} File(s)</p>
-                    </div>
-                    <span class="px-2 py-1 rounded text-xs font-bold border ${statusClass}">
-                        ${data.status}
-                    </span>
+      const item = document.createElement('div');
+      item.className = 'bg-white border-2 border-black rounded-lg p-4 shadow-sm relative group';
+      item.innerHTML = `
+            <div class="flex justify-between items-start mb-2">
+                <div>
+                    <span class="text-xs font-bold text-gray-500">#${doc.id.slice(0, 8)}</span>
+                    <p class="font-bold text-black">${data.files ? data.files.length : 1} File(s)</p>
                 </div>
-                <div class="flex justify-between items-center text-sm">
-                    <span class="text-gray-600">${date}</span>
-                    <span class="font-bold text-neo-cyan">${formatCurrency(data.totalCost)}</span>
-                </div>
-            `;
-        requestsList.appendChild(item);
-      });
+                <span class="px-2 py-1 rounded text-xs font-bold border ${statusClass}">
+                    ${data.status}
+                </span>
+            </div>
+            <div class="flex justify-between items-center text-sm">
+                <span class="text-gray-600">${date}</span>
+                <span class="font-bold text-neo-cyan">${formatCurrency(data.totalCost)}</span>
+            </div>
+            ${canDelete ? `
+            <button onclick="window.deleteRequest('${doc.id}')" class="absolute top-2 right-2 text-red-500 hover:text-red-700 p-1 rounded hover:bg-red-50" title="Delete Request">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+            </button>
+            ` : ''}
+        `;
+      requestsList.appendChild(item);
     });
-  };
-
-  viewHistoryBtn.addEventListener('click', openHistory);
-
-  closeModalBtn.addEventListener('click', () => {
-    requestsModal.classList.add('hidden');
-    if (unsubscribeHistory) unsubscribeHistory();
   });
+
+  // Global Delete Handler
+  window.deleteRequest = async (requestId) => {
+    if (!confirm("Are you sure you want to delete this request?")) return;
+    try {
+      await deleteDoc(doc(db, "requests", requestId));
+      // onSnapshot will update UI
+    } catch (error) {
+      console.error("Error deleting request:", error);
+      alert("Failed to delete request.");
+    }
+  };
 
   // Abandoned file cleanup
   window.addEventListener('beforeunload', (event) => {
