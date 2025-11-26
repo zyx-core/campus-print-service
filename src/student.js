@@ -296,7 +296,7 @@ export const renderStudentDashboard = (user) => {
   const closeModalBtn = document.getElementById('closeModalBtn');
   const requestsList = document.getElementById('requestsList');
 
-  // Calculate Cost
+  // Calculate Cost (Reverted to Old Logic)
   const calculateCost = () => {
     if (!totalPageCount) return { total: 0, discount: 0, printCost: 0, bindingCost: 0, isBulk: false };
 
@@ -309,24 +309,22 @@ export const renderStudentDashboard = (user) => {
     const finishingFeePerItem = finishingSelect.value === 'spiral' ? 25.00 : 0.00;
     const bindingCost = finishingFeePerItem * copies * numberOfFiles;
 
-    let printCost = totalPageCount * rate * copies;
-    let isBulk = false;
+    const printCost = totalPageCount * rate * copies;
 
-    // Bulk Discount Logic: 10+ copies = ₹0.85/page (for duplex)
-    if (copies >= 10) {
+    // Discount Logic (Old Logic: >10 copies AND >500 cost)
+    let discount = 0;
+    let isBulk = false;
+    if (copies > 10 && printCost > 500) {
+      discount = printCost * 0.15;
       isBulk = true;
-      printCost = totalPageCount * 0.85 * copies; // Direct rate application for bulk
-      if (!isDuplex) {
-        printCost = totalPageCount * (1.5 * 0.85) * copies;
-      }
     }
 
-    const total = printCost + bindingCost;
-    return { total, printCost, bindingCost, isBulk };
+    const total = (printCost - discount) + bindingCost;
+    return { total, printCost, bindingCost, isBulk, discount };
   };
 
   const updateCostDisplay = () => {
-    const { total, printCost, bindingCost, isBulk } = calculateCost();
+    const { total, printCost, bindingCost, isBulk, discount } = calculateCost();
 
     // Update Summary
     summaryPages.textContent = totalPageCount;
@@ -338,7 +336,7 @@ export const renderStudentDashboard = (user) => {
     // Update Breakdown Text
     let breakdownText = `${totalPageCount} pgs × ${copiesInput.value} copies`;
     if (bindingCost > 0) breakdownText += ` + Binding`;
-    if (isBulk) breakdownText += ` (Bulk Rate Applied)`;
+    if (discount > 0) breakdownText += ` (Discount Applied)`;
     costBreakdown.textContent = breakdownText;
 
     // Show/Hide Bulk Badge
@@ -383,10 +381,7 @@ export const renderStudentDashboard = (user) => {
     updateCostDisplay();
   });
 
-  // File Upload Handler
-  // File Upload Handler
-  // File Upload Handler
-  // File Upload Handler
+  // File Upload Handler (Keep new UI logic as it drives the interface)
   fileInput.addEventListener('change', async (e) => {
     const files = Array.from(e.target.files);
     if (!files.length) return;
@@ -494,7 +489,7 @@ export const renderStudentDashboard = (user) => {
         }).catch(err => {
           console.error("Upload failed", err);
           document.getElementById(`status-${tempId}`).textContent = "Failed";
-          document.getElementById(`status-${tempId}`).className = "text-xs font-bold text-white bg-red-500";
+          document.getElementById(`status-${tempId}`).className = "text-xs font-bold text-white bg-red-500 px-2 py-0.5 rounded border border-black";
         });
 
       } catch (err) {
@@ -515,7 +510,7 @@ export const renderStudentDashboard = (user) => {
       return;
     }
 
-    const { total } = calculateCost();
+    const { total, discount } = calculateCost();
     const confirmMsg = `Total Cost: ${formatCurrency(total)}\n\nProceed with request?`;
 
     if (!confirm(confirmMsg)) return;
@@ -532,18 +527,26 @@ export const renderStudentDashboard = (user) => {
         pages: f.pages
       }));
 
+      const fileNames = uploadedFiles.map(f => f.originalName);
+
+      // Data structure matching OLD logic
       const requestData = {
         userId: user.uid,
         userEmail: user.email,
+        fileNames: fileNames, // Array
+        fileName: fileNames.join(', '), // String
         files: uploadedFiles,
-        printMode: printModeSelect.value,
-        duplex: duplexSelect.value,
-        copies: parseInt(copiesInput.value),
-        finishing: finishingSelect.value,
+        pageCount: totalPageCount,
+        options: {
+          duplex: duplexSelect.value,
+          copies: parseInt(copiesInput.value),
+          finishing: finishingSelect.value
+        },
         totalCost: total,
-        status: 'Pending',
+        discountApplied: discount,
+        status: 'New Request', // Old status
         paymentStatus: 'Pending',
-        paymentMethod: 'COD',
+        paymentMethod: 'COD', // Defaulting to COD as per old logic usually
         createdAt: new Date(),
         updatedAt: new Date()
       };
