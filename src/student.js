@@ -452,8 +452,9 @@ export const renderStudentDashboard = (user) => {
           document.getElementById(`spinner-${tempId}`).classList.remove('hidden');
           document.getElementById(`status-${tempId}`).textContent = "Uploading...";
 
-          const sanitizedName = sanitizeFileName(file.name);
-          const fileName = `${Date.now()}_${sanitizedName}`;
+          // sanitizeFileName returns an object with safeFileName
+          const { safeFileName } = sanitizeFileName(file.name);
+          const fileName = safeFileName;
 
           const { data, error } = await supabase.storage
             .from('pdfs')
@@ -471,7 +472,7 @@ export const renderStudentDashboard = (user) => {
 
           return {
             originalName: file.name,
-            sanitizedName: sanitizedName,
+            sanitizedName: fileName,
             path: fileName,
             url: publicUrl,
             pages: pages
