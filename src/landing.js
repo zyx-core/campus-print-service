@@ -14,7 +14,7 @@ export const renderLanding = () => {
           <div class="flex justify-between items-center h-20">
             <!-- Logo -->
             <div class="flex items-center gap-3">
-              <div class="w-12 h-12 bg-neo-cyan border-4 border-black rounded-lg flex items-center justify-center text-black font-bold text-xl shadow-neo-sm">P</div>
+              <img src="/logo.png" alt="Port Print Logo" class="h-14 w-auto object-contain">
               <h1 class="text-2xl font-bold text-black tracking-tight">Port Print</h1>
             </div>
 

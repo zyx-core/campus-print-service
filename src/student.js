@@ -15,7 +15,7 @@ export const renderStudentDashboard = (user) => {
     <nav class="max-w-5xl mx-auto mb-8 flex justify-between items-center bg-white border-4 border-black p-4 shadow-neo-sm">
       <div class="flex items-center gap-4">
         <a href="#/" id="homeLink" class="flex items-center gap-2 hover:opacity-80 transition cursor-pointer">
-          <div class="w-10 h-10 bg-neo-yellow border-3 border-black rounded flex items-center justify-center text-black font-bold text-xl">P</div>
+          <img src="/logo.png" alt="Port Print Logo" class="h-12 w-auto object-contain">
           <h1 class="text-xl font-bold text-black hidden sm:block">Port Print</h1>
         </a>
         <div class="h-8 w-1 bg-black hidden sm:block"></div>
