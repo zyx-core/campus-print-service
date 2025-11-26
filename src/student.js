@@ -265,6 +265,10 @@ export const renderStudentDashboard = (user) => {
 
   // Modal Elements
   const requestsList = document.getElementById('requestsList');
+  const confirmModal = document.getElementById('confirmModal');
+  const confirmAmount = document.getElementById('confirmAmount');
+  const cancelConfirmBtn = document.getElementById('cancelConfirmBtn');
+  const proceedConfirmBtn = document.getElementById('proceedConfirmBtn');
 
   // Calculate Cost (Reverted to Old Logic)
   const calculateCost = () => {
@@ -529,8 +533,8 @@ export const renderStudentDashboard = (user) => {
     fileInput.value = '';
   });
 
-  // Submit Handler
-  submitBtn.addEventListener('click', async () => {
+  // Submit Handler (Opens Modal)
+  submitBtn.addEventListener('click', () => {
     if (submitBtn.disabled) return;
 
     // Final check
@@ -539,13 +543,23 @@ export const renderStudentDashboard = (user) => {
       return;
     }
 
-    const { total, discount } = calculateCost();
-    const confirmMsg = `Total Cost: ${formatCurrency(total)}\n\nProceed with request?`;
+    const { total } = calculateCost();
+    confirmAmount.textContent = formatCurrency(total);
+    confirmModal.classList.remove('hidden');
+  });
 
-    if (!confirm(confirmMsg)) return;
+  // Confirm Modal Handlers
+  cancelConfirmBtn.addEventListener('click', () => {
+    confirmModal.classList.add('hidden');
+  });
+
+  proceedConfirmBtn.addEventListener('click', async () => {
+    confirmModal.classList.add('hidden');
 
     submitBtn.textContent = "Submitting...";
     submitBtn.disabled = true;
+
+    const { total, discount } = calculateCost();
 
     try {
       const uploadedFiles = currentFiles.map(f => ({
