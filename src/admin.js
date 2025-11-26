@@ -233,6 +233,7 @@ export const renderAdminDashboard = (user) => {
         </td>
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
           <div>${data.options.duplex === 'duplex' ? 'Duplex' : 'Simplex'}</div>
+          <div>${data.options.pagesPerSheet > 1 ? `<span class="font-bold text-blue-600">${data.options.pagesPerSheet} Pages/Sheet</span>` : 'Normal (1/Sheet)'}</div>
           <div>${data.options.finishing !== 'none' ? data.options.finishing : 'No Finishing'}</div>
           <div>${data.options.copies} Copies</div>
         </td>

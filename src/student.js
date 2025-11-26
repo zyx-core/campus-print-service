@@ -90,6 +90,15 @@ export const renderStudentDashboard = (user) => {
                   <option value="simplex">Single-sided</option>
                 </select>
               </div>
+              <div>
+                <label class="block text-sm font-bold text-black mb-2">Pages Per Sheet</label>
+                <select id="pagesPerSheet" class="w-full border-4 border-black rounded-lg p-3 font-bold bg-white focus:ring-4 focus:ring-neo-cyan outline-none">
+                  <option value="1" selected>1 Page per Sheet (Normal)</option>
+                  <option value="2">2 Pages per Sheet (Half Cost! 💰)</option>
+                  <option value="4">4 Pages per Sheet</option>
+                  <option value="6">6 Pages per Sheet</option>
+                </select>
+              </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -273,6 +282,7 @@ export const renderStudentDashboard = (user) => {
   // Inputs
   const printModeSelect = document.getElementById('printMode');
   const duplexSelect = document.getElementById('duplex');
+  const pagesPerSheetSelect = document.getElementById('pagesPerSheet');
   const copiesInput = document.getElementById('copies');
   const finishingSelect = document.getElementById('finishing');
   const incCopiesBtn = document.getElementById('incCopies');
@@ -294,11 +304,15 @@ export const renderStudentDashboard = (user) => {
     const copies = parseInt(copiesInput.value) || 1;
     const numberOfFiles = currentFiles.length || 1;
 
+    // N-up Logic
+    const pagesPerSheet = parseInt(pagesPerSheetSelect.value) || 1;
+    const physicalPages = Math.ceil(totalPageCount / pagesPerSheet);
+
     // Binding Cost: ₹25 * Copies * Number of Files (if spiral)
     const finishingFeePerItem = finishingSelect.value === 'spiral' ? 25.00 : 0.00;
     const bindingCost = finishingFeePerItem * copies * numberOfFiles;
 
-    const printCost = totalPageCount * rate * copies;
+    const printCost = physicalPages * rate * copies;
 
     // Discount Logic (Old Logic: >10 copies AND >500 cost)
     let discount = 0;
@@ -359,7 +373,7 @@ export const renderStudentDashboard = (user) => {
   };
 
   // Event Listeners for Options
-  [printModeSelect, duplexSelect, finishingSelect].forEach(el => {
+  [printModeSelect, duplexSelect, finishingSelect, pagesPerSheetSelect].forEach(el => {
     el.addEventListener('change', updateCostDisplay);
   });
 
@@ -597,6 +611,7 @@ export const renderStudentDashboard = (user) => {
         pageCount: totalPageCount,
         options: {
           duplex: duplexSelect.value,
+          pagesPerSheet: parseInt(pagesPerSheetSelect.value),
           copies: parseInt(copiesInput.value),
           finishing: finishingSelect.value
         },
