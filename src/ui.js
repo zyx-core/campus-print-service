@@ -206,144 +206,100 @@ export const renderSignup = () => {
   console.log("[Signup] Rendering signup page");
   const app = document.querySelector('#app');
   app.innerHTML = `
-    <div class="min-h-screen bg-[#E5E5E5] flex items-center justify-center p-4 font-sans">
-      <div class="bg-white rounded-lg shadow-2xl w-full max-w-5xl overflow-hidden flex flex-col md:flex-row">
+    <!-- Paper Container with Border -->
+    <div class="min-h-screen p-4 md:p-8">
+      <div class="max-w-[1200px] mx-auto bg-white border-[8px] border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]">
         
-        <!-- Left Side: Marketing Content (Deep Blue Theme) -->
-        <div class="w-full md:w-1/2 bg-[#043873] p-8 md:p-12 text-white flex flex-col justify-center relative overflow-hidden">
-          <!-- Decorative Element -->
-          <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-[#4F9CF9] opacity-10 blur-3xl"></div>
-          <div class="absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 rounded-full bg-[#FFE492] opacity-5 blur-3xl"></div>
-
-          <div class="relative z-10">
-            <div class="flex items-center gap-3 mb-6">
-              <!-- Logo Icon -->
-              <div class="w-10 h-10 bg-[#4F9CF9] rounded-lg flex items-center justify-center text-white font-bold text-xl">P</div>
-              <h1 class="text-3xl font-bold tracking-tight">Port Print</h1>
-            </div>
-            
-            <h2 class="text-3xl font-bold mb-4 leading-tight">🚀 Join Port Print!</h2>
-            
-            <p class="mb-6 text-gray-200 text-base leading-relaxed">
-              Create your free account and start printing smarter!<br/>
-              <span class="text-[#FFE492] font-semibold">No credit card required.</span> 🎉
-            </p>
-
-            <div class="bg-white bg-opacity-5 rounded-lg p-4 mb-6 border border-white border-opacity-10">
-              <p class="text-gray-100 mb-3">
-                ✨ <span class="font-bold text-white">What you get:</span>
-              </p>
-              <div class="space-y-2 text-sm">
-                <div class="flex items-center gap-2">
-                  <span class="text-[#FFE492]">✓</span>
-                  <span class="text-gray-200">Instant access to print services</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span class="text-[#FFE492]">✓</span>
-                  <span class="text-gray-200">Upload unlimited PDFs (up to 300MB each)</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span class="text-[#FFE492]">✓</span>
-                  <span class="text-gray-200">Track your print requests in real-time</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span class="text-[#FFE492]">✓</span>
-                  <span class="text-gray-200">Next-day campus pickup guaranteed</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="bg-[#4F9CF9] bg-opacity-15 rounded-lg p-4 mb-6 border border-[#4F9CF9] border-opacity-30">
-              <p class="text-white text-sm leading-relaxed">
-                💡 <span class="font-bold">Pro tip:</span> Use your college email for faster verification and exclusive student discounts!
-              </p>
-            </div>
-
-            <p class="text-gray-300 text-sm italic">
-              Already printing smart with 500+ students...<br/>
-              <span class="text-[#FFE492] font-bold not-italic">Join them now! 🎓✨</span>
-            </p>
-          </div>
+        <!-- Back Button -->
+        <div class="p-6 border-b-4 border-black">
+          <button id="backToHome" class="flex items-center gap-2 text-black font-bold hover:text-neo-cyan transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            Back to Home
+          </button>
         </div>
 
-        <!-- Right Side: Signup Form -->
-        <div class="w-full md:w-1/2 p-8 md:p-12 flex items-center justify-center bg-white">
-          <div class="w-full max-w-md">
-            <h2 class="text-3xl font-bold mb-2 text-[#043873]">Create Account</h2>
-            <p class="text-gray-500 mb-8">Start your printing journey today</p>
-
-            <div id="errorMessage" class="hidden mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
-              <p class="text-sm text-red-600"></p>
+        <!-- Content Grid -->
+        <div class="grid md:grid-cols-2 gap-0">
+          
+          <!-- Left Side: Fun Marketing Content -->
+          <div class="p-8 md:p-12 bg-neo-yellow border-r-0 md:border-r-4 border-b-4 md:border-b-0 border-black">
+            <!-- Logo -->
+            <div class="flex items-center gap-3 mb-8">
+              <div class="w-12 h-12 bg-neo-cyan border-4 border-black rounded-lg flex items-center justify-center text-black font-bold text-xl shadow-neo-sm">P</div>
+              <h1 class="text-3xl font-bold text-black">Port Print</h1>
             </div>
-
-            <form id="signupForm" class="space-y-5">
-              <div>
-                <label class="block text-sm font-semibold text-[#043873] mb-1">Email Address</label>
-                <input 
-                  type="email" 
-                  id="email" 
-                  class="mt-1 block w-full border border-gray-200 rounded-lg shadow-sm p-3 focus:ring-[#4F9CF9] focus:border-[#4F9CF9] transition-all bg-gray-50" 
-                  placeholder="student@ukfcet.ac.in" 
-                  required
-                >
-                <p class="text-xs text-gray-500 mt-1">Use your college email for verification</p>
-              </div>
-              
-              <div>
-                <label class="block text-sm font-semibold text-[#043873] mb-1">Password</label>
-                <input 
-                  type="password" 
-                  id="password" 
-                  class="mt-1 block w-full border border-gray-200 rounded-lg shadow-sm p-3 focus:ring-[#4F9CF9] focus:border-[#4F9CF9] transition-all bg-gray-50" 
-                  placeholder="••••••••" 
-                  minlength="6"
-                  required
-                >
-                <p class="text-xs text-gray-500 mt-1">Minimum 6 characters</p>
-              </div>
-
-              <div>
-                <label class="block text-sm font-semibold text-[#043873] mb-1">Confirm Password</label>
-                <input 
-                  type="password" 
-                  id="confirmPassword" 
-                  class="mt-1 block w-full border border-gray-200 rounded-lg shadow-sm p-3 focus:ring-[#4F9CF9] focus:border-[#4F9CF9] transition-all bg-gray-50" 
-                  placeholder="••••••••" 
-                  required
-                >
-              </div>
-
-              <div class="flex items-start">
-                <input 
-                  type="checkbox" 
-                  id="terms" 
-                  class="mt-1 rounded border-gray-300 text-[#4F9CF9] focus:ring-[#4F9CF9]" 
-                  required
-                >
-                <label for="terms" class="ml-2 text-sm text-gray-600">
-                  I agree to the <a href="#" class="text-[#4F9CF9] hover:underline">Terms of Service</a> and <a href="#" class="text-[#4F9CF9] hover:underline">Privacy Policy</a>
-                </label>
-              </div>
-
-              <button 
-                type="submit" 
-                id="signupBtn" 
-                class="w-full bg-[#4F9CF9] text-white py-3.5 rounded-lg font-bold hover:bg-[#2F7ACF] transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-              >
-                Create Account
-              </button>
-            </form>
             
-            <div class="relative my-8">
-              <div class="absolute inset-0 flex items-center">
-                <div class="w-full border-t border-gray-200"></div>
+            <h2 class="text-4xl font-bold text-black mb-4 leading-tight">
+              Join the Print Party! 🎉
+            </h2>
+            
+            <p class="text-lg text-black mb-6 font-bold">
+              500+ students are already printing smarter.<br/>
+              <span class="text-neo-pink">Your turn!</span>
+            </p>
+
+            <!-- Benefits Cards -->
+            <div class="space-y-4 mb-8">
+              <div class="bg-neo-pink border-4 border-black rounded-xl p-4 shadow-neo-sm transform rotate-slight-left">
+                <div class="flex items-start gap-3">
+                  <span class="text-3xl">💰</span>
+                  <div>
+                    <h3 class="font-bold text-black text-lg">Super Affordable</h3>
+                    <p class="text-black text-sm">₹1/page regular, ₹0.85/page bulk!</p>
+                  </div>
+                </div>
               </div>
-              <div class="relative flex justify-center text-sm">
-                <span class="px-4 bg-white text-gray-400">Or sign up with</span>
+
+              <div class="bg-neo-cyan border-4 border-black rounded-xl p-4 shadow-neo-sm">
+                <div class="flex items-start gap-3">
+                  <span class="text-3xl">⚡</span>
+                  <div>
+                    <h3 class="font-bold text-black text-lg">Lightning Fast</h3>
+                    <p class="text-black text-sm">Upload, pay, collect. That's it!</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-white border-4 border-black rounded-xl p-4 shadow-neo-sm transform rotate-slight-right">
+                <div class="flex items-start gap-3">
+                  <span class="text-3xl">📱</span>
+                  <div>
+                    <h3 class="font-bold text-black text-lg">Track Everything</h3>
+                    <p class="text-black text-sm">Real-time updates on your prints</p>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <button id="googleSignUpBtn" class="w-full flex items-center justify-center gap-3 bg-white border border-gray-200 text-gray-700 py-3 rounded-lg hover:bg-gray-50 transition-colors font-medium shadow-sm hover:shadow-md">
+            <!-- Mascot Character -->
+            <div class="hidden md:block mt-8">
+              <div class="bg-neo-cream border-4 border-black rounded-xl p-4 relative">
+                <div class="flex items-center gap-3">
+                  <div class="text-5xl animate-float">🖨️</div>
+                  <div class="bg-white border-3 border-black rounded-lg p-3 shadow-neo-sm">
+                    <p class="text-black font-bold text-sm">
+                      "Print smarter, not harder!" 💪
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Side: Signup Form -->
+          <div class="p-8 md:p-12 bg-white">
+            <h2 class="text-3xl font-bold text-black mb-2">Create Account</h2>
+            <p class="text-gray-600 mb-6 font-bold">Let's get you started! ✨</p>
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="hidden mb-4 p-4 bg-red-100 border-4 border-red-500 rounded-lg">
+              <p class="text-sm text-red-700 font-bold"></p>
+            </div>
+
+            <!-- Google Sign Up Button -->
+            <button id="googleSignUpBtn" class="w-full neo-btn-white mb-6 flex items-center justify-center gap-3">
               <svg class="w-5 h-5" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                 <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -353,8 +309,78 @@ export const renderSignup = () => {
               Sign up with Google
             </button>
 
-            <p class="mt-8 text-center text-sm text-gray-500">
-              Already have an account? <a href="#" id="showLogin" class="text-[#4F9CF9] font-bold hover:underline">Log in</a>
+            <!-- Divider -->
+            <div class="relative mb-6">
+              <div class="absolute inset-0 flex items-center">
+                <div class="w-full border-t-4 border-black"></div>
+              </div>
+              <div class="relative flex justify-center">
+                <span class="px-4 bg-white text-black font-bold text-sm">OR</span>
+              </div>
+            </div>
+
+            <!-- Signup Form -->
+            <form id="signupForm" class="space-y-4">
+              <div>
+                <label class="block text-sm font-bold text-black mb-2">Email Address</label>
+                <input 
+                  type="email" 
+                  id="email" 
+                  class="w-full border-4 border-black rounded-lg p-3 focus:ring-4 focus:ring-neo-cyan focus:border-neo-cyan transition-all font-bold bg-gray-50" 
+                  placeholder="your@email.com" 
+                  required
+                >
+                <p class="text-xs text-gray-600 mt-1 font-bold">💡 Use your college email!</p>
+              </div>
+              
+              <div>
+                <label class="block text-sm font-bold text-black mb-2">Password</label>
+                <input 
+                  type="password" 
+                  id="password" 
+                  class="w-full border-4 border-black rounded-lg p-3 focus:ring-4 focus:ring-neo-cyan focus:border-neo-cyan transition-all font-bold bg-gray-50" 
+                  placeholder="••••••••" 
+                  minlength="6"
+                  required
+                >
+                <p class="text-xs text-gray-600 mt-1 font-bold">Minimum 6 characters</p>
+              </div>
+
+              <div>
+                <label class="block text-sm font-bold text-black mb-2">Confirm Password</label>
+                <input 
+                  type="password" 
+                  id="confirmPassword" 
+                  class="w-full border-4 border-black rounded-lg p-3 focus:ring-4 focus:ring-neo-cyan focus:border-neo-cyan transition-all font-bold bg-gray-50" 
+                  placeholder="••••••••" 
+                  required
+                >
+              </div>
+
+              <div class="flex items-start gap-3 p-4 bg-neo-cream border-3 border-black rounded-lg">
+                <input 
+                  type="checkbox" 
+                  id="terms" 
+                  class="mt-1 w-5 h-5 border-3 border-black rounded text-neo-cyan focus:ring-neo-cyan" 
+                  required
+                >
+                <label for="terms" class="text-sm text-black font-bold">
+                  I agree to the <a href="#" class="text-neo-cyan underline">Terms</a> and <a href="#" class="text-neo-cyan underline">Privacy Policy</a>
+                </label>
+              </div>
+
+              <button 
+                type="submit" 
+                id="signupBtn" 
+                class="w-full neo-btn-primary rounded-xl text-lg"
+              >
+                Create Account 🚀
+              </button>
+            </form>
+
+            <p class="mt-6 text-center text-sm text-gray-600 font-bold">
+              Already have an account? 
+              <a href="#" id="showLogin" class="text-neo-cyan hover:underline font-bold">Log in</a>
             </p>
           </div>
         </div>
@@ -366,6 +392,7 @@ export const renderSignup = () => {
   const errorMessage = document.getElementById('errorMessage');
   const signupBtn = document.getElementById('signupBtn');
   const googleSignUpBtn = document.getElementById('googleSignUpBtn');
+  const backToHomeBtn = document.getElementById('backToHome');
 
   const showError = (message) => {
     errorMessage.classList.remove('hidden');
@@ -375,6 +402,13 @@ export const renderSignup = () => {
   const hideError = () => {
     errorMessage.classList.add('hidden');
   };
+
+  // Back to Home Handler
+  if (backToHomeBtn) {
+    backToHomeBtn.addEventListener('click', () => {
+      navigateTo('/');
+    });
+  }
 
   // Email/Password Signup Handler
   if (signupForm) {
