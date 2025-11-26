@@ -583,8 +583,7 @@ export const renderStudentDashboard = (user) => {
   // Real-time History Listener
   const q = query(
     collection(db, "requests"),
-    where("userId", "==", user.uid),
-    orderBy("createdAt", "desc")
+    where("userId", "==", user.uid)
   );
 
   onSnapshot(q, (snapshot) => {
@@ -594,7 +593,14 @@ export const renderStudentDashboard = (user) => {
       return;
     }
 
-    snapshot.forEach((doc) => {
+    // Sort client-side to avoid index requirement
+    const docs = snapshot.docs.sort((a, b) => {
+      const dateA = a.data().createdAt?.toDate ? a.data().createdAt.toDate() : new Date(0);
+      const dateB = b.data().createdAt?.toDate ? b.data().createdAt.toDate() : new Date(0);
+      return dateB - dateA; // Descending
+    });
+
+    docs.forEach((doc) => {
       const data = doc.data();
       const date = data.createdAt?.toDate ? formatDate(data.createdAt.toDate()) : 'Just now';
 
