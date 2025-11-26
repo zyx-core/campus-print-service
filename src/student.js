@@ -9,24 +9,28 @@ import { navigateTo } from './router.js';
 export const renderStudentDashboard = (user) => {
   const app = document.querySelector('#app');
   app.innerHTML = `
-  <div class="min-h-screen bg-white p-4 md:p-8">
-    
-    <!-- Navigation -->
-    <nav class="max-w-5xl mx-auto mb-8 flex justify-between items-center bg-white border-4 border-black p-4 shadow-neo-sm">
-      <div class="flex items-center gap-4">
-        <a href="#/" id="homeLink" class="flex items-center gap-2 hover:opacity-80 transition cursor-pointer">
-          <img src="/logo.png" alt="Port Print Logo" class="h-12 w-auto object-contain">
-          <h1 class="text-xl font-bold text-black hidden sm:block">Port Print</h1>
-        </a>
-        <div class="h-8 w-1 bg-black hidden sm:block"></div>
-        <span class="text-gray-600 font-bold hidden sm:block">Dashboard</span>
-      </div>
+  <div class="min-h-screen p-4 md:p-8">
+    <!-- Paper Container -->
+    <div class="max-w-[1400px] mx-auto bg-white border-[8px] border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] relative">
       
-      <div class="flex items-center gap-4">
-        <span class="text-sm font-bold hidden md:block bg-neo-cream px-3 py-1 border-2 border-black rounded-full">${user.email}</span>
-        <button id="logoutBtn" class="neo-btn-secondary text-sm px-4 py-2 rounded-lg">Logout</button>
-      </div>
-    </nav>
+      <!-- Navigation (Sticky) -->
+      <nav class="sticky top-0 z-40 bg-white border-b-4 border-black p-4 flex justify-between items-center">
+        <div class="flex items-center gap-4">
+          <a href="#/" id="homeLink" class="flex items-center gap-2 hover:opacity-80 transition cursor-pointer">
+            <div class="w-10 h-10 bg-neo-cyan border-2 border-black rounded flex items-center justify-center text-black font-bold shadow-neo-sm">P</div>
+            <h1 class="text-xl font-bold text-black hidden sm:block">Port Print</h1>
+          </a>
+          <div class="h-8 w-1 bg-black hidden sm:block"></div>
+          <span class="text-gray-600 font-bold hidden sm:block">Dashboard</span>
+        </div>
+        
+        <div class="flex items-center gap-4">
+          <span class="text-sm font-bold hidden md:block bg-neo-cream px-3 py-1 border-2 border-black rounded-full">${user.email}</span>
+          <button id="logoutBtn" class="neo-btn-secondary text-sm px-4 py-2 rounded-lg border-2 shadow-neo-sm">Logout</button>
+        </div>
+      </nav>
+
+      <div class="p-4 md:p-8">
 
     <main class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 pb-24">
       
@@ -174,6 +178,10 @@ export const renderStudentDashboard = (user) => {
       </div>
 
     </main>
+    </div>
+    <!-- End Content Padding -->
+    </div>
+    <!-- End Paper Container -->
     
 
   
