@@ -370,20 +370,46 @@ export const renderStudentDashboard = (user) => {
     }
   });
 
-  // File Upload Handler (Keep new UI logic as it drives the interface)
-  fileInput.addEventListener('change', async (e) => {
-    const files = Array.from(e.target.files);
-    if (!files.length) return;
+  // Remove File Handler
+  const removeFile = async (tempId) => {
+    const fileIndex = currentFiles.findIndex(f => f.tempId === tempId);
+    if (fileIndex === -1) return;
 
-    // Cleanup previous
-    if (currentFiles.length > 0) {
-      const paths = currentFiles.map(f => f.path).filter(p => p);
-      if (paths.length) supabase.storage.from('pdfs').remove(paths);
+    const file = currentFiles[fileIndex];
+
+    // Remove from UI
+    const item = document.getElementById(`file-item-${tempId}`);
+    if (item) item.remove();
+
+    // Update Totals
+    totalPageCount -= (file.pages || 0);
+    if (totalPageCount < 0) totalPageCount = 0;
+
+    pageCountDisplay.textContent = `Total Pages: ${totalPageCount}`;
+    updateCostDisplay();
+
+    // Remove from Storage (if uploaded)
+    if (file.path) {
+      supabase.storage.from('pdfs').remove([file.path]).catch(console.error);
     }
 
-    currentFiles = [];
-    totalPageCount = 0;
-    fileListDisplay.innerHTML = '';
+    // Remove from Array
+    currentFiles.splice(fileIndex, 1);
+
+    // Hide list if empty
+    if (currentFiles.length === 0) {
+      fileListDisplay.classList.add('hidden');
+      pageCountDisplay.classList.add('hidden');
+      optionsSection.classList.add('opacity-50', 'pointer-events-none');
+    }
+  };
+
+  // File Upload Handler (Append Mode)
+  fileInput.addEventListener('change', async (e) => {
+    const newFiles = Array.from(e.target.files);
+    if (!newFiles.length) return;
+
+    // Don't clear previous files - Append instead
     fileListDisplay.classList.remove('hidden');
     pageCountDisplay.classList.add('hidden');
 
@@ -391,12 +417,13 @@ export const renderStudentDashboard = (user) => {
     submitBtn.disabled = true;
     submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
 
-    for (const file of files) {
+    for (const file of newFiles) {
       const tempId = Math.random().toString(36).substring(7);
 
       // UI Item
       const fileItem = document.createElement('div');
-      fileItem.className = 'flex justify-between items-center p-3 bg-gray-50 border-2 border-black rounded-lg';
+      fileItem.id = `file-item-${tempId}`;
+      fileItem.className = 'flex justify-between items-center p-3 bg-gray-50 border-2 border-black rounded-lg mb-2';
       fileItem.innerHTML = `
         <div class="flex items-center gap-3 overflow-hidden">
           <span class="text-xl">📄</span>
@@ -405,9 +432,15 @@ export const renderStudentDashboard = (user) => {
         <div class="flex items-center gap-2">
           <div id="spinner-${tempId}" class="animate-spin h-4 w-4 border-2 border-neo-cyan rounded-full border-t-transparent"></div>
           <span id="status-${tempId}" class="text-xs font-bold text-gray-500">Processing...</span>
+          <button id="remove-${tempId}" class="ml-2 text-red-500 hover:text-red-700 font-bold hidden">&times;</button>
         </div>
       `;
       fileListDisplay.appendChild(fileItem);
+
+      // Add Remove Handler
+      document.getElementById(`remove-${tempId}`).addEventListener('click', () => {
+        removeFile(tempId);
+      });
 
       if (file.type !== 'application/pdf') {
         document.getElementById(`status-${tempId}`).textContent = "PDF Only";
@@ -458,6 +491,7 @@ export const renderStudentDashboard = (user) => {
           document.getElementById(`spinner-${tempId}`).classList.add('hidden');
           document.getElementById(`status-${tempId}`).textContent = "Ready";
           document.getElementById(`status-${tempId}`).className = "text-xs font-bold text-white bg-green-500 px-2 py-0.5 rounded border border-black";
+          document.getElementById(`remove-${tempId}`).classList.remove('hidden');
 
           return {
             originalName: file.name,
@@ -469,7 +503,7 @@ export const renderStudentDashboard = (user) => {
         };
 
         // Store promise
-        const fileObj = { file, pages, uploadPromise: uploadTask() };
+        const fileObj = { tempId, file, pages, uploadPromise: uploadTask() };
         currentFiles.push(fileObj);
 
         // Wait for upload to complete to update fileObj
@@ -480,14 +514,19 @@ export const renderStudentDashboard = (user) => {
           console.error("Upload failed", err);
           document.getElementById(`status-${tempId}`).textContent = "Failed";
           document.getElementById(`status-${tempId}`).className = "text-xs font-bold text-white bg-red-500 px-2 py-0.5 rounded border border-black";
+          document.getElementById(`remove-${tempId}`).classList.remove('hidden'); // Allow removing failed files
         });
 
       } catch (err) {
         console.error(err);
         document.getElementById(`status-${tempId}`).textContent = "Error";
         document.getElementById(`spinner-${tempId}`).classList.add('hidden');
+        document.getElementById(`remove-${tempId}`).classList.remove('hidden'); // Allow removing errored files
       }
     }
+
+    // Reset input so same files can be selected again if needed
+    fileInput.value = '';
   });
 
   // Submit Handler
