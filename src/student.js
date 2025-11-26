@@ -9,95 +9,180 @@ import { navigateTo } from './router.js';
 export const renderStudentDashboard = (user) => {
   const app = document.querySelector('#app');
   app.innerHTML = `
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-white p-4 md:p-8">
+    
+    <!-- Navigation -->
+    <nav class="max-w-5xl mx-auto mb-8 flex justify-between items-center bg-white border-4 border-black p-4 shadow-neo-sm">
+      <div class="flex items-center gap-4">
+        <a href="#/" id="homeLink" class="flex items-center gap-2 hover:opacity-80 transition cursor-pointer">
+          <div class="w-10 h-10 bg-neo-yellow border-3 border-black rounded flex items-center justify-center text-black font-bold text-xl">P</div>
+          <h1 class="text-xl font-bold text-black hidden sm:block">Port Print</h1>
+        </a>
+        <div class="h-8 w-1 bg-black hidden sm:block"></div>
+        <span class="text-gray-600 font-bold hidden sm:block">Dashboard</span>
+      </div>
+      
+      <div class="flex items-center gap-4">
+        <span class="text-sm font-bold hidden md:block bg-neo-cream px-3 py-1 border-2 border-black rounded-full">${user.email}</span>
+        <button id="logoutBtn" class="neo-btn-secondary text-sm px-4 py-2 rounded-lg">Logout</button>
+      </div>
+    </nav>
 
-      <nav class="bg-[#043873] shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="flex justify-between h-16">
-            <div class="flex items-center gap-6">
-              <a href="#/" id="homeLink" class="flex items-center gap-3 hover:opacity-80 transition cursor-pointer">
-                <div class="w-8 h-8 bg-[#4F9CF9] rounded flex items-center justify-center text-white font-bold">P</div>
-                <h1 class="text-xl font-bold text-white tracking-tight">Port Print</h1>
-              </a>
-              <span class="text-gray-300 text-sm hidden sm:inline">→ Dashboard</span>
+    <main class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 pb-24">
+      
+      <!-- Left Column: Request Form -->
+      <div class="lg:col-span-2 space-y-8">
+        
+        <!-- Step 1: Upload -->
+        <div class="bg-white border-4 border-black shadow-neo rounded-xl overflow-hidden">
+          <div class="bg-neo-cyan border-b-4 border-black p-4 flex justify-between items-center">
+            <h2 class="text-xl font-bold text-black flex items-center gap-2">
+              <span class="bg-black text-white w-8 h-8 rounded-full flex items-center justify-center text-sm">1</span>
+              Upload Files
+            </h2>
+            <span class="text-xs font-bold bg-white px-2 py-1 border-2 border-black rounded">PDF Only</span>
+          </div>
+          
+          <div class="p-6">
+            <div class="flex items-center justify-center w-full">
+              <label for="file-upload" class="flex flex-col items-center justify-center w-full h-40 border-4 border-black border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-neo-cream transition-colors group">
+                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                  <div class="mb-3 text-4xl group-hover:scale-110 transition-transform">📂</div>
+                  <p class="mb-2 text-sm text-black font-bold">Click to upload or drag and drop</p>
+                  <p class="text-xs text-gray-500 font-bold">Max 300MB per file</p>
+                </div>
+                <input id="file-upload" type="file" class="hidden" accept="application/pdf" multiple />
+              </label>
             </div>
-            <div class="flex items-center space-x-4">
-              <span class="text-gray-200 text-sm hidden sm:block">${user.email}</span>
-              <button id="logoutBtn" class="text-sm bg-[#4F9CF9] text-white px-3 py-1.5 rounded hover:bg-[#2F7ACF] transition-colors">Logout</button>
+            
+            <!-- File List -->
+            <div id="fileList" class="mt-4 space-y-3 hidden"></div>
+            <p id="pageCountDisplay" class="mt-2 text-sm font-bold text-neo-cyan hidden"></p>
+          </div>
+        </div>
+
+        <!-- Step 2: Settings -->
+        <div id="optionsSection" class="bg-white border-4 border-black shadow-neo rounded-xl overflow-hidden opacity-50 pointer-events-none transition-all duration-300">
+          <div class="bg-neo-yellow border-b-4 border-black p-4">
+            <h2 class="text-xl font-bold text-black flex items-center gap-2">
+              <span class="bg-black text-white w-8 h-8 rounded-full flex items-center justify-center text-sm">2</span>
+              Print Settings
+            </h2>
+          </div>
+          
+          <div class="p-6 space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-bold text-black mb-2">Print Mode</label>
+                <select id="printMode" class="w-full border-4 border-black rounded-lg p-3 font-bold bg-white focus:ring-4 focus:ring-neo-cyan outline-none">
+                  <option value="bw">Black & White</option>
+                  <option value="color" disabled>Color (Coming Soon)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-bold text-black mb-2">Sides</label>
+                <select id="duplex" class="w-full border-4 border-black rounded-lg p-3 font-bold bg-white focus:ring-4 focus:ring-neo-cyan outline-none">
+                  <option value="duplex" selected>Double-sided (Save Paper! 🌱)</option>
+                  <option value="simplex">Single-sided</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-bold text-black mb-2">Copies</label>
+                <div class="flex items-center">
+                  <button id="decCopies" class="bg-gray-200 border-4 border-black border-r-0 rounded-l-lg p-3 font-bold hover:bg-gray-300">-</button>
+                  <input type="number" id="copies" min="1" value="1" class="w-full border-4 border-black p-3 text-center font-bold bg-white outline-none" readonly>
+                  <button id="incCopies" class="bg-gray-200 border-4 border-black border-l-0 rounded-r-lg p-3 font-bold hover:bg-gray-300">+</button>
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-bold text-black mb-2">Finishing</label>
+                <select id="finishing" class="w-full border-4 border-black rounded-lg p-3 font-bold bg-white focus:ring-4 focus:ring-neo-cyan outline-none">
+                  <option value="none">None</option>
+                  <option value="staple">Staple (Free)</option>
+                  <option value="spiral">Spiral Binding (+₹25)</option>
+                </select>
+              </div>
+            </div>
+            
+            <!-- Bulk Discount Badge -->
+            <div id="bulkDiscountBadge" class="hidden bg-neo-pink border-4 border-black p-3 rounded-lg text-center transform rotate-1">
+              <p class="font-bold text-black">🎉 Bulk Discount Applied! (₹0.85/page)</p>
             </div>
           </div>
         </div>
-      </nav>
+      </div>
 
-      <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <!-- New Request Section -->
-          <div class="lg:col-span-2 space-y-6">
-            <div class="bg-white shadow rounded-lg p-6">
-              <h2 class="text-lg font-medium text-[#043873] mb-4">New Print Request</h2>
-              
-              <!-- File Upload -->
-              <div class="mb-6">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Upload PDF</label>
-                <div class="flex items-center justify-center w-full">
-                  <label for="file-upload" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
-                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                      <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                      </svg>
-                      <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                      <p class="text-xs text-gray-500">PDF only</p>
-                    </div>
-                    <input id="file-upload" type="file" class="hidden" accept="application/pdf" multiple />
-                  </label>
-                </div>
-                <div id="fileList" class="mt-2 space-y-1 hidden"></div>
-                <p id="pageCountDisplay" class="mt-1 text-sm font-medium text-blue-600 hidden"></p>
-              </div>
+      <!-- Right Column: Summary & History -->
+      <div class="space-y-8">
+        
+        <!-- Step 3: Summary (Sticky) -->
+        <div class="bg-white border-4 border-black shadow-neo rounded-xl overflow-hidden sticky top-4">
+          <div class="bg-neo-pink border-b-4 border-black p-4">
+            <h2 class="text-xl font-bold text-black flex items-center gap-2">
+              <span class="bg-black text-white w-8 h-8 rounded-full flex items-center justify-center text-sm">3</span>
+              Summary
+            </h2>
+          </div>
+          
+          <div class="p-6 space-y-4">
+            <div class="flex justify-between items-center text-gray-600 font-bold">
+              <span>Total Pages:</span>
+              <span id="summaryPages">0</span>
+            </div>
+            <div class="flex justify-between items-center text-gray-600 font-bold">
+              <span>Copies:</span>
+              <span id="summaryCopies">1</span>
+            </div>
+             <div class="flex justify-between items-center text-gray-600 font-bold">
+              <span>Finishing:</span>
+              <span id="summaryFinishing">None</span>
+            </div>
+            
+            <div class="border-t-4 border-black my-4"></div>
+            
+            <div class="flex justify-between items-end mb-2">
+              <span class="text-xl font-bold text-black">Total Cost:</span>
+              <span id="totalCost" class="text-4xl font-bold text-neo-cyan">₹0</span>
+            </div>
+            <div id="costBreakdown" class="text-xs text-gray-500 text-right font-bold"></div>
+            
+            <button id="submitRequestBtn" class="w-full neo-btn-primary rounded-xl text-lg py-4 mt-4 opacity-50 cursor-not-allowed" disabled>
+              Submit Request 🚀
+            </button>
+            <p class="text-xs text-center text-gray-500 font-bold mt-2">Pay via UPI/Cash on pickup</p>
+          </div>
+        </div>
 
-              <!-- Options -->
-              <div id="optionsSection" class="space-y-4 opacity-50 pointer-events-none transition-opacity duration-200">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700">Print Mode</label>
-                    <select id="printMode" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 border">
-                      <option value="bw">Black & White</option>
-                      <option value="color" disabled>Color (Unavailable)</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700">Sides</label>
-                    <select id="duplex" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 border">
-                      <option value="simplex">Single-sided (Simplex)</option>
-                      <option value="duplex" selected>Double-sided (Duplex)</option>
-                    </select>
-                  </div>
-                </div>
+        <!-- My Requests Link -->
+        <div class="bg-neo-cream border-4 border-black shadow-neo rounded-xl p-6 text-center">
+          <h3 class="font-bold text-lg mb-2">Recent Activity</h3>
+          <p class="text-sm text-gray-600 mb-4">Track your previous print jobs</p>
+          <button id="viewHistoryBtn" class="neo-btn-white w-full text-sm">View My Requests</button>
+        </div>
+      </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700">Copies</label>
-                    <input type="number" id="copies" min="1" value="1" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 border">
-                  </div>
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700">Finishing</label>
-                    <select id="finishing" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 border">
-                      <option value="none">None</option>
-                      <option value="staple">Staple (Free)</option>
-                      <option value="spiral">Spiral Binding (₹25)</option>
-                    </select>
-                  </div>
-                </div>
+    </main>
+    
+    <!-- Requests Modal (Hidden by default) -->
+    <div id="requestsModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+      <div class="bg-white border-4 border-black shadow-neo-lg rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+        <div class="bg-neo-yellow border-b-4 border-black p-4 flex justify-between items-center">
+          <h2 class="text-xl font-bold text-black">My Requests</h2>
+          <button id="closeModalBtn" class="text-black hover:text-red-600 font-bold text-xl">&times;</button>
+        </div>
+        <div class="p-6 overflow-y-auto flex-grow">
+          <div id="requestsList" class="space-y-4">
+            <!-- Requests injected here -->
+            <div class="text-center py-8 text-gray-500 font-bold">Loading requests...</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-                <!-- Quote -->
-                <div class="bg-[#043873] bg-opacity-5 p-4 rounded-md mt-6 border border-[#043873] border-opacity-10">
-                  <div class="flex justify-between items-center mb-2">
-                    <span class="text-[#043873] font-medium">Total Cost:</span>
-                    <span id="totalCost" class="text-2xl font-bold text-[#043873]">₹0.00</span>
-                  </div>
-                  <div id="costBreakdown" class="text-xs text-gray-500 text-right space-y-1">
-                    <!-- Formula will be injected here -->
-                  </div>
+  </div>
                 </div>
 
                 <button id="payBtn" class="w-full bg-[#4F9CF9] text-white py-3 rounded-lg font-bold hover:bg-[#2F7ACF] transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 mt-6">
@@ -169,7 +254,6 @@ export const renderStudentDashboard = (user) => {
   document.getElementById('logoutBtn').addEventListener('click', () => {
     console.log('[Student] Logging out...');
     auth.signOut();
-    // Auth state change will handle navigation to landing page
   });
 
   // Home link handler
@@ -188,18 +272,33 @@ export const renderStudentDashboard = (user) => {
   const fileListDisplay = document.getElementById('fileList');
   const pageCountDisplay = document.getElementById('pageCountDisplay');
   const optionsSection = document.getElementById('optionsSection');
+
+  // Summary Elements
+  const summaryPages = document.getElementById('summaryPages');
+  const summaryCopies = document.getElementById('summaryCopies');
+  const summaryFinishing = document.getElementById('summaryFinishing');
   const totalCostDisplay = document.getElementById('totalCost');
-  const payBtn = document.getElementById('payBtn');
+  const costBreakdown = document.getElementById('costBreakdown');
+  const submitBtn = document.getElementById('submitRequestBtn');
+  const bulkBadge = document.getElementById('bulkDiscountBadge');
 
   // Inputs
+  const printModeSelect = document.getElementById('printMode');
   const duplexSelect = document.getElementById('duplex');
   const copiesInput = document.getElementById('copies');
   const finishingSelect = document.getElementById('finishing');
+  const incCopiesBtn = document.getElementById('incCopies');
+  const decCopiesBtn = document.getElementById('decCopies');
+
+  // Modal Elements
+  const requestsModal = document.getElementById('requestsModal');
+  const viewHistoryBtn = document.getElementById('viewHistoryBtn');
+  const closeModalBtn = document.getElementById('closeModalBtn');
+  const requestsList = document.getElementById('requestsList');
 
   // Calculate Cost
-  // Calculate Cost
   const calculateCost = () => {
-    if (!totalPageCount) return { total: 0, discount: 0, printCost: 0, bindingCost: 0 };
+    if (!totalPageCount) return { total: 0, discount: 0, printCost: 0, bindingCost: 0, isBulk: false };
 
     const isDuplex = duplexSelect.value === 'duplex';
     const rate = isDuplex ? 1.00 : 1.50;
@@ -210,47 +309,81 @@ export const renderStudentDashboard = (user) => {
     const finishingFeePerItem = finishingSelect.value === 'spiral' ? 25.00 : 0.00;
     const bindingCost = finishingFeePerItem * copies * numberOfFiles;
 
-    const printCost = totalPageCount * rate * copies;
+    let printCost = totalPageCount * rate * copies;
+    let isBulk = false;
 
-    // Discount Logic
-    let discount = 0;
-    if (copies > 10 && printCost > 500) {
-      discount = printCost * 0.15;
+    // Bulk Discount Logic: 10+ copies = ₹0.85/page (for duplex)
+    if (copies >= 10) {
+      isBulk = true;
+      printCost = totalPageCount * 0.85 * copies; // Direct rate application for bulk
+      if (!isDuplex) {
+        printCost = totalPageCount * (1.5 * 0.85) * copies;
+      }
     }
 
-    const total = (printCost - discount) + bindingCost;
-    return { total, discount, printCost, bindingCost };
+    const total = printCost + bindingCost;
+    return { total, printCost, bindingCost, isBulk };
   };
 
   const updateCostDisplay = () => {
-    const { total, discount, printCost, bindingCost } = calculateCost();
+    const { total, printCost, bindingCost, isBulk } = calculateCost();
+
+    // Update Summary
+    summaryPages.textContent = totalPageCount;
+    summaryCopies.textContent = copiesInput.value;
+    summaryFinishing.textContent = finishingSelect.options[finishingSelect.selectedIndex].text;
+
     totalCostDisplay.textContent = formatCurrency(total);
 
-    // Update Breakdown
-    const isDuplex = duplexSelect.value === 'duplex';
-    const rate = isDuplex ? 1.00 : 1.50;
-    const copies = parseInt(copiesInput.value) || 1;
-    const numberOfFiles = currentFiles.length || 1;
+    // Update Breakdown Text
+    let breakdownText = `${totalPageCount} pgs × ${copiesInput.value} copies`;
+    if (bindingCost > 0) breakdownText += ` + Binding`;
+    if (isBulk) breakdownText += ` (Bulk Rate Applied)`;
+    costBreakdown.textContent = breakdownText;
 
-    const costBreakdown = document.getElementById('costBreakdown');
-    let breakdownHtml = `
-      <p>${totalPageCount} pages × ${formatCurrency(rate)} × ${copies} copies = ${formatCurrency(printCost)}</p>
-      ${bindingCost > 0 ? `<p>+ Binding: ₹25 × ${numberOfFiles} files × ${copies} copies = ${formatCurrency(bindingCost)}</p>` : ''}
-    `;
-
-    if (discount > 0) {
-      breakdownHtml += `<p class="text-green-600 font-bold">Discount (15% off print): -${formatCurrency(discount)}</p>`;
+    // Show/Hide Bulk Badge
+    if (isBulk) {
+      bulkBadge.classList.remove('hidden');
+    } else {
+      bulkBadge.classList.add('hidden');
     }
 
-    costBreakdown.innerHTML = breakdownHtml;
+    // Enable/Disable Submit
+    if (totalPageCount > 0 && currentFiles.every(f => f.url)) {
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      submitBtn.classList.add('hover:scale-[1.02]', 'active:scale-[0.98]', 'transition-transform');
+    } else {
+      submitBtn.disabled = true;
+      submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      submitBtn.classList.remove('hover:scale-[1.02]', 'active:scale-[0.98]', 'transition-transform');
+    }
   };
 
   // Event Listeners for Options
-  [duplexSelect, copiesInput, finishingSelect].forEach(el => {
+  [printModeSelect, duplexSelect, finishingSelect].forEach(el => {
     el.addEventListener('change', updateCostDisplay);
-    el.addEventListener('input', updateCostDisplay);
   });
 
+  // Copies Handlers
+  incCopiesBtn.addEventListener('click', () => {
+    copiesInput.value = parseInt(copiesInput.value) + 1;
+    updateCostDisplay();
+  });
+
+  decCopiesBtn.addEventListener('click', () => {
+    if (parseInt(copiesInput.value) > 1) {
+      copiesInput.value = parseInt(copiesInput.value) - 1;
+      updateCostDisplay();
+    }
+  });
+
+  copiesInput.addEventListener('input', () => {
+    if (parseInt(copiesInput.value) < 1) copiesInput.value = 1;
+    updateCostDisplay();
+  });
+
+  // File Upload Handler
   // File Upload Handler
   // File Upload Handler
   // File Upload Handler
@@ -258,191 +391,139 @@ export const renderStudentDashboard = (user) => {
     const files = Array.from(e.target.files);
     if (!files.length) return;
 
-    // cleanup previous files if any
+    // Cleanup previous
     if (currentFiles.length > 0) {
-      const pathsToDelete = currentFiles.map(f => f.path).filter(p => p);
-      if (pathsToDelete.length > 0) {
-        console.log("Cleaning up previous files...", pathsToDelete);
-        supabase.storage.from('pdfs').remove(pathsToDelete).then(({ error }) => {
-          if (error) console.error("Error cleaning up old files:", error);
-        });
-      }
+      const paths = currentFiles.map(f => f.path).filter(p => p);
+      if (paths.length) supabase.storage.from('pdfs').remove(paths);
     }
 
-    // Reset state
     currentFiles = [];
     totalPageCount = 0;
     fileListDisplay.innerHTML = '';
     fileListDisplay.classList.remove('hidden');
+    pageCountDisplay.classList.add('hidden');
 
-    // We don't need the global loading modal for local processing, it's fast enough.
-    // But we can show it briefly if we want, or just rely on the inline spinners.
+    // Disable submit while processing
+    submitBtn.disabled = true;
+    submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
 
-    try {
-      for (const file of files) {
-        const tempId = Math.random().toString(36).substring(7);
+    for (const file of files) {
+      const tempId = Math.random().toString(36).substring(7);
 
-        // 1. Create UI Item (Initial State)
-        const fileItem = document.createElement('div');
-        fileItem.id = `file-item-${tempId}`;
-        fileItem.className = 'text-sm text-gray-600 flex justify-between items-center p-2 bg-gray-50 rounded mb-2';
-        fileItem.innerHTML = `
-            <span class="truncate max-w-[200px]">${file.name}</span>
-            <div class="flex items-center gap-2">
-                <div id="spinner-${tempId}" class="animate-spin h-4 w-4 border-2 border-blue-500 rounded-full border-t-transparent"></div>
-                <span id="status-${tempId}" class="text-xs text-blue-500">Reading...</span>
-            </div>
-        `;
-        fileListDisplay.appendChild(fileItem);
+      // UI Item
+      const fileItem = document.createElement('div');
+      fileItem.className = 'flex justify-between items-center p-3 bg-gray-50 border-2 border-black rounded-lg';
+      fileItem.innerHTML = `
+        <div class="flex items-center gap-3 overflow-hidden">
+          <span class="text-xl">📄</span>
+          <span class="font-bold text-sm truncate max-w-[150px]">${file.name}</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <div id="spinner-${tempId}" class="animate-spin h-4 w-4 border-2 border-neo-cyan rounded-full border-t-transparent"></div>
+          <span id="status-${tempId}" class="text-xs font-bold text-gray-500">Processing...</span>
+        </div>
+      `;
+      fileListDisplay.appendChild(fileItem);
 
-        if (file.type !== 'application/pdf') {
-          document.getElementById(`status-${tempId}`).textContent = "Invalid File";
-          document.getElementById(`status-${tempId}`).className = "text-xs text-red-500";
-          document.getElementById(`spinner-${tempId}`).classList.add('hidden');
-          continue;
-        }
+      if (file.type !== 'application/pdf') {
+        document.getElementById(`status-${tempId}`).textContent = "PDF Only";
+        document.getElementById(`status-${tempId}`).className = "text-xs font-bold text-red-500";
+        document.getElementById(`spinner-${tempId}`).classList.add('hidden');
+        continue;
+      }
 
-        const maxSize = 300 * 1024 * 1024; // 300MB
-        if (file.size > maxSize) {
-          document.getElementById(`status-${tempId}`).textContent = "Too Large";
-          document.getElementById(`status-${tempId}`).className = "text-xs text-red-500";
-          document.getElementById(`spinner-${tempId}`).classList.add('hidden');
-          continue;
-        }
-
-        // 2. Local Processing (Page Count) - Await this to show cost immediately
+      try {
+        // 1. Local Page Count
         const arrayBuffer = await file.arrayBuffer();
         const pdfDoc = await PDFDocument.load(arrayBuffer);
         const pages = pdfDoc.getPageCount();
 
-        // 3. Update State & UI IMMEDIATELY
-        const fileObj = {
-          file: file,
-          originalName: file.name,
-          sanitizedName: sanitizeFileName(file.name).safeFileName,
-          pages: pages,
-          tempId: tempId,
-          path: null, // Will be set after upload
-          url: null   // Will be set after upload
-        };
-        currentFiles.push(fileObj);
-        totalPageCount += pages;
+        // Update UI
+        document.getElementById(`status-${tempId}`).textContent = `${pages} pgs`;
+        document.getElementById(`status-${tempId}`).className = "text-xs font-bold text-black bg-neo-yellow px-2 py-0.5 rounded border border-black";
+        // Keep spinner for upload phase
 
-        // Update Cost Display NOW
-        pageCountDisplay.textContent = `${totalPageCount} Total Pages`;
+        // Update Total
+        totalPageCount += pages;
+        pageCountDisplay.textContent = `Total Pages: ${totalPageCount}`;
         pageCountDisplay.classList.remove('hidden');
+
+        // Show Options
         optionsSection.classList.remove('opacity-50', 'pointer-events-none');
         updateCostDisplay();
 
-        // 4. Start Background Upload (Do NOT await)
-        const statusEl = document.getElementById(`status-${tempId}`);
-        const spinnerEl = document.getElementById(`spinner-${tempId}`);
-        statusEl.textContent = "Uploading...";
-
+        // 2. Background Upload
         const uploadTask = async () => {
-          try {
-            const storagePath = `${user.uid}/${Date.now()}_${fileObj.sanitizedName}`;
-            const { error: uploadError } = await supabase.storage
-              .from('pdfs')
-              .upload(storagePath, file);
+          document.getElementById(`spinner-${tempId}`).classList.remove('hidden');
+          document.getElementById(`status-${tempId}`).textContent = "Uploading...";
 
-            if (uploadError) throw uploadError;
+          const sanitizedName = sanitizeFileName(file.name);
+          const fileName = `${Date.now()}_${sanitizedName}`;
 
-            const { data: { publicUrl } } = supabase.storage
-              .from('pdfs')
-              .getPublicUrl(storagePath);
+          const { data, error } = await supabase.storage
+            .from('pdfs')
+            .upload(fileName, file);
 
-            // Update file object with remote details
-            fileObj.path = storagePath;
-            fileObj.url = publicUrl;
+          if (error) throw error;
 
-            // Success UI
-            statusEl.textContent = `${pages} pages • Uploaded`;
-            statusEl.className = "text-xs text-green-600 font-medium";
-            spinnerEl.classList.add('hidden');
-            spinnerEl.parentElement.innerHTML = `
-                    <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                    <span class="text-xs text-green-600">${pages} pages</span>
-                `;
-          } catch (err) {
-            console.error(`Error uploading ${file.name}:`, err);
-            statusEl.textContent = "Upload Failed";
-            statusEl.className = "text-xs text-red-500";
-            spinnerEl.classList.add('hidden');
-            // Remove from currentFiles so we don't try to submit it? 
-            // Or keep it and let validation fail. Let's keep it but it won't have a URL.
-          }
+          const { data: { publicUrl } } = supabase.storage
+            .from('pdfs')
+            .getPublicUrl(fileName);
+
+          document.getElementById(`spinner-${tempId}`).classList.add('hidden');
+          document.getElementById(`status-${tempId}`).textContent = "Ready";
+          document.getElementById(`status-${tempId}`).className = "text-xs font-bold text-white bg-green-500 px-2 py-0.5 rounded border border-black";
+
+          return {
+            originalName: file.name,
+            sanitizedName: sanitizedName,
+            path: fileName,
+            url: publicUrl,
+            pages: pages
+          };
         };
 
-        // Attach promise to object if we want to track it later, 
-        // but for now we just let it run.
-        fileObj.uploadPromise = uploadTask();
-      }
+        // Store promise
+        const fileObj = { file, pages, uploadPromise: uploadTask() };
+        currentFiles.push(fileObj);
 
-    } catch (error) {
-      console.error("Error in file handler:", error);
-      alert("An unexpected error occurred.");
+        // Wait for upload to complete to update fileObj
+        fileObj.uploadPromise.then(result => {
+          Object.assign(fileObj, result);
+          updateCostDisplay(); // Re-check submit button
+        }).catch(err => {
+          console.error("Upload failed", err);
+          document.getElementById(`status-${tempId}`).textContent = "Failed";
+          document.getElementById(`status-${tempId}`).className = "text-xs font-bold text-white bg-red-500";
+        });
+
+      } catch (err) {
+        console.error(err);
+        document.getElementById(`status-${tempId}`).textContent = "Error";
+        document.getElementById(`spinner-${tempId}`).classList.add('hidden');
+      }
     }
   });
 
-  // Reusable function to submit request
-  // Confirmation Modal Logic
-  const showConfirmationModal = () => {
+  // Submit Handler
+  submitBtn.addEventListener('click', async () => {
+    if (submitBtn.disabled) return;
+
+    // Final check
+    if (!currentFiles.every(f => f.url)) {
+      alert("Please wait for all files to finish uploading.");
+      return;
+    }
+
     const { total } = calculateCost();
-    document.getElementById('confirmAmount').textContent = formatCurrency(total);
-    document.getElementById('confirmModal').classList.remove('hidden');
-  };
+    const confirmMsg = `Total Cost: ${formatCurrency(total)}\n\nProceed with request?`;
 
-  document.getElementById('cancelConfirmBtn').addEventListener('click', () => {
-    if (confirm("Cancelling will remove your uploaded files. Are you sure?")) {
-      // cleanup files
-      if (currentFiles.length > 0) {
-        const pathsToDelete = currentFiles.map(f => f.path).filter(p => p);
-        if (pathsToDelete.length > 0) {
-          supabase.storage.from('pdfs').remove(pathsToDelete).then(({ error }) => {
-            if (error) console.error("Error cleaning up files on cancel:", error);
-          });
-        }
-      }
+    if (!confirm(confirmMsg)) return;
 
-      // Reset UI
-      fileInput.value = '';
-      currentFiles = [];
-      totalPageCount = 0;
-      document.getElementById('fileList').innerHTML = '';
-      document.getElementById('fileList').classList.add('hidden');
-      pageCountDisplay.classList.add('hidden');
-      optionsSection.classList.add('opacity-50', 'pointer-events-none');
-      updateCostDisplay();
-
-      document.getElementById('confirmModal').classList.add('hidden');
-    }
-  });
-
-  document.getElementById('proceedConfirmBtn').addEventListener('click', () => {
-    document.getElementById('confirmModal').classList.add('hidden');
-    processSubmission('Cash on Delivery', 'Pending');
-  });
-
-  // Process Submission
-  const processSubmission = async (paymentMethod, paymentStatus) => {
-    const loadingModal = document.getElementById('loadingModal');
-    loadingModal.classList.remove('hidden');
+    submitBtn.textContent = "Submitting...";
+    submitBtn.disabled = true;
 
     try {
-      const submitBtn = document.getElementById('payBtn');
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Saving Request...";
-
-      // Ensure files are ready (though UI prevents submission if not)
-      if (!currentFiles.length || !currentFiles.every(f => f.url)) {
-        alert("Files are still processing. Please wait.");
-        loadingModal.classList.add('hidden');
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Submit Request';
-        return;
-      }
-
       const uploadedFiles = currentFiles.map(f => ({
         originalName: f.originalName,
         sanitizedName: f.sanitizedName,
@@ -451,45 +532,24 @@ export const renderStudentDashboard = (user) => {
         pages: f.pages
       }));
 
-      const { total, discount } = calculateCost();
-      const fileNames = uploadedFiles.map(f => f.originalName);
-
-      // Save to Firestore
-      await addDoc(collection(db, "requests"), {
+      const requestData = {
         userId: user.uid,
         userEmail: user.email,
-        fileNames: fileNames, // Array of file names
-        fileName: fileNames.join(', '), // For backward compatibility/display
-        files: uploadedFiles, // Detailed file info
-        pageCount: totalPageCount,
-        options: {
-          duplex: duplexSelect.value,
-          copies: parseInt(copiesInput.value),
-          finishing: finishingSelect.value
-        },
+        files: uploadedFiles,
+        printMode: printModeSelect.value,
+        duplex: duplexSelect.value,
+        copies: parseInt(copiesInput.value),
+        finishing: finishingSelect.value,
         totalCost: total,
-        discountApplied: discount,
-        status: 'New Request',
-        paymentMethod: paymentMethod,
-        paymentStatus: paymentStatus,
-        createdAt: new Date()
-      });
+        status: 'Pending',
+        paymentStatus: 'Pending',
+        paymentMethod: 'COD',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
 
-      // Reset Form
-      alert(`Request submitted successfully! Please pay ${formatCurrency(total)} when you collect your prints.`);
-
-      // Reset UI (files are already uploaded and saved, so just clear local state)
-      fileInput.value = '';
-      currentFiles = [];
-      totalPageCount = 0;
-      document.getElementById('fileList').innerHTML = '';
-      document.getElementById('fileList').classList.add('hidden');
-      pageCountDisplay.classList.add('hidden');
-      optionsSection.classList.add('opacity-50', 'pointer-events-none');
-      updateCostDisplay();
-
-      // Clear temp tracking as these are now permanent
-      localStorage.removeItem('temp_uploads');
+      const docRef = await addDoc(collection(db, "requests"), requestData);
+      console.log("Request created with ID: ", docRef.id);
 
       // Send Email
       fetch('/api/email', {
@@ -499,190 +559,119 @@ export const renderStudentDashboard = (user) => {
           type: 'new_request',
           data: {
             userEmail: user.email,
-            fileName: fileNames.join(', '),
-            pageCount: totalPageCount,
+            orderId: docRef.id,
             totalCost: total,
-            paymentMethod: paymentMethod,
-            paymentStatus: paymentStatus,
-            status: 'New Request'
+            fileCount: uploadedFiles.length
           }
         })
-      }).catch(err => console.error("Failed to send email notifications:", err));
+      }).catch(err => console.error("Email failed", err));
+
+      alert("Request Submitted Successfully! 🎉");
+
+      // Reset UI
+      currentFiles = [];
+      totalPageCount = 0;
+      fileInput.value = '';
+      fileListDisplay.innerHTML = '';
+      fileListDisplay.classList.add('hidden');
+      pageCountDisplay.classList.add('hidden');
+      optionsSection.classList.add('opacity-50', 'pointer-events-none');
+      updateCostDisplay();
+      submitBtn.textContent = "Submit Request 🚀";
 
     } catch (error) {
       console.error("Error submitting request:", error);
-      alert("Failed to submit request: " + error.message);
-    } finally {
-      loadingModal.classList.add('hidden');
-      const submitBtn = document.getElementById('payBtn');
+      alert("Failed to submit request. Please try again.");
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Submit Request';
+      submitBtn.textContent = "Submit Request 🚀";
     }
-  };
-
-  // Payment Flow
-  payBtn.addEventListener('click', () => {
-    showConfirmationModal();
   });
 
-  // Delete Request Handler
-  window.deleteRequest = async (requestId) => {
-    if (!confirm("Are you sure you want to delete this request?")) return;
+  // History Modal Handlers
+  let unsubscribeHistory = null;
 
-    try {
-      // Fetch data for email before deleting
-      const docRef = doc(db, "requests", requestId);
-      const docSnap = await getDoc(docRef); // Need to import getDoc
-      const data = docSnap.exists() ? docSnap.data() : null;
+  const openHistory = () => {
+    requestsModal.classList.remove('hidden');
 
-      await deleteDoc(docRef);
+    const q = query(
+      collection(db, "requests"),
+      where("userId", "==", user.uid),
+      orderBy("createdAt", "desc")
+    );
 
-      // Send Email to Admin
-      if (data) {
-        fetch('/api/email', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            type: 'request_deleted',
-            data: {
-              userEmail: user.email,
-              fileName: data.fileName || 'Unknown File',
-              requestId: requestId
-            }
-          })
-        }).catch(err => console.error("Failed to send delete notification:", err));
+    unsubscribeHistory = onSnapshot(q, (snapshot) => {
+      requestsList.innerHTML = '';
+      if (snapshot.empty) {
+        requestsList.innerHTML = '<div class="text-center py-8 text-gray-500 font-bold">No requests found. Start printing!</div>';
+        return;
       }
 
-      // UI updates automatically via onSnapshot
-    } catch (error) {
-      console.error("Error deleting request:", error);
-      alert("Failed to delete request.");
-    }
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        const date = data.createdAt?.toDate ? formatDate(data.createdAt.toDate()) : 'Just now';
+
+        const statusColors = {
+          'Pending': 'bg-yellow-100 text-yellow-800 border-yellow-300',
+          'Processing': 'bg-blue-100 text-blue-800 border-blue-300',
+          'Completed': 'bg-green-100 text-green-800 border-green-300',
+          'Rejected': 'bg-red-100 text-red-800 border-red-300'
+        };
+        const statusClass = statusColors[data.status] || 'bg-gray-100';
+
+        const item = document.createElement('div');
+        item.className = 'bg-white border-2 border-black rounded-lg p-4 shadow-sm';
+        item.innerHTML = `
+                <div class="flex justify-between items-start mb-2">
+                    <div>
+                        <span class="text-xs font-bold text-gray-500">#${doc.id.slice(0, 8)}</span>
+                        <p class="font-bold text-black">${data.files.length} File(s)</p>
+                    </div>
+                    <span class="px-2 py-1 rounded text-xs font-bold border ${statusClass}">
+                        ${data.status}
+                    </span>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                    <span class="text-gray-600">${date}</span>
+                    <span class="font-bold text-neo-cyan">${formatCurrency(data.totalCost)}</span>
+                </div>
+            `;
+        requestsList.appendChild(item);
+      });
+    });
   };
 
+  viewHistoryBtn.addEventListener('click', openHistory);
 
-  // --- Cleanup Logic for Abandoned Requests ---
+  closeModalBtn.addEventListener('click', () => {
+    requestsModal.classList.add('hidden');
+    if (unsubscribeHistory) unsubscribeHistory();
+  });
 
-  // 1. Cleanup on Load (Safety Net)
+  // Abandoned file cleanup
+  window.addEventListener('beforeunload', (event) => {
+    if (currentFiles.length > 0) {
+      const paths = currentFiles.map(f => f.path).filter(p => p);
+      if (paths.length > 0) {
+        localStorage.setItem('temp_uploads', JSON.stringify(paths));
+        supabase.storage.from('pdfs').remove(paths).catch(err => console.error(err));
+      }
+    }
+  });
+
   const cleanupAbandonedFiles = async () => {
     const tempFilesJson = localStorage.getItem('temp_uploads');
     if (tempFilesJson) {
       try {
         const paths = JSON.parse(tempFilesJson);
         if (paths && paths.length > 0) {
-          console.log("Cleaning up abandoned files from previous session:", paths);
+          console.log("Cleaning up abandoned files:", paths);
           await supabase.storage.from('pdfs').remove(paths);
         }
       } catch (e) {
-        console.error("Error parsing temp files:", e);
+        console.error(e);
       }
       localStorage.removeItem('temp_uploads');
     }
   };
   cleanupAbandonedFiles();
-
-  // 2. Cleanup on Unload (Best Effort)
-  window.addEventListener('beforeunload', (event) => {
-    if (currentFiles.length > 0) {
-      const paths = currentFiles.map(f => f.path).filter(p => p);
-      if (paths.length > 0) {
-        // Save to localStorage so we can clean up next time if this fails
-        localStorage.setItem('temp_uploads', JSON.stringify(paths));
-
-        // Attempt immediate cleanup (might be cancelled by browser)
-        supabase.storage.from('pdfs').remove(paths).catch(err => console.error(err));
-
-        // Optional: Show confirmation dialog (browsers often ignore custom messages)
-        // event.preventDefault();
-        // event.returnValue = ''; 
-      }
-    }
-  });
-
-  // Real-time Requests Listener
-  const q = query(
-    collection(db, "requests"),
-    where("userId", "==", user.uid)
-  );
-
-  onSnapshot(q, (snapshot) => {
-    const requestsList = document.getElementById('requestsList');
-    requestsList.innerHTML = '';
-
-    if (snapshot.empty) {
-      requestsList.innerHTML = '<p class="text-gray-500 text-sm text-center">No requests yet.</p>';
-      return;
-    }
-
-    // Sort manually to avoid needing a composite index
-    const docs = snapshot.docs.sort((a, b) => {
-      const dateA = a.data().createdAt?.toDate ? a.data().createdAt.toDate() : new Date(0);
-      const dateB = b.data().createdAt?.toDate ? b.data().createdAt.toDate() : new Date(0);
-      return dateB - dateA;
-    });
-
-    docs.forEach((doc) => {
-      const data = doc.data();
-      const date = data.createdAt?.toDate ? formatDate(data.createdAt.toDate()) : 'Just now';
-
-      const statusColors = {
-        'New Request': 'bg-yellow-100 text-yellow-800',
-        'Printing': 'bg-blue-100 text-blue-800',
-        'Ready for Pickup': 'bg-green-100 text-green-800',
-        'Completed': 'bg-gray-100 text-gray-800',
-        'Rejected': 'bg-red-100 text-red-800'
-      };
-      const statusClass = statusColors[data.status] || 'bg-gray-100 text-gray-800';
-
-      const item = document.createElement('div');
-      item.className = 'border rounded-md p-4 hover:bg-gray-50 transition-colors relative group';
-
-      // Delete Button Logic
-      const now = new Date();
-      const createdAt = data.createdAt?.toDate ? data.createdAt.toDate() : new Date();
-      const diffMins = (now - createdAt) / 1000 / 60;
-      const canDelete = diffMins < 20 && data.status === 'New Request';
-
-      let deleteBtnHtml = '';
-      if (canDelete) {
-        deleteBtnHtml = `
-          <button onclick="deleteRequest('${doc.id}')" class="absolute top-2 right-2 text-red-500 hover:text-red-700 p-1 rounded hover:bg-red-50" title="Delete Request">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-          </button>
-        `;
-      }
-
-      item.innerHTML = `
-        ${deleteBtnHtml}
-        <div class="flex justify-between items-start mb-2 pr-6">
-          <div>
-            <h3 class="font-medium text-gray-900 truncate max-w-[150px]" title="${data.fileName}">${data.fileName}</h3>
-            <p class="text-xs text-gray-500">${date}</p>
-          </div>
-          <span class="px-2 py-1 text-xs font-semibold rounded-full ${statusClass}">${data.status}</span>
-        </div>
-        <div class="text-sm text-gray-600 space-y-1">
-          <div class="flex justify-between">
-            <span>Pages: ${data.pageCount}</span>
-            <span>${data.options.duplex === 'duplex' ? 'Duplex' : 'Simplex'}</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="text-xs ${data.paymentMethod === 'Cash on Delivery' ? 'text-orange-600' : 'text-green-600'}">${data.paymentMethod || 'Online Payment'}</span>
-            <span class="text-xs text-gray-500">${data.paymentStatus || 'Paid'}</span>
-          </div>
-          <div class="flex justify-between font-medium text-gray-900 pt-2 border-t mt-2">
-            <span>Total</span>
-            <span>${formatCurrency(data.totalCost)}</span>
-          </div>
-          ${data.discountApplied > 0 ? `<div class="text-xs text-green-600 text-right">Saved: ${formatCurrency(data.discountApplied)}</div>` : ''}
-        </div>
-`;
-      requestsList.appendChild(item);
-    });
-  }, (error) => {
-    console.error("Error loading requests:", error);
-    const requestsList = document.getElementById('requestsList');
-    requestsList.innerHTML = '<p class="text-red-500 text-sm text-center">Error loading requests. Please refresh the page.</p>';
-  });
-
 };
