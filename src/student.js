@@ -264,9 +264,6 @@ export const renderStudentDashboard = (user) => {
   const decCopiesBtn = document.getElementById('decCopies');
 
   // Modal Elements
-  const requestsModal = document.getElementById('requestsModal');
-  const viewHistoryBtn = document.getElementById('viewHistoryBtn');
-  const closeModalBtn = document.getElementById('closeModalBtn');
   const requestsList = document.getElementById('requestsList');
 
   // Calculate Cost (Reverted to Old Logic)
@@ -640,6 +637,9 @@ export const renderStudentDashboard = (user) => {
         `;
       requestsList.appendChild(item);
     });
+  }, (error) => {
+    console.error("Error fetching requests:", error);
+    requestsList.innerHTML = `<div class="text-center py-4 text-red-500 font-bold">Error loading requests. Please try again.</div>`;
   });
 
   // Global Delete Handler
