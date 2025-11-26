@@ -8,36 +8,104 @@
   }
 
   body {
-    @apply bg-gray-50 text-gray-900;
+    @apply bg-neo-cream text-black font-space;
   }
 }
 
 @layer components {
 
-  /* Glassmorphism effect for navigation */
+  /* Neo-Brutalism Card */
+  .neo-card {
+    @apply bg-white border-4 border-black shadow-neo;
+  }
+
+  .neo-card:hover {
+    @apply shadow-neo-lg translate-x-[-2px] translate-y-[-2px];
+  }
+
+  /* Neo-Brutalism Button */
+  .neo-btn {
+    @apply px-6 py-3 border-4 border-black font-bold text-lg transition-all duration-200 shadow-neo;
+  }
+
+  .neo-btn:hover {
+    @apply shadow-neo-lg translate-x-[-2px] translate-y-[-2px];
+  }
+
+  .neo-btn:active {
+    @apply shadow-neo-sm translate-x-[2px] translate-y-[2px];
+  }
+
+  .neo-btn-primary {
+    @apply neo-btn bg-neo-cyan text-black;
+  }
+
+  .neo-btn-secondary {
+    @apply neo-btn bg-neo-yellow text-black;
+  }
+
+  .neo-btn-white {
+    @apply neo-btn bg-white text-black;
+  }
+
+  /* Neo-Brutalism Badge */
+  .neo-badge {
+    @apply inline-block px-4 py-2 border-3 border-black font-bold text-sm shadow-neo-sm;
+  }
+
+  /* Icon Badge */
+  .neo-icon-badge {
+    @apply w-16 h-16 rounded-full border-4 border-black flex items-center justify-center text-3xl shadow-neo-sm;
+  }
+
+  /* Wavy Divider */
+  .wavy-divider {
+    position: relative;
+    height: 30px;
+    overflow: hidden;
+  }
+
+  .wavy-divider::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='30' viewBox='0 0 100 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 15 Q 25 5, 50 15 T 100 15' stroke='black' stroke-width='3' fill='none'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-size: 100px 30px;
+  }
+
+  /* Floating Badge Animation */
+  .floating-badge {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0px) rotate(-2deg);
+    }
+
+    50% {
+      transform: translateY(-10px) rotate(2deg);
+    }
+  }
+
+  /* Slight rotation for playful asymmetry */
+  .rotate-slight-left {
+    transform: rotate(-1deg);
+  }
+
+  .rotate-slight-right {
+    transform: rotate(1deg);
+  }
+
+  /* Glassmorphism effect for navigation (keeping for scroll effect) */
   .glass {
-    @apply bg-white bg-opacity-90 backdrop-blur-lg;
-  }
-
-  /* Gradient backgrounds */
-  .gradient-hero {
-    background: linear-gradient(180deg, #f9fafb 0%, #e5e7eb 100%);
-  }
-
-  /* Animated gradient for CTA section */
-  .gradient-animated {
-    background: linear-gradient(-45deg, #043873, #4F9CF9, #1e3a8a, #043873);
-    background-size: 400% 400%;
-    animation: gradient-shift 15s ease infinite;
-  }
-
-  /* Hover lift effect for cards */
-  .hover-lift {
-    @apply transition-all duration-300;
-  }
-
-  .hover-lift:hover {
-    @apply -translate-y-2 shadow-2xl;
+    @apply bg-neo-yellow bg-opacity-95 backdrop-blur-lg;
   }
 }
 
@@ -55,44 +123,36 @@
     transform: translateY(0);
   }
 
-  /* Text gradient for headings */
-  .text-gradient-blue {
-    @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #043873 0%, #4F9CF9 100%);
+  /* Border utilities */
+  .border-neo {
+    @apply border-4 border-black;
+  }
+
+  .border-neo-thick {
+    @apply border-[6px] border-black;
+  }
+
+  /* Text styles */
+  .text-chunky {
+    @apply font-bold tracking-tight;
   }
 }
 
-/* Keyframe animations */
-@keyframes gradient-shift {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
 }
 
-@keyframes glow-pulse {
-
-  0%,
-  100% {
-    box-shadow: 0 0 5px rgba(79, 156, 249, 0.5),
-      0 0 10px rgba(79, 156, 249, 0.4),
-      0 0 15px rgba(79, 156, 249, 0.3);
-  }
-
-  50% {
-    box-shadow: 0 0 10px rgba(79, 156, 249, 0.8),
-      0 0 20px rgba(79, 156, 249, 0.6),
-      0 0 30px rgba(79, 156, 249, 0.4);
-  }
+::-webkit-scrollbar-track {
+  background: #FFFEF2;
+  border-left: 3px solid #000;
 }
 
-.glow-button {
-  animation: glow-pulse 2s ease-in-out infinite;
+::-webkit-scrollbar-thumb {
+  background: #00D9FF;
+  border: 3px solid #000;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FFD700;
 }
