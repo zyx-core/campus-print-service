@@ -53,6 +53,7 @@ export function showInstallPrompt() {
 function showInstallButton() {
     installButton = document.getElementById('pwa-install-button');
     if (installButton) {
+        installButton.classList.remove('hidden');
         installButton.style.display = 'flex';
         installButton.addEventListener('click', showInstallPrompt);
     }
@@ -67,6 +68,7 @@ function showInstallButton() {
 function hideInstallButton() {
     if (installButton) {
         installButton.style.display = 'none';
+        installButton.classList.add('hidden');
     }
 
     // Also hide the character
