@@ -178,44 +178,51 @@ export const renderStudentDashboard = (user) => {
 
   
   <!-- Loading Modal -->
-  <div id="loadingModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 hidden flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg p-8 max-w-sm w-full text-center shadow-xl">
-      <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
-      <h3 class="text-xl font-bold text-gray-900 mb-2">Processing Request...</h3>
-      <p class="text-gray-600">Uploading your file and calculating details.</p>
-      <p class="text-xs text-gray-400 mt-2">Please do not close this window.</p>
+  <div id="loadingModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 p-4">
+    <div class="bg-white border-4 border-black shadow-neo-lg rounded-xl max-w-sm w-full text-center overflow-hidden">
+      <div class="bg-neo-cyan border-b-4 border-black p-4">
+        <h3 class="text-xl font-bold text-black">Processing... ⚙️</h3>
+      </div>
+      <div class="p-8">
+        <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-black mx-auto mb-4"></div>
+        <p class="text-black font-bold mb-2">Uploading & Calculating</p>
+        <p class="text-xs text-gray-500 font-bold">Please don't close this window!</p>
+      </div>
     </div>
   </div>
+
   <!-- Confirmation Modal -->
-  <div id="confirmModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 hidden flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg p-6 max-w-sm w-full shadow-xl">
-      <h3 class="text-xl font-bold text-[#043873] mb-4">Confirm Request</h3>
+  <div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 p-4">
+    <div class="bg-white border-4 border-black shadow-neo-lg rounded-xl max-w-sm w-full overflow-hidden">
+      <div class="bg-neo-yellow border-b-4 border-black p-4">
+        <h3 class="text-xl font-bold text-black">Confirm Request? 🤔</h3>
+      </div>
       
-      <div class="space-y-3 mb-6">
-        <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
-          <span class="font-medium text-gray-700">Amount to Pay:</span>
-          <span id="confirmAmount" class="text-xl font-bold text-[#043873]">₹0.00</span>
+      <div class="p-6 space-y-6">
+        <div class="flex justify-between items-center p-4 bg-neo-cream border-2 border-black rounded-lg">
+          <span class="font-bold text-black">Total to Pay:</span>
+          <span id="confirmAmount" class="text-2xl font-bold text-neo-cyan">₹0.00</span>
         </div>
         
-        <div class="text-sm text-gray-600 space-y-2">
+        <div class="text-sm text-gray-600 font-bold space-y-2">
           <p class="flex items-start gap-2">
-            <span class="text-blue-500 mt-0.5">ℹ️</span>
-            Check your Spam folder for email updates.
+            <span>📧</span>
+            <span>Check your <span class="text-red-500">Spam folder</span> for updates!</span>
           </p>
           <p class="flex items-start gap-2">
-            <span class="text-blue-500 mt-0.5">ℹ️</span>
-            You can delete this request within 20 minutes if needed.
+            <span>⏳</span>
+            <span>You can cancel within 20 mins.</span>
           </p>
         </div>
-      </div>
 
-      <div class="flex gap-3">
-        <button id="cancelConfirmBtn" class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium">
-          Cancel
-        </button>
-        <button id="proceedConfirmBtn" class="flex-1 px-4 py-2 bg-[#4F9CF9] text-white rounded-lg hover:bg-[#2F7ACF] font-bold shadow-md">
-          Proceed
-        </button>
+        <div class="flex gap-4">
+          <button id="cancelConfirmBtn" class="flex-1 neo-btn-secondary py-3 rounded-lg text-sm">
+            Cancel
+          </button>
+          <button id="proceedConfirmBtn" class="flex-1 neo-btn-primary py-3 rounded-lg text-sm">
+            Proceed 🚀
+          </button>
+        </div>
       </div>
     </div>
   </div>
