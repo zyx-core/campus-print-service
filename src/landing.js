@@ -75,12 +75,16 @@ export const renderLanding = () => {
               
               <h1 class="text-5xl md:text-6xl font-bold text-black mb-6 leading-tight">
                 Print Smart.<br/>
-                <span class="text-neo-cyan">Print with Port Print 🚀</span>
+                <span class="text-neo-cyan">Save More! 💰</span>
               </h1>
               
-              <p class="text-xl text-gray-800 mb-8 leading-relaxed font-bold">
-                Affordable, Fast, and Fun<br/>
-                Campus Printing for Everyone.
+              <p class="text-xl text-gray-800 mb-4 leading-relaxed font-bold">
+                ₹1/page for Regular Prints<br/>
+                <span class="text-2xl text-neo-pink">₹0.85/page for Bulk Orders!</span>
+              </p>
+              
+              <p class="text-lg text-gray-700 mb-8 leading-relaxed">
+                Affordable, Fast, and Fun Campus Printing for Everyone.
               </p>
 
               <div class="flex flex-col sm:flex-row gap-4 mb-8">
@@ -258,14 +262,11 @@ export const renderLanding = () => {
             </p>
           </div>
 
-          <div class="max-w-md mx-auto mb-12">
-            <!-- Pricing Card -->
-            <div class="fade-in-up bg-neo-yellow rounded-2xl p-8 border-6 border-black relative shadow-neo-lg rotate-slight-left">
-              <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-neo-pink border-4 border-black px-4 py-1 rounded-full text-sm font-bold shadow-neo-sm">
-                BEST PRICE
-              </div>
+          <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-12">
+            <!-- Regular Pricing Card -->
+            <div class="fade-in-up bg-neo-yellow rounded-2xl p-8 border-6 border-black relative shadow-neo-lg">
               <div class="text-center text-black">
-                <h3 class="text-2xl font-bold mb-2">Double-Sided</h3>
+                <h3 class="text-2xl font-bold mb-2">Regular Print</h3>
                 <div class="text-5xl font-bold mb-4">₹1.00<span class="text-xl opacity-75">/page</span></div>
                 <ul class="text-left space-y-3 mb-6">
                   <li class="flex items-center gap-3">
@@ -274,11 +275,44 @@ export const renderLanding = () => {
                   </li>
                   <li class="flex items-center gap-3">
                     <span class="text-2xl">✓</span>
-                    <span class="font-bold">Eco-Friendly & Cheaper</span>
+                    <span class="font-bold">Double-Sided (Duplex)</span>
                   </li>
                   <li class="flex items-center gap-3">
                     <span class="text-2xl">✓</span>
                     <span class="font-bold">Free Stapling</span>
+                  </li>
+                  <li class="flex items-center gap-3">
+                    <span class="text-2xl">✓</span>
+                    <span class="font-bold">Perfect for Assignments</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Bulk Pricing Card -->
+            <div class="fade-in-up bg-neo-pink rounded-2xl p-8 border-6 border-black relative shadow-neo-lg">
+              <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-neo-cyan border-4 border-black px-4 py-1 rounded-full text-sm font-bold shadow-neo-sm">
+                BEST VALUE
+              </div>
+              <div class="text-center text-black">
+                <h3 class="text-2xl font-bold mb-2">Bulk Print with Friends</h3>
+                <div class="text-5xl font-bold mb-4">₹0.85<span class="text-xl opacity-75">/page</span></div>
+                <ul class="text-left space-y-3 mb-6">
+                  <li class="flex items-center gap-3">
+                    <span class="text-2xl">✓</span>
+                    <span class="font-bold">Everything in Regular</span>
+                  </li>
+                  <li class="flex items-center gap-3">
+                    <span class="text-2xl">✓</span>
+                    <span class="font-bold">15% Discount Applied</span>
+                  </li>
+                  <li class="flex items-center gap-3">
+                    <span class="text-2xl">✓</span>
+                    <span class="font-bold">10+ Copies Required</span>
+                  </li>
+                  <li class="flex items-center gap-3">
+                    <span class="text-2xl">✓</span>
+                    <span class="font-bold">Save More Together!</span>
                   </li>
                 </ul>
               </div>
