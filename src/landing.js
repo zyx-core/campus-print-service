@@ -34,11 +34,8 @@ export const renderLanding = () => {
                 </svg>
                 Install
               </button>
-              <button id="navLoginBtn" class="hidden md:block text-black font-bold hover:text-neo-cyan transition-colors">
-                Login
-              </button>
-              <button id="navSignupBtn" class="neo-btn-primary rounded-lg">
-                Get Started
+              <button id="navLoginBtn" class="neo-btn-primary rounded-lg">
+                Login / Sign Up
               </button>
             </div>
           </div>
@@ -506,15 +503,14 @@ export const renderLanding = () => {
   // CTA Button Handlers - connected to router
   const loginBtn = document.getElementById('navLoginBtn');
   const signupBtns = [
-    document.getElementById('navSignupBtn'),
     document.getElementById('heroGetStartedBtn'),
     document.getElementById('howItWorksCTA'),
     document.getElementById('finalCTA')
   ];
 
   loginBtn.addEventListener('click', () => {
-    console.log('[Landing] Navigating to login');
-    navigateTo('/login');
+    console.log('[Landing] Navigating to signup');
+    navigateTo('/signup');
   });
 
   signupBtns.forEach(btn => {
