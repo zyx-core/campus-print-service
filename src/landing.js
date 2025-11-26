@@ -75,17 +75,17 @@ export const renderLanding = () => {
                 <span class="text-neo-cyan">Print with Port Print 🚀</span>
               </h1>
               
-              <p class="text-xl text-gray-800 mb-8 leading-relaxed">
-                Fast, affordable, and hassle-free campus printing service. Upload your documents, pay online, and pick up next day at college. 
-                <span class="font-bold text-black bg-neo-yellow px-2 py-1 border-2 border-black">Starting at just ₹1/page.</span>
+              <p class="text-xl text-gray-800 mb-8 leading-relaxed font-bold">
+                Affordable, Fast, and Fun<br/>
+                Campus Printing for Everyone.
               </p>
 
               <div class="flex flex-col sm:flex-row gap-4 mb-8">
-                <button id="heroGetStartedBtn" class="neo-btn-primary rounded-xl text-xl">
-                  Get Started Free
+                <button id="heroGetStartedBtn" class="neo-btn-primary rounded-xl text-xl flex items-center gap-2 justify-center">
+                  Get Started ↗
                 </button>
-                <button id="heroLearnMoreBtn" class="neo-btn-white rounded-xl text-xl">
-                  Learn More
+                <button id="heroLearnMoreBtn" class="neo-btn-secondary rounded-xl text-xl flex items-center gap-2 justify-center">
+                  Learn More ⓘ
                 </button>
               </div>
 
@@ -109,23 +109,8 @@ export const renderLanding = () => {
             <!-- Hero Illustration -->
             <div class="fade-in-up hidden md:block">
               <div class="relative">
-                <!-- Floating Badges -->
-                <div class="absolute -top-8 -left-8 bg-neo-yellow border-4 border-black px-4 py-2 rounded-lg shadow-neo font-bold text-xl floating-badge rotate-slight-left z-10">
-                  ₹1/page
-                </div>
-                <div class="absolute -bottom-4 -right-4 bg-neo-pink border-4 border-black px-4 py-2 rounded-lg shadow-neo font-bold floating-badge rotate-slight-right z-10">
-                  Next Day! 🚀
-                </div>
-                
-                <!-- Main Card -->
-                <div class="relative bg-white rounded-2xl border-6 border-black shadow-neo-lg p-8">
-                  <div class="text-center">
-                    <div class="text-8xl mb-4">📄</div>
-                    <div class="text-6xl mb-4">➡️</div>
-                    <div class="text-8xl mb-4">🖨️</div>
-                    <div class="text-2xl font-bold text-black">Upload → Print → Collect</div>
-                  </div>
-                </div>
+                <!-- Printer Mascot with Doodles -->
+                <img src="/printer-mascot.png" alt="Cute printer mascot character" class="w-full h-auto max-w-lg mx-auto" />
               </div>
             </div>
           </div>
