@@ -4,9 +4,12 @@ import { showInstallPrompt } from './install-prompt.js';
 export const renderLanding = () => {
   const app = document.querySelector('#app');
   app.innerHTML = `
-    <div class="min-h-screen bg-neo-cream">
+    <!-- Paper Container with Border -->
+    <div class="min-h-screen p-4 md:p-8">
+      <div class="max-w-[1400px] mx-auto bg-white border-[8px] border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]">
+        <!-- Content Wrapper -->
       <!-- Navigation Header -->
-      <nav class="fixed top-0 w-full z-50 transition-all duration-300 bg-neo-yellow border-b-4 border-black" id="main-nav">
+      <nav class="sticky top-0 w-full z-50 transition-all duration-300 bg-neo-yellow border-b-4 border-black" id="main-nav">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex justify-between items-center h-20">
             <!-- Logo -->
@@ -61,7 +64,7 @@ export const renderLanding = () => {
       </nav>
 
       <!-- Hero Section -->
-      <section class="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+      <section class="pt-12 pb-20 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
           <div class="grid md:grid-cols-2 gap-12 items-center">
             <!-- Hero Content -->
@@ -405,7 +408,10 @@ export const renderLanding = () => {
           </div>
         </div>
       </footer>
+      </div>
+      <!-- End Content Wrapper -->
     </div>
+    <!-- End Paper Container -->
   `;
 
   // Add scroll animation observer

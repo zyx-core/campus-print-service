@@ -8,7 +8,9 @@
   }
 
   body {
-    @apply bg-neo-cream text-black font-space;
+    @apply bg-neo-cream text-black font-fredoka;
+    background-image: radial-gradient(circle, #d0d0d0 1px, transparent 1px);
+    background-size: 20px 20px;
   }
 }
 

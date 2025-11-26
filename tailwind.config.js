@@ -15,7 +15,8 @@ export default {
                 'neo-border': '#000000',
             },
             fontFamily: {
-                'space': ['"Space Grotesk"', 'sans-serif'],
+                'sans': ['"Fredoka"', 'sans-serif'],
+                'fredoka': ['"Fredoka"', 'sans-serif'],
             },
             boxShadow: {
                 'neo': '6px 6px 0px 0px #000000',
