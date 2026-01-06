@@ -71,13 +71,12 @@ export const renderLanding = () => {
               </div>
               
               <h1 class="text-5xl md:text-6xl font-bold text-black mb-6 leading-tight">
-                Print Smart.<br/>
-                <span class="text-neo-cyan">Save More! 💰</span>
+                ₹1/page for Regular Prints<br/>
+                <span class="text-neo-cyan">₹0.85/page for Bulk Orders!</span>
               </h1>
               
-              <p class="text-xl text-gray-800 mb-4 leading-relaxed font-bold">
-                ₹1/page for Regular Prints<br/>
-                <span class="text-2xl text-neo-pink">₹0.85/page for Bulk Orders!</span>
+              <p class="text-2xl text-gray-800 mb-4 leading-relaxed font-bold">
+                Print Smart. Save More! 💰
               </p>
               
               <p class="text-lg text-gray-700 mb-8 leading-relaxed">
