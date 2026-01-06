@@ -134,6 +134,99 @@ export const renderLanding = () => {
       <!-- Wavy Divider -->
       <div class="wavy-divider"></div>
 
+      <!-- Pricing Section -->
+      <section id="pricing" class="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+        <div class="max-w-7xl mx-auto">
+          <div class="text-center mb-16 fade-in-up">
+            <h2 class="text-4xl md:text-5xl font-bold text-black mb-4">
+              Simple, Transparent Pricing
+            </h2>
+            <p class="text-xl text-gray-700 max-w-2xl mx-auto">
+              No hidden fees. Pay only for what you print.
+            </p>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-12">
+            <!-- Regular Pricing Card -->
+            <div class="fade-in-up bg-neo-yellow rounded-2xl p-8 border-6 border-black relative shadow-neo-lg">
+              <div class="text-center text-black">
+                <h3 class="text-2xl font-bold mb-2">Regular Print</h3>
+                <div class="text-5xl font-bold mb-4">₹1.00<span class="text-xl opacity-75">/page</span></div>
+                <ul class="text-left space-y-3 mb-6">
+                  <li class="flex items-center gap-3">
+                    <span class="text-2xl">✓</span>
+                    <span class="font-bold">Black & White Printing</span>
+                  </li>
+                  <li class="flex items-center gap-3">
+                    <span class="text-2xl">✓</span>
+                    <span class="font-bold">Double-Sided (Duplex)</span>
+                  </li>
+                  <li class="flex items-center gap-3">
+                    <span class="text-2xl">✓</span>
+                    <span class="font-bold">Free Stapling</span>
+                  </li>
+                  <li class="flex items-center gap-3">
+                    <span class="text-2xl">✓</span>
+                    <span class="font-bold">Perfect for Assignments</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Bulk Pricing Card -->
+            <div class="fade-in-up bg-neo-pink rounded-2xl p-8 border-6 border-black relative shadow-neo-lg">
+              <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-neo-cyan border-4 border-black px-4 py-1 rounded-full text-sm font-bold shadow-neo-sm">
+                BEST VALUE
+              </div>
+              <div class="text-center text-black">
+                <h3 class="text-2xl font-bold mb-2">Bulk Print with Friends</h3>
+                <div class="text-5xl font-bold mb-4">₹0.85<span class="text-xl opacity-75">/page</span></div>
+                <ul class="text-left space-y-3 mb-6">
+                  <li class="flex items-center gap-3">
+                    <span class="text-2xl">✓</span>
+                    <span class="font-bold">Everything in Regular</span>
+                  </li>
+                  <li class="flex items-center gap-3">
+                    <span class="text-2xl">✓</span>
+                    <span class="font-bold">15% Discount Applied</span>
+                  </li>
+                  <li class="flex items-center gap-3">
+                    <span class="text-2xl">✓</span>
+                    <span class="font-bold">10+ Copies Required</span>
+                  </li>
+                  <li class="flex items-center gap-3">
+                    <span class="text-2xl">✓</span>
+                    <span class="font-bold">Save More Together!</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Additional Services -->
+          <div class="fade-in-up bg-neo-cream rounded-xl p-8 max-w-2xl mx-auto border-4 border-black shadow-neo">
+            <h3 class="text-xl font-bold text-black mb-4 text-center">Additional Services</h3>
+            <div class="space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="text-gray-900 font-bold">📎 Stapling</span>
+                <span class="font-bold text-black bg-neo-cyan px-3 py-1 border-2 border-black rounded">Free</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-gray-900 font-bold">📘 Spiral Binding</span>
+                <span class="font-bold text-black bg-neo-cyan px-3 py-1 border-2 border-black rounded">₹25/document</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-gray-900 font-bold">📑 Multiple Copies</span>
+                <span class="font-bold text-black bg-neo-cyan px-3 py-1 border-2 border-black rounded">Same Rate × Copies</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Wavy Divider -->
+      <div class="wavy-divider bg-white"></div>
+
       <!-- Features Section -->
       <section id="features" class="py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div class="max-w-7xl mx-auto">
@@ -248,98 +341,6 @@ export const renderLanding = () => {
       <div class="wavy-divider bg-neo-cyan"></div>
 
       <!-- Pricing Section -->
-      <section id="pricing" class="py-20 px-4 sm:px-6 lg:px-8 bg-white">
-        <div class="max-w-7xl mx-auto">
-          <div class="text-center mb-16 fade-in-up">
-            <h2 class="text-4xl md:text-5xl font-bold text-black mb-4">
-              Simple, Transparent Pricing
-            </h2>
-            <p class="text-xl text-gray-700 max-w-2xl mx-auto">
-              No hidden fees. Pay only for what you print.
-            </p>
-          </div>
-
-          <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-12">
-            <!-- Regular Pricing Card -->
-            <div class="fade-in-up bg-neo-yellow rounded-2xl p-8 border-6 border-black relative shadow-neo-lg">
-              <div class="text-center text-black">
-                <h3 class="text-2xl font-bold mb-2">Regular Print</h3>
-                <div class="text-5xl font-bold mb-4">₹1.00<span class="text-xl opacity-75">/page</span></div>
-                <ul class="text-left space-y-3 mb-6">
-                  <li class="flex items-center gap-3">
-                    <span class="text-2xl">✓</span>
-                    <span class="font-bold">Black & White Printing</span>
-                  </li>
-                  <li class="flex items-center gap-3">
-                    <span class="text-2xl">✓</span>
-                    <span class="font-bold">Double-Sided (Duplex)</span>
-                  </li>
-                  <li class="flex items-center gap-3">
-                    <span class="text-2xl">✓</span>
-                    <span class="font-bold">Free Stapling</span>
-                  </li>
-                  <li class="flex items-center gap-3">
-                    <span class="text-2xl">✓</span>
-                    <span class="font-bold">Perfect for Assignments</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <!-- Bulk Pricing Card -->
-            <div class="fade-in-up bg-neo-pink rounded-2xl p-8 border-6 border-black relative shadow-neo-lg">
-              <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-neo-cyan border-4 border-black px-4 py-1 rounded-full text-sm font-bold shadow-neo-sm">
-                BEST VALUE
-              </div>
-              <div class="text-center text-black">
-                <h3 class="text-2xl font-bold mb-2">Bulk Print with Friends</h3>
-                <div class="text-5xl font-bold mb-4">₹0.85<span class="text-xl opacity-75">/page</span></div>
-                <ul class="text-left space-y-3 mb-6">
-                  <li class="flex items-center gap-3">
-                    <span class="text-2xl">✓</span>
-                    <span class="font-bold">Everything in Regular</span>
-                  </li>
-                  <li class="flex items-center gap-3">
-                    <span class="text-2xl">✓</span>
-                    <span class="font-bold">15% Discount Applied</span>
-                  </li>
-                  <li class="flex items-center gap-3">
-                    <span class="text-2xl">✓</span>
-                    <span class="font-bold">10+ Copies Required</span>
-                  </li>
-                  <li class="flex items-center gap-3">
-                    <span class="text-2xl">✓</span>
-                    <span class="font-bold">Save More Together!</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <!-- Additional Services -->
-          <div class="fade-in-up bg-neo-cream rounded-xl p-8 max-w-2xl mx-auto border-4 border-black shadow-neo">
-            <h3 class="text-xl font-bold text-black mb-4 text-center">Additional Services</h3>
-            <div class="space-y-3">
-              <div class="flex justify-between items-center">
-                <span class="text-gray-900 font-bold">📎 Stapling</span>
-                <span class="font-bold text-black bg-neo-cyan px-3 py-1 border-2 border-black rounded">Free</span>
-              </div>
-              <div class="flex justify-between items-center">
-                <span class="text-gray-900 font-bold">📘 Spiral Binding</span>
-                <span class="font-bold text-black bg-neo-cyan px-3 py-1 border-2 border-black rounded">₹25/document</span>
-              </div>
-              <div class="flex justify-between items-center">
-                <span class="text-gray-900 font-bold">📑 Multiple Copies</span>
-                <span class="font-bold text-black bg-neo-cyan px-3 py-1 border-2 border-black rounded">Same Rate × Copies</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Wavy Divider -->
-      <div class="wavy-divider bg-white"></div>
-
       <!-- FAQ Section -->
       <section id="faq" class="py-20 px-4 sm:px-6 lg:px-8 bg-neo-cream">
         <div class="max-w-4xl mx-auto">
